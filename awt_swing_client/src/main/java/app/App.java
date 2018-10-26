@@ -37,7 +37,7 @@ public class App {
 
 
     public class AppAktor extends JAktor {
-        Frame formBack;
+        JFrame formBack;
         JLabel label_resultLoadSo;
         JLabel label_resultCheck;
         JLabel label_errorCode;
@@ -84,20 +84,34 @@ public class App {
     private void preperaGUI(){
         mainFrame = new JFrame("CLIENT EBS");
         mainFrame.setSize(600, 400);
+        JPanel listPane = new JPanel();
+        listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
+
         checkButton = new JButton("Choose file");
+        checkButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         infoLabel = new JLabel("INFO LABEL");
+        infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         label_resultLoadSo= new JLabel("RESULT LOAD SO LABEL");
+        label_resultLoadSo.setAlignmentX(Component.CENTER_ALIGNMENT);
         label_resultCheck= new JLabel("LABEL Result");
+        label_resultCheck.setAlignmentX(Component.CENTER_ALIGNMENT);
         label_errorCode= new JLabel("Label Error CODE");
-
-        mainFrame.add( label_resultLoadSo);
-        mainFrame.add(label_resultCheck);
-        mainFrame.add(label_errorCode);
-        JPanel buttonsPanel = new JPanel(new FlowLayout());
+        label_errorCode.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
+        listPane.add(infoLabel);
+        listPane.add(label_resultLoadSo);
+        listPane.add(label_resultCheck);
+        listPane.add(label_errorCode);
+        listPane.add(checkButton);
 
-        mainFrame.add(buttonsPanel, BorderLayout.SOUTH);
+
+        mainFrame.add(listPane);
+
+
+
         initListeners();
         showMessageDialog(null, "App started");
 
