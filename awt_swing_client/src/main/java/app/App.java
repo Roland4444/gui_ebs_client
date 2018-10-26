@@ -1,6 +1,8 @@
 package app;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
+import essens.ResponceMessage;
+import essens.TablesEBSCheck;
 import impl.JAktor;
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +20,13 @@ import java.util.Map;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class App {
+    TablesEBSCheck tebs = new TablesEBSCheck();
     private int voron = 0;
-    private Frame mainFrame;
+    private JFrame mainFrame;
     private JLabel infoLabel;
+    JLabel label_resultLoadSo;
+    JLabel label_resultCheck;
+    JLabel label_errorCode;
     private JButton addCrow;
     private JButton removeCrow;
     private JButton checkButton;
@@ -32,43 +38,64 @@ public class App {
 
     public class AppAktor extends JAktor {
         Frame formBack;
-        JLabel label_out;
+        JLabel label_resultLoadSo;
+        JLabel label_resultCheck;
+        JLabel label_errorCode;
         Boolean justSpawned=false;
-        public void setFormBack(Frame in){
-            this.formBack=in;
-        }
         @Override
         public void receive(byte[] message) throws IOException {
+
             System.out.println("Received!!!! via console");
+            label_resultLoadSo.setText("Changed via AKTOR; Message = Received");
            // showMessageDialog(null, "JUST RECEIVED");
-           /* var resp = ResponceMessage.restoreBytesToResponceMessage(message);
+            var resp = ResponceMessage.restoreBytesToResponceMessage(message);
             System.out.println("\n\n\nRECEIVED");
-            showMessageDialog(null, "JUST RECEIVED");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (tableRequest.get(resp.ID)!=null){
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
-                //showMessageDialog(formBack, "JUST RECEIVED");
-            } */
+                this.label_resultLoadSo.setText(tebs.onLoadLibraryErrors.get(resp.ResultLoadingSoSymbols));
+                this.label_errorCode.setText("Code result check=>"+resp.lastErrorInSession);
+                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0))
+                    this.label_resultCheck.setText("проверка успешна");
+                else
+                    this.label_resultCheck.setText("проверка не пройдена");
+
+            }
         }
     }
 
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.formBack=mainFrame;
-        akt.label_out= infoLabel;
+        akt.label_resultLoadSo = infoLabel;
+        akt.label_errorCode=label_errorCode;
+        akt.label_resultCheck=label_resultCheck;
+
         akt.setAddress("http://127.0.0.1:14444/");
         akt.spawn();
         showMessageDialog(null, "AKtor spawned");
     }
 
     private void preperaGUI(){
-        mainFrame = new JFrame("CLEINT EBS");
+        mainFrame = new JFrame("CLIENT EBS");
         mainFrame.setSize(600, 400);
         checkButton = new JButton("Choose file");
         infoLabel = new JLabel("INFO LABEL");
+        label_resultLoadSo= new JLabel("RESULT LOAD SO LABEL");
+        label_resultCheck= new JLabel("LABEL Result");
+        label_errorCode= new JLabel("Label Error CODE");
+
+        mainFrame.add( label_resultLoadSo);
+        mainFrame.add(label_resultCheck);
+        mainFrame.add(label_errorCode);
         JPanel buttonsPanel = new JPanel(new FlowLayout());
 
-        buttonsPanel.add(checkButton, infoLabel);
+
 
         mainFrame.add(buttonsPanel, BorderLayout.SOUTH);
         initListeners();
