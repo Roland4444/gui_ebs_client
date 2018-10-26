@@ -14,6 +14,11 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>se.roland</groupId>
+            <artifactId>JAKtor</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>11</version>
@@ -59,7 +64,7 @@
                 <version>3.1.0</version>
                 <configuration>
                     <outputDirectory>
-                        ${project.build.directory}/modules
+                        ./build
                     </outputDirectory>
                 </configuration>
             </plugin>
@@ -76,7 +81,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.directory}/modules
+                                ./build
                             </outputDirectory>
                             <includeScope>runtime</includeScope>
                         </configuration>
