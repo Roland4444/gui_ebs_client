@@ -7,6 +7,13 @@
     <groupId>se.roland</groupId>
     <artifactId>gui_ebs_client</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+    <dependency>
+        <groupId>javax.media</groupId>
+        <artifactId>jmf</artifactId>
+        <version>2.1.1e</version>
+    </dependency>
+    </dependencies>>
 
 
 </project>

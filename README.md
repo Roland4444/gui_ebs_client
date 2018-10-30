@@ -5,3 +5,11 @@ AWT tutorial  =>    https://ru.wikibooks.org/wiki/Java/%D0%9F%D0%B5%D1%80%D0%B2%
 
 positions => http://www.quizful.net/post/swing-layout-managers
 layouts => https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html#group
+WAV in JAVA tutorial => https://www.youtube.com/watch?v=GVtl19L9GxU
+
+отношение сигнал-шум для звука 20-100 дБ;
+ глубина квантования 8-32 бит;  =>24 bit;
+ частота дискретизации 8-96 кГц;   =>48 kHz;
+ длина записи 5-35 секунд;
+ количество каналов в записи от 1 (моно режим) до 2 (стерео режим);
+ размер проверяемых данных 100-1500 Кб.

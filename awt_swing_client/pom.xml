@@ -19,11 +19,6 @@
             <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>11</version>
-        </dependency>
-        <dependency>
             <groupId>se.roland</groupId>
             <artifactId>modular_ebs</artifactId>
             <version>1.0-SNAPSHOT</version>
