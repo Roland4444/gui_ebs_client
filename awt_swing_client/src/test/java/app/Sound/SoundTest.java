@@ -2,10 +2,7 @@ package app.Sound;
 
 import org.junit.jupiter.api.Test;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
+import javax.sound.sampled.*;
 
 import java.io.IOException;
 
@@ -31,11 +28,27 @@ class SoundTest {
 
     @Test
     void startRecord() throws IOException, LineUnavailableException, InterruptedException {
-        var newFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 24, 1, 4, 44100, false  );
+        var newFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 8, 1, 1, 44100, false  );
         sound.setFormat(newFormat);
-        sound.startRecord("out.wav");
-        Thread.sleep(10000);
+        sound.getFullInfo();
+
+        var info = new DataLine.Info(TargetDataLine.class, newFormat);
+        sound.startRecord("out.wav", info);
+        Thread.sleep( 4000);
         sound.stopRecord();
+
+    }
+
+    @Test
+    void findProperLine() throws LineUnavailableException {
+        var l = mixer.getTargetLineInfo();
+        var targetLine = mixer.getTargetLines();
+        assertNotEquals(null, targetLine);
+        System.out.println(targetLine.length);
+
+        assertNotEquals(null, l);
+        TargetDataLine line = (TargetDataLine) AudioSystem.getLine(l[0]);
+        assertNotEquals(null, line);
 
     }
 }

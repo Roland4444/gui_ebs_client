@@ -20,15 +20,18 @@ public class Sound {
         var info = new DataLine.Info(TargetDataLine.class, format);
         return AudioSystem.isLineSupported(info);
     }
-    public void startRecord(String FileName) throws LineUnavailableException, IOException {
+    public void startRecord(String FileName, DataLine.Info info) throws LineUnavailableException, IOException {
         var dataline = new DataLine.Info(TargetDataLine.class, format);
         if (!checkAudioConfig()) {
             System.out.println("FORMAt Not suppoerted");
             return ;
         }
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+     //   DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);  <<=comented
 
-        td = (TargetDataLine) AudioSystem.getLine(info);;
+
+
+        td = (TargetDataLine) mixer.getLine(info);
+        //(TargetDataLine) AudioSystem.getLine(info);;
         td.open();
         td.start();
         ThreadRecord = new Thread(){
@@ -51,24 +54,26 @@ public class Sound {
         td.close();
     }
 
-    public void getFullInfo(){
+    public void getFullInfo() {
         var mixInfos = AudioSystem.getMixerInfo();
         var counter = 0;
-        for (var info : mixInfos){
-            System.out.println("\n\n\nIndex==>"+counter);
-            System.out.println("Name =>"+info.getName()+"\nDescription=>"+info.getDescription());
+        for (var info : mixInfos) {
+            System.out.println("\n\n\nIndex==>" + counter);
+            System.out.println("Name =>" + info.getName() + "\nDescription=>" + info.getDescription());
             mixer = AudioSystem.getMixer(mixInfos[counter]);
 
+
             System.out.println("Describing subsystem");
-            System.out.println("\nSOURCES::");
+            System.out.println("\ndata Written to::");
             var sources = mixer.getSourceLineInfo();
-            for (var s : sources )
+            for (var s : sources)
                 System.out.println(s.toString());
 
-            System.out.println("\nOUTPUTS::");
+            System.out.println("\ndata CAPTURED from::");
             var targets = mixer.getTargetLineInfo();
-            for (var s : targets )
+            for (var s : targets)
                 System.out.println(s.toString());
+
 
             counter++;
         }
