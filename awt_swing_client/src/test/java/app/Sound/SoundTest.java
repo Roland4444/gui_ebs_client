@@ -33,9 +33,9 @@ class SoundTest {
     void startRecordviabinarysets() throws IOException, LineUnavailableException, InterruptedException {
         Sound_Settings ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
         Sound binarySound = new Sound(ss);
-        sound.startRecord("out.wav");
+        binarySound.startRecord("out.wav");
         Thread.sleep( 4000);
-        sound.stopRecord();
+        binarySound.stopRecord();
     }
 
     @Test

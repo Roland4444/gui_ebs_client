@@ -11,7 +11,8 @@ public class Sound {
         this.mixer=mixer;
     }
     public Sound(Sound_Settings sets){
-     //   this.mixer =  AudioSystem.getMixer(sets.mixerInfo);sets.encoding,
+        Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
+        this.mixer = AudioSystem.getMixer(mixInfos[sets.indexmixer]);
         this.format= new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sets.sampleRate, sets.sampleSizeInBits, sets.channels,sets.frameSize,sets.frameRate, sets.bigEndian  );
     }
     public Mixer mixer = null;
