@@ -19,6 +19,7 @@ public class SSettings {
 
     public JButton loadSets;
     public JButton saveSets;
+    public JButton saveAsSets;
 
     public JPanel SetsPane ;
     public JPanel sampleRatePane;
@@ -77,8 +78,10 @@ public class SSettings {
 
         saveSets = new JButton("Сохранить настройки");
         loadSets = new JButton("Загрузить настройки");
+        saveAsSets = new JButton("Сохранить..");
         panelControlButtons.add(loadSets, BorderLayout.WEST);
         panelControlButtons.add(saveSets, BorderLayout.EAST);
+        panelControlButtons.add(saveAsSets, BorderLayout.CENTER);
 
         var gr_layout= new GridLayout(4,                1);
         gr_layout.setVgap(20);
@@ -90,7 +93,7 @@ public class SSettings {
         sampleRatePane = new JPanel(new GridLayout());
         SetsPane.add(sampleRatePane);
 
-        sampleRateLabel = new JLabel("Частота дискретизации");
+        sampleRateLabel = new JLabel("Частота дискретизации(sampleRate)");
         sampleRateInput = new JTextField("",3);
 
 
@@ -100,7 +103,7 @@ public class SSettings {
         sampleSizeInBitsPane = new JPanel(new GridLayout());
         SetsPane.add(sampleSizeInBitsPane);
 
-        sampleSizeInBitsLabel = new JLabel("Разрядность звука");
+        sampleSizeInBitsLabel = new JLabel("Разрядность звука(sampleSizeInBits)");
         sampleSizeInBitsInput = new JTextField();
 
         sampleSizeInBitsPane.add(sampleSizeInBitsLabel);
@@ -111,7 +114,7 @@ public class SSettings {
         channelsPane = new JPanel(new GridLayout());
         SetsPane.add(channelsPane);
 
-        channelsLabel = new JLabel("Число каналов звука");
+        channelsLabel = new JLabel("Число каналов звука(channels)");
         channelsInput = new JTextField("",3);
 
         channelsPane.add(channelsLabel);
@@ -122,7 +125,7 @@ public class SSettings {
         frameSizePane = new JPanel(new GridLayout());
         SetsPane.add(frameSizePane);
 
-        frameSizeLabel = new JLabel("Число каналов звука");
+        frameSizeLabel = new JLabel("Размер кадра звука(frameSize)");
         frameSizeInput = new JTextField("",3);
 
         frameSizePane.add(frameSizeLabel);
@@ -133,7 +136,7 @@ public class SSettings {
         frameRatePane = new JPanel(new GridLayout());
         SetsPane.add(frameRatePane);
 
-        frameRateLabel = new JLabel("Число кадров в секунду звука");
+        frameRateLabel = new JLabel("Число кадров в секунду звука(frameRate)");
         frameRateInput = new JTextField("",3);
 
         frameRatePane.add(frameRateLabel);
@@ -160,7 +163,7 @@ public class SSettings {
         indexmixerPane = new JPanel(new GridLayout());
         SetsPane.add(indexmixerPane);
 
-        indexmixerLabel = new JLabel("Номер миксера");
+        indexmixerLabel = new JLabel("Номер миксера(mixer#)");
 
         mixerchooser = new Choice();
 
@@ -191,7 +194,7 @@ public class SSettings {
         mixerchooser.select(ss.indexmixer);
     }
 
-void initListeners() {
+    void initListeners() {
         saveSets.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
@@ -206,6 +209,40 @@ void initListeners() {
                         Float.parseFloat(frameRateInput.getText()), Endian, mixerchooser.getSelectedIndex());
                 try {
                     new FileOutputStream("./sound_settings.bin").write(Sound_Settings.saveSetiingsToBytes(ss));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        saveAsSets.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e2) {
+                boolean Endian;
+                if (check.getSelectedCheckbox()==true_)
+                    Endian=true;
+                else
+                    Endian=false;
+                Sound_Settings ss = new Sound_Settings(Float.parseFloat(sampleRateInput.getText()),
+                        Integer.parseInt(sampleSizeInBitsInput.getText()),  Integer.parseInt(channelsInput.getText()),
+                        Integer.parseInt(frameSizeInput.getText()),
+                        Float.parseFloat(frameRateInput.getText()), Endian, mixerchooser.getSelectedIndex());
+                FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
+                fd.setDirectory("./");
+                fd.setVisible(true);
+                var fullpathtoCheckFile = fd.getDirectory()+fd.getFile();
+                System.out.print(fullpathtoCheckFile);
+                File file = new File(fullpathtoCheckFile);
+                if (file != null) {
+                    try {
+                        loadSets(fullpathtoCheckFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    new FileOutputStream(fullpathtoCheckFile).write(Sound_Settings.saveSetiingsToBytes(ss));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
