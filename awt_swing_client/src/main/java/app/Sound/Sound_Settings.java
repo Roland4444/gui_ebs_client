@@ -1,9 +1,6 @@
-package app;
-
-import essens.ResponceMessage;
+package app.Sound;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.Mixer;
 import java.io.*;
 
 public class Sound_Settings implements Serializable {
@@ -18,7 +15,7 @@ public class Sound_Settings implements Serializable {
 
     }
 
-    public Sound_Settings(AudioFormat.Encoding encoding, float sampleRate, int sampleSizeInBits,
+    public Sound_Settings(float sampleRate, int sampleSizeInBits,
                           int channels, int frameSize, float frameRate, boolean bigEndian, int indexmixer){
         this.sampleRate=sampleRate;
         this.sampleSizeInBits=sampleSizeInBits;

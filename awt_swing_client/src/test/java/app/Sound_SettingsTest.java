@@ -1,12 +1,10 @@
 package app;
 
+import app.Sound.Sound_Settings;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -16,7 +14,7 @@ class Sound_SettingsTest {
 
     @Test
     void saveSetiingsToBytes() throws IOException {
-        Sound_Settings ss = new Sound_Settings(AudioFormat.Encoding.PCM_SIGNED, 44100, 8, 1, 1, 44100, false, 6);
+        Sound_Settings ss = new Sound_Settings(44100, 8, 1, 1, 44100, false, 6);
         Sound_Settings restored = Sound_Settings.restoreBytesToSetiings(Sound_Settings.saveSetiingsToBytes(ss));
         assertEquals(ss.channels, restored.channels);
         assertEquals(ss.frameRate, restored.frameRate);
