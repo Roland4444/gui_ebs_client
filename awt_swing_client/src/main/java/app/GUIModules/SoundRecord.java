@@ -8,11 +8,16 @@ import java.awt.*;
 public class SoundRecord extends ModuleGUI {
     public JFrame frame;
     public JPanel panel;
+    public JPanel controlsPanel;
+    public JPanel startPanel;
+    public JPanel stopPPanel;
     public JButton sets;
     public JButton check;
     public JButton save;
-    public JButton play;
+    public JButton start;
     public JButton stop;
+    public JLabel startLabel;
+    public JLabel stopLabel;
     public SoundView sv;
     public SoundRecord() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         preperaGUI();
@@ -27,13 +32,34 @@ public class SoundRecord extends ModuleGUI {
 
         frame.getContentPane().add(panel, BorderLayout.PAGE_END);
 
-
         sets = new JButton("Настройки звука");
         check = new JButton("Проверить записанный фрагмент");
         save = new JButton("Сохранить фрагмент в WAV...");
         panel.add(sets, BorderLayout.WEST);
         panel.add(check, BorderLayout.CENTER);
         panel.add(save, BorderLayout.EAST);
+
+        controlsPanel = new JPanel(new FlowLayout());
+        startPanel = new JPanel(new GridLayout(2,1));
+        stopPPanel = new JPanel(new GridLayout(2,1));
+
+        start = new JButton("START");
+        stop = new JButton("STOP");
+        startLabel = new JLabel("Start");
+        stopLabel=new JLabel("Stop");
+
+        startPanel.add(start);
+        startPanel.add(startLabel);
+
+        stopPPanel.add(stop);
+        stopPPanel.add(stopLabel);
+
+        controlsPanel.add(startPanel, FlowLayout.LEFT);
+        controlsPanel.add(stopPPanel, FlowLayout.RIGHT);
+
+        frame.getContentPane().add(controlsPanel, BorderLayout.PAGE_START);
+
+
 
 
         frame.setVisible(true);
