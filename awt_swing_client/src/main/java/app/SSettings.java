@@ -1,7 +1,5 @@
 package app;
 import app.Sound.Sound_Settings;
-import essens.InputMessage;
-
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 import javax.swing.*;
@@ -11,60 +9,62 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 
 public class SSettings {
-    JFrame frame;
-    JPanel panelControlButtons;
+    public JFrame frame;
+    public JPanel panelControlButtons;
 
-    JButton loadSets;
-    JButton saveSets;
+    public JButton loadSets;
+    public JButton saveSets;
 
-    JPanel SetsPane ;
-    JPanel sampleRatePane;
+    public JPanel SetsPane ;
+    public JPanel sampleRatePane;
 
-    JLabel sampleRateLabel;
-    JTextField sampleRateInput ;
+    public JLabel sampleRateLabel;
+    public JTextField sampleRateInput ;
 
-    JPanel sampleSizeInBitsPane;
-
-
-    JLabel sampleSizeInBitsLabel ;
-    JTextField sampleSizeInBitsInput;
-
-    JPanel channelsPane ;
+    public JPanel sampleSizeInBitsPane;
 
 
-    JLabel channelsLabel;
-    JTextField channelsInput;
+    public JLabel sampleSizeInBitsLabel ;
+    public JTextField sampleSizeInBitsInput;
 
-    JPanel frameSizePane ;
+    public JPanel channelsPane ;
 
-    JLabel frameSizeLabel;
-    JTextField frameSizeInput;
 
-    JPanel frameRatePane ;
+    public JLabel channelsLabel;
+    public JTextField channelsInput;
 
-    JLabel frameRateLabel;
-    JTextField frameRateInput;
-    JPanel bigEndianPane;
+    public JPanel frameSizePane ;
 
-    JPanel checkBoxPanel ;
+    public JLabel frameSizeLabel;
+    public JTextField frameSizeInput;
 
-    JLabel bigEndianLabel;
-    CheckboxGroup check ;
-    Checkbox true_, false_;
+    public JPanel frameRatePane ;
 
-    JPanel indexmixerPane ;
+    public JLabel frameRateLabel;
+    public JTextField frameRateInput;
+    public JPanel bigEndianPane;
 
-    JLabel indexmixerLabel;
+    public JPanel checkBoxPanel ;
 
-    Choice mixerchooser;
+    public  JLabel bigEndianLabel;
+    public CheckboxGroup check ;
+    public  Checkbox true_, false_;
 
+    public JPanel indexmixerPane ;
+
+    public JLabel indexmixerLabel;
+
+    public Choice mixerchooser;
+
+
+    public SSettings(){
+
+    }
 
 
     public void createAndShowGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -174,7 +174,7 @@ public class SSettings {
         indexmixerPane.add(mixerchooser);
         frame.pack();
 
-        frame.setVisible(true);
+
     }
 
     public void loadSets(String FileName) throws IOException {
@@ -190,9 +190,8 @@ public class SSettings {
         else check.setSelectedCheckbox(false_);
         mixerchooser.select(ss.indexmixer);
     }
-//float sampleRate, int sampleSizeInBits,
-//                          int channels, int frameSize, float frameRate, boolean bigEndian, int indexmixer
-    private void initListeners() {
+
+void initListeners() {
         saveSets.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
@@ -233,38 +232,26 @@ public class SSettings {
             }
         });
 
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
 
-                System.out.println("==============================>CLOSING!!!!");
-                Runtime.getRuntime().exit(0);
-            }
-        });
-    }
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    frame.addWindowListener(new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+            System.out.println("Higing window!!!!");
+            frame.setVisible(false);
+        }
+    });
+
+   }
 
 
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
         SSettings ss = new SSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    ss.createAndShowGUI();
-                    ss.initListeners();
-                    ss.loadSets("./sound_settings.bin");
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    System.out.println("DEfault file setting not found");
-                }
-            }
-        });
-    }
+        ss.createAndShowGUI();
+        ss.initListeners();
+        ss.frame.setVisible(true);
+        ss.loadSets("./sound_settings.bin");
+    };
+
 
 }

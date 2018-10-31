@@ -20,6 +20,7 @@ import java.util.Map;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class App {
+    SSettings ss = null;
     TablesEBSCheck tebs = new TablesEBSCheck();
     private int voron = 0;
     private JFrame mainFrame;
@@ -30,6 +31,7 @@ public class App {
     private JButton addCrow;
     private JButton removeCrow;
     private JButton checkButton;
+    private JButton settingsButton;
     public String fullpathtoCheckFile;
     timeBasedUUID uuid = new timeBasedUUID();
     public Map<String, Integer> tableRequest = new HashMap<>();
@@ -69,6 +71,32 @@ public class App {
         }
     }
 
+    private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+
+        ss = new SSettings();
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    ss.createAndShowGUI();
+                    ss.initListeners();
+                    ss.loadSets("./sound_settings.bin");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    System.out.println("DEfault file setting not found");
+                }
+            }
+        });
+
+    }
+
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.formBack=mainFrame;
@@ -91,6 +119,12 @@ public class App {
         checkButton = new JButton("Choose file");
         checkButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        settingsButton = new JButton("Setting sound");
+        settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+
+
         infoLabel = new JLabel("INFO LABEL");
         infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -107,6 +141,7 @@ public class App {
         listPane.add(label_resultCheck);
         listPane.add(label_errorCode);
         listPane.add(checkButton);
+        listPane.add(settingsButton);
 
 
         mainFrame.add(listPane);
@@ -117,9 +152,10 @@ public class App {
         mainFrame.setVisible(true);
     }
 
-    public App() throws InterruptedException {
+    public App() throws InterruptedException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IOException, IllegalAccessException {
         preperaGUI();
         prepareAktor();
+        initSoundSettingFrame();
     }
     private void initListeners() {
         checkButton.addActionListener(new ActionListener() {
@@ -155,9 +191,15 @@ public class App {
             }
         });
 
+        settingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e2) {
+                ss.frame.setVisible(true);
+            }
+        });
+
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-
                 System.out.println("==============================>CLOSING!!!!");
                 akt.terminate();
                 Runtime.getRuntime().exit(0);
@@ -165,7 +207,7 @@ public class App {
         });
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
         App app = new App();
     }
 }
