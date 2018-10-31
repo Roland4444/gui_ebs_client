@@ -1,10 +1,13 @@
 package app.Sound;
 
+import app.Sound_Settings;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,16 +30,12 @@ class SoundTest {
     }
 
     @Test
-    void startRecord() throws IOException, LineUnavailableException, InterruptedException {
-        var newFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 8, 1, 1, 44100, false  );
-        sound.setFormat(newFormat);
-        sound.getFullInfo();
-
-        var info = new DataLine.Info(TargetDataLine.class, newFormat);
-        sound.startRecord("out.wav", info);
+    void startRecordviabinarysets() throws IOException, LineUnavailableException, InterruptedException {
+        Sound_Settings ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+        Sound binarySound = new Sound(ss);
+        sound.startRecord("out.wav");
         Thread.sleep( 4000);
         sound.stopRecord();
-
     }
 
     @Test
@@ -49,6 +48,5 @@ class SoundTest {
         assertNotEquals(null, l);
         TargetDataLine line = (TargetDataLine) AudioSystem.getLine(l[0]);
         assertNotEquals(null, line);
-
     }
 }

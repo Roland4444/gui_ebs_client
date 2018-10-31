@@ -6,12 +6,16 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class Sound_SettingsTest {
 
     @Test
-    void saveSetiingsToBytes() {
+    void saveSetiingsToBytes() throws IOException {
         Sound_Settings ss = new Sound_Settings(AudioFormat.Encoding.PCM_SIGNED, 44100, 8, 1, 1, 44100, false, 6);
         Sound_Settings restored = Sound_Settings.restoreBytesToSetiings(Sound_Settings.saveSetiingsToBytes(ss));
         assertEquals(ss.channels, restored.channels);
@@ -22,6 +26,9 @@ class Sound_SettingsTest {
         assertEquals(ss.bigEndian, restored.bigEndian);
         assertEquals(ss.indexmixer, restored.indexmixer);
         printSets(ss, restored);
+        FileOutputStream fos = new FileOutputStream("sound_settings.bin");
+        fos.write(Sound_Settings.saveSetiingsToBytes(ss));
+        fos.close();
     }
 
     public void printSets(Sound_Settings ss1, Sound_Settings ss2 ){

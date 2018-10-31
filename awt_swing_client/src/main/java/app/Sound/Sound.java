@@ -26,15 +26,13 @@ public class Sound {
         var info = new DataLine.Info(TargetDataLine.class, format);
         return AudioSystem.isLineSupported(info);
     }
-    public void startRecord(String FileName, DataLine.Info info) throws LineUnavailableException, IOException {
+    public void startRecord(String FileName) throws LineUnavailableException, IOException {
         if (!checkAudioConfig()) {
             System.out.println("FORMAt Not suppoerted");
             return ;
         }
-     //   DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);  <<=comented
-
+        var info = new DataLine.Info(TargetDataLine.class, format);
         td = (TargetDataLine) mixer.getLine(info);
-        //(TargetDataLine) AudioSystem.getLine(info);;
         td.open();
         td.start();
         ThreadRecord = new Thread(){
@@ -52,6 +50,7 @@ public class Sound {
         };
         ThreadRecord.start();
     }
+
     public void stopRecord(){
         td.stop();
         td.close();
