@@ -1,5 +1,7 @@
 package app.Sound;
 
+import app.Sound_Settings;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +9,10 @@ import java.io.IOException;
 public class Sound {
     public Sound(Mixer mixer){
         this.mixer=mixer;
+    }
+    public Sound(Sound_Settings sets){
+     //   this.mixer =  AudioSystem.getMixer(sets.mixerInfo);sets.encoding,
+        this.format= new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sets.sampleRate, sets.sampleSizeInBits, sets.channels,sets.frameSize,sets.frameRate, sets.bigEndian  );
     }
     public Mixer mixer = null;
     public Thread ThreadRecord;
@@ -21,14 +27,11 @@ public class Sound {
         return AudioSystem.isLineSupported(info);
     }
     public void startRecord(String FileName, DataLine.Info info) throws LineUnavailableException, IOException {
-        var dataline = new DataLine.Info(TargetDataLine.class, format);
         if (!checkAudioConfig()) {
             System.out.println("FORMAt Not suppoerted");
             return ;
         }
      //   DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);  <<=comented
-
-
 
         td = (TargetDataLine) mixer.getLine(info);
         //(TargetDataLine) AudioSystem.getLine(info);;
@@ -73,7 +76,6 @@ public class Sound {
             var targets = mixer.getTargetLineInfo();
             for (var s : targets)
                 System.out.println(s.toString());
-
 
             counter++;
         }
