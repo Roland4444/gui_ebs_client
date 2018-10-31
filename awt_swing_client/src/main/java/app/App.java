@@ -83,9 +83,6 @@ public class App {
 
     private void preperaGUI(){
 
-
-
-
         mainFrame = new JFrame("CLIENT EBS");
         mainFrame.setSize(600, 400);
         JPanel listPane = new JPanel();
@@ -114,22 +111,10 @@ public class App {
 
         mainFrame.add(listPane);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
-
-        mainFrame.add(tabbedPane);
-
         initListeners();
         showMessageDialog(null, "App started");
 
         mainFrame.setVisible(true);
-
-
-
-
-
-
-
-
     }
 
     public App() throws InterruptedException {
@@ -179,9 +164,6 @@ public class App {
             }
         });
     }
-
-
-
 
     public static void main(String[] args) throws InterruptedException {
         App app = new App();
