@@ -1,4 +1,5 @@
-package app;
+package app.GUIModules;
+import app.abstractions.ModuleGUI;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
 import essens.ResponceMessage;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class App {
+public class App extends ModuleGUI {
     SSettings ss = null;
     TablesEBSCheck tebs = new TablesEBSCheck();
     private int voron = 0;
@@ -78,7 +79,7 @@ public class App {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    ss.createAndShowGUI();
+                    ss.preperaGUI();
                     ss.initListeners();
                     ss.loadSets("./sound_settings.bin");
                 } catch (ClassNotFoundException e) {
@@ -109,7 +110,8 @@ public class App {
         showMessageDialog(null, "AKtor spawned");
     }
 
-    private void preperaGUI(){
+    @Override
+    public void preperaGUI(){
 
         mainFrame = new JFrame("CLIENT EBS");
         mainFrame.setSize(600, 400);
@@ -157,7 +159,9 @@ public class App {
         prepareAktor();
         initSoundSettingFrame();
     }
-    private void initListeners() {
+
+    @Override
+    public void initListeners() {
         checkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {

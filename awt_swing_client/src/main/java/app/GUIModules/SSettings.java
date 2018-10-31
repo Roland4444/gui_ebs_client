@@ -1,5 +1,7 @@
-package app;
+package app.GUIModules;
 import app.Sound.Sound_Settings;
+import app.abstractions.ModuleGUI;
+
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
 import javax.swing.*;
@@ -13,7 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class SSettings {
+public class SSettings  extends ModuleGUI {
     public JFrame frame;
     public JPanel panelControlButtons;
 
@@ -67,8 +69,8 @@ public class SSettings {
 
     }
 
-
-    public void createAndShowGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    @Override
+    public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
 
         frame = new JFrame("Меню настроек звука");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -194,7 +196,8 @@ public class SSettings {
         mixerchooser.select(ss.indexmixer);
     }
 
-    void initListeners() {
+    @Override
+    public void initListeners() {
         saveSets.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
@@ -284,7 +287,7 @@ public class SSettings {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
         SSettings ss = new SSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        ss.createAndShowGUI();
+        ss.preperaGUI();
         ss.initListeners();
         ss.frame.setVisible(true);
         ss.loadSets("./sound_settings.bin");
