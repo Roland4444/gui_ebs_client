@@ -1,5 +1,7 @@
 package app.Sound;
 
+import app.Essens.Sound_Settings;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package app.GUIModules;
 import app.Sound.Sound;
-import app.Sound.Sound_Settings;
+import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
@@ -13,18 +13,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class SoundRecord extends ModuleGUI {
+    public String addressSoundCheckService = "http://127.0.0.1:12121/";
     timeBasedUUID uuid = new timeBasedUUID();
     public final String tempfile = "temp.wav";
+    public final String ServiceIPSets = "settingsIP.bin";
     TablesEBSCheck tebs = new TablesEBSCheck();
     public Map<String, Integer> tableRequest = new HashMap<>();
     public SSettings ss;
@@ -46,6 +48,18 @@ public class SoundRecord extends ModuleGUI {
     public interop exchange;
     AppAktor akt;
 
+    public void loadsetstoservice() throws IOException {
+        if (!(new File(ServiceIPSets).exists())){
+            showMessageDialog(null, "файл настроек не был найден и был создан новый =>"+ServiceIPSets);
+            PrintWriter pw = new PrintWriter(ServiceIPSets);
+            pw.write("serviceCheckIP="+addressSoundCheckService+"");
+            pw.close();
+        }
+        else {
+
+        }
+    }
+
     public Color StartBackgroundColor;
     public SoundRecord() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         preperaGUI();
@@ -54,8 +68,6 @@ public class SoundRecord extends ModuleGUI {
         initinterop();
         prepareAktor();
     }
-
-
 
     public void initinterop(){
         exchange=new interop();
@@ -74,7 +86,6 @@ public class SoundRecord extends ModuleGUI {
 
         frame.getContentPane().add(panel, BorderLayout.PAGE_END);
 
-
         sets = new JButton("Настройки звука");
         check = new JButton("Проверить записанный фрагмент");
         save = new JButton("Сохранить фрагмент в WAV...");
@@ -85,7 +96,6 @@ public class SoundRecord extends ModuleGUI {
         var controlPanelLayout = new FlowLayout();
         controlPanelLayout.setHgap(100);
         controlPanelLayout.setVgap(40);
-
 
         controlsPanel = new JPanel(controlPanelLayout);
         startPanel = new JPanel(new GridLayout(2,1));
@@ -109,7 +119,6 @@ public class SoundRecord extends ModuleGUI {
         save.setEnabled(false);
 
         frame.setVisible(true);
-
 
     }
     private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
@@ -178,8 +187,6 @@ public class SoundRecord extends ModuleGUI {
                     return;
                 }
                 recording=true;
-
-
             }
         });
 
@@ -191,7 +198,6 @@ public class SoundRecord extends ModuleGUI {
                 start.setBackground(StartBackgroundColor);
                 binarySound.stopRecord();
                 recording = false;
-
             }
         });
 
@@ -199,7 +205,6 @@ public class SoundRecord extends ModuleGUI {
             @Override
             public void actionPerformed(ActionEvent e2) {
                 ss.frame.setVisible(true);
-
             }
         });
 
@@ -219,17 +224,19 @@ public class SoundRecord extends ModuleGUI {
                     InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.tebs.voice, akt.getURL_thisAktor(), uuid_);
                     System.out.println("\n\n\n\nSTARTING SENDING...");
                     System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
-                    akt.send(InputMessage.saveMessageToBytes(inp), "http://127.0.0.1:12121/");
+                    akt.send(InputMessage.saveMessageToBytes(inp), addressSoundCheckService);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                 } catch (UnknownHostException e) {
-                    e.printStackTrace();
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ");
+
+                }
+                catch (CompletionException e){
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ");
                 }
             }
         });
-
-
     }
 
 
@@ -246,7 +253,6 @@ public class SoundRecord extends ModuleGUI {
         SoundRecord sr = new SoundRecord();
     }
 
-
     public class AppAktor extends JAktor {
         public interop checkedViaForm;
         public JButton save;
@@ -254,7 +260,6 @@ public class SoundRecord extends ModuleGUI {
         Boolean justSpawned=false;
         @Override
         public void receive(byte[] message) throws IOException {
-
             System.out.println("Received!!!! via console");
             // showMessageDialog(null, "JUST RECEIVED");
             var resp = ResponceMessage.restoreBytesToResponceMessage(message);

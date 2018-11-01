@@ -1,6 +1,5 @@
-package app.Sound;
+package app.Essens;
 
-import javax.sound.sampled.AudioFormat;
 import java.io.*;
 
 public class Sound_Settings implements Serializable {

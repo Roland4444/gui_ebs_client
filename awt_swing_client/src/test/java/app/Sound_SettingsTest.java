@@ -1,9 +1,7 @@
 package app;
 
-import app.Sound.Sound_Settings;
+import app.Essens.Sound_Settings;
 import org.junit.jupiter.api.Test;
-
-import javax.sound.sampled.AudioFormat;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

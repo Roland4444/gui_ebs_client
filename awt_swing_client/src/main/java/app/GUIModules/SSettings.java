@@ -1,5 +1,5 @@
 package app.GUIModules;
-import app.Sound.Sound_Settings;
+import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
 
 import javax.sound.sampled.AudioSystem;

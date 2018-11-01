@@ -1,5 +1,6 @@
 package app.Sound;
 
+import app.Essens.Sound_Settings;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.*;
