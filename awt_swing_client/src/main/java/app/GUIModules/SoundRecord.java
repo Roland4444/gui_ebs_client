@@ -30,6 +30,7 @@ public class SoundRecord extends ModuleGUI {
     TablesEBSCheck tebs = new TablesEBSCheck();
     public Map<String, Integer> tableRequest = new HashMap<>();
     public SSettings ss;
+    public NetworkSettings ns;
     public boolean recording = false;
     public Sound binarySound = null;
     public JFrame frame;
@@ -120,6 +121,10 @@ public class SoundRecord extends ModuleGUI {
 
         frame.setVisible(true);
 
+    }
+
+    private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        ns = new NetworkSettings();
     }
     private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
 

@@ -1,19 +1,27 @@
 package app.GUIModules;
 
+import app.Essens.IPSetts;
 import app.abstractions.ModuleGUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class NetworkSettings extends ModuleGUI {
+    public final String settingFiles="ns.bin";
     public JFrame frame;
 
     public JButton saveSets;
     public JButton Exit;
+
 
 
     public JTextField serverAdress;
@@ -27,11 +35,25 @@ public class NetworkSettings extends ModuleGUI {
 
     public JPanel ButtonSaveExitpanel ;
 
-    public NetworkSettings() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        preperaGUI();
-        initListeners();
+    public NetworkSettings(){
+
+
     }
 
+    public String getPort(String fulladdress){
+        int init = fulladdress.lastIndexOf(":");
+        if (init < 0)
+            return "";
+        return fulladdress.substring(init+1, fulladdress.length()-1);
+    }
+
+
+    public void tryReadData() throws IOException {
+        byte[] arr = Files.readAllBytes(new File(settingFiles).toPath());;
+        IPSetts sets = IPSetts.restoreBytesToIPSetts(arr);
+        //port =
+
+    }
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -80,6 +102,19 @@ public class NetworkSettings extends ModuleGUI {
                     showMessageDialog(null, "Заполните все поля!");
                     return;
                 }
+                IPSetts sets = new IPSetts();
+                sets.address="http://"+serverAdress.getText()+":"+port.getText()+"/";
+                try {
+                    FileOutputStream fos = new FileOutputStream(settingFiles);
+                    fos.write(IPSetts.saveIPSettsToBytes(sets));
+                    fos.close();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+
             }
         });
         Exit.addActionListener(new ActionListener() {
@@ -92,8 +127,12 @@ public class NetworkSettings extends ModuleGUI {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+
         NetworkSettings ns=new NetworkSettings();
+        ns.preperaGUI();
+        ns.initListeners();
+        ns.tryReadData();
         ns.frame.setVisible(true);
     }
 }
