@@ -47,11 +47,20 @@ public class NetworkSettings extends ModuleGUI {
         return fulladdress.substring(init+1, fulladdress.length()-1);
     }
 
+    public String getAddress(String fulladdress){
+        int init = fulladdress.indexOf("/");
+        int stooped = fulladdress.lastIndexOf(":");
+        if ((init < 0) || (stooped<0))
+            return "";
+        return fulladdress.substring(init+2, stooped);
+    }
+
 
     public void tryReadData() throws IOException {
         byte[] arr = Files.readAllBytes(new File(settingFiles).toPath());;
         IPSetts sets = IPSetts.restoreBytesToIPSetts(arr);
-        //port =
+        serverAdress.setText(getAddress(sets.address));
+        port.setText(getPort(sets.address));
 
     }
 

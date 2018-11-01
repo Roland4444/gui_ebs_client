@@ -11,5 +11,6 @@ class NetworkSettingsTest {
         NetworkSettings ns = new NetworkSettings();
         String full = "http://127.0.0.1:19000/";
         assertEquals("19000", ns.getPort(full));
+        assertEquals("127.0.0.1", ns.getAddress(full));
     }
 }
