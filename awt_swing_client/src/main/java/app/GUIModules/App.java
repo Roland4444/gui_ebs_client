@@ -44,13 +44,11 @@ public class App extends ModuleGUI {
         JLabel label_resultLoadSo;
         JLabel label_resultCheck;
         JLabel label_errorCode;
-        Boolean justSpawned=false;
         @Override
         public void receive(byte[] message) throws IOException {
 
             System.out.println("Received!!!! via console");
             label_resultLoadSo.setText("Changed via AKTOR; Message = Received");
-           // showMessageDialog(null, "JUST RECEIVED");
             var resp = ResponceMessage.restoreBytesToResponceMessage(message);
             System.out.println("\n\n\nRECEIVED");
             try {
@@ -73,7 +71,6 @@ public class App extends ModuleGUI {
     }
 
     private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
-
         ss = new SSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -180,7 +177,7 @@ public class App extends ModuleGUI {
                     var uuid_ = uuid.generate();
                     tableRequest.put(uuid_,-3);
                     try {
-                        InputMessage inp = new  InputMessage(file.getName(), fileContent,  "photo", akt.getURL_thisAktor(), uuid_);
+                        InputMessage inp = new  InputMessage(file.getName(), fileContent,  tebs.voice, akt.getURL_thisAktor(), uuid_);
                         System.out.println("\n\n\n\nSTARTING SENDING...");
                         System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
                         akt.send(InputMessage.saveMessageToBytes(inp), "http://127.0.0.1:12121/");
