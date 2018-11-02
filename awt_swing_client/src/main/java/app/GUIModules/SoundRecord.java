@@ -23,11 +23,9 @@ import java.util.concurrent.CompletionException;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class SoundRecord extends ModuleGUI {
-    public String addressSoundCheckService = "http://127.0.0.1:12121/";
     timeBasedUUID uuid = new timeBasedUUID();
     public final String tempfile = "temp.wav";
-    public final String ServiceIPSets = "settingsIP.bin";
-    TablesEBSCheck tebs = new TablesEBSCheck();
+
     public Map<String, Integer> tableRequest = new HashMap<>();
     public SSettings ss;
     public NetworkSettings ns;
@@ -47,27 +45,19 @@ public class SoundRecord extends ModuleGUI {
     public JLabel stopLabel;
     public boolean checked = false;
     public interop exchange;
+    public JMenu file;
+    public JMenu Settings;
     AppAktor akt;
-
-    public void loadsetstoservice() throws IOException {
-        if (!(new File(ServiceIPSets).exists())){
-            showMessageDialog(null, "файл настроек не был найден и был создан новый =>"+ServiceIPSets);
-            PrintWriter pw = new PrintWriter(ServiceIPSets);
-            pw.write("serviceCheckIP="+addressSoundCheckService+"");
-            pw.close();
-        }
-        else {
-
-        }
-    }
 
     public Color StartBackgroundColor;
     public SoundRecord() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         preperaGUI();
+        initNetworkSettinFrame();
         initSoundSettingFrame();
         initListeners();
         initinterop();
         prepareAktor();
+
     }
 
     public void initinterop(){
@@ -123,8 +113,32 @@ public class SoundRecord extends ModuleGUI {
 
     }
 
-    private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        ns = new NetworkSettings();
+    private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+        ns=new NetworkSettings();
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    ns.preperaGUI();
+                    ns.initListeners();
+                    ns.tryReadData();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    System.out.println("DEfault file setting not found");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
     private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
 
@@ -229,16 +243,17 @@ public class SoundRecord extends ModuleGUI {
                     InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.tebs.voice, akt.getURL_thisAktor(), uuid_);
                     System.out.println("\n\n\n\nSTARTING SENDING...");
                     System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
-                    akt.send(InputMessage.saveMessageToBytes(inp), addressSoundCheckService);
+                    System.out.println("SENDING =>> "+ns.sets.address);
+                    akt.send(InputMessage.saveMessageToBytes(inp), ns.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                 } catch (UnknownHostException e) {
-                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ");
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
                 } catch (IOException e) {
-                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ");
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
 
                 }
                 catch (CompletionException e){
-                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ");
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
                 }
             }
         });

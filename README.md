@@ -7,6 +7,7 @@ positions => http://www.quizful.net/post/swing-layout-managers
 layouts => https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html#group
 WAV in JAVA tutorial => https://www.youtube.com/watch?v=GVtl19L9GxU
 Layouts in SWING => https://www.intuit.ru/studies/courses/16/16/lecture/27125?page=6
+Menu in SWING => https://javaswing.wordpress.com/2010/02/20/jmenubar/
 
 отношение сигнал-шум для звука 20-100 дБ;
  глубина квантования 8-32 бит;  =>24 bit;

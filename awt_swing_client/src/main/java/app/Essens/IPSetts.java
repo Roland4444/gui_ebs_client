@@ -5,6 +5,14 @@ import java.io.*;
 public class IPSetts implements Serializable {
     public String address;
 
+    public IPSetts(){
+
+    }
+
+    public IPSetts(String address){
+        this.address=address;
+    }
+
     public static byte[] saveIPSettsToBytes(IPSetts input) {
         byte[] Result=null ;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

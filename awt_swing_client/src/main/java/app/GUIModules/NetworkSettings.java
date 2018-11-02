@@ -16,26 +16,29 @@ import java.nio.file.Files;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class NetworkSettings extends ModuleGUI {
-    public final String settingFiles="ns.bin";
+    private final String settingFiles="ns.bin";
+    private final String defaultAdress =  "http://127.0.0.1:12121/";
+    private IPSetts defaultSets = new IPSetts( defaultAdress);
     public JFrame frame;
 
-    public JButton saveSets;
-    public JButton Exit;
+    private JButton saveSets;
+    private JButton Exit;
+
+    public IPSetts sets;
 
 
+    private JTextField serverAdress;
+    private JTextField port;
+    private JLabel serverNameLabel;
+    private JLabel portLabel;
+    private JLabel info;
+    private JLabel ender;
 
-    public JTextField serverAdress;
-    public JTextField port;
-    public JLabel serverNameLabel;
-    public JLabel portLabel;
-    public JLabel info;
-    public JLabel ender;
+    private JPanel SettingPanel;
 
-    public JPanel SettingPanel;
+    private JPanel ButtonSaveExitpanel ;
 
-    public JPanel ButtonSaveExitpanel ;
-
-    public NetworkSettings(){
+    public NetworkSettings() throws IOException, InterruptedException {
 
 
     }
@@ -56,9 +59,16 @@ public class NetworkSettings extends ModuleGUI {
     }
 
 
-    public void tryReadData() throws IOException {
+    public void tryReadData() throws IOException, InterruptedException {
+        if (!new File(settingFiles).exists()){
+            var fos = new FileOutputStream(settingFiles);
+            fos.write(IPSetts.saveIPSettsToBytes(defaultSets));
+            fos.close();
+            Thread.sleep(400);
+        }
+
         byte[] arr = Files.readAllBytes(new File(settingFiles).toPath());;
-        IPSetts sets = IPSetts.restoreBytesToIPSetts(arr);
+        sets = IPSetts.restoreBytesToIPSetts(arr);
         serverAdress.setText(getAddress(sets.address));
         port.setText(getPort(sets.address));
 
@@ -136,7 +146,7 @@ public class NetworkSettings extends ModuleGUI {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
 
         NetworkSettings ns=new NetworkSettings();
         ns.preperaGUI();
