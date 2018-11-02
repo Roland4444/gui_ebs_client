@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -26,9 +27,22 @@ public class SoundRecord extends ModuleGUI {
     timeBasedUUID uuid = new timeBasedUUID();
     public final String tempfile = "temp.wav";
 
+
     public Map<String, Integer> tableRequest = new HashMap<>();
+    JMenuBar menuBar;
+
+    JMenu fileMenu ;
+    JMenu EditMenu;
+    JMenu helpMenu ;
+    JMenu settsMenu;
+    JMenuItem exitItem ;
+
+    JMenuItem nsItem = new JMenuItem("Настройки сервиса");
+    JMenuItem ssItem = new JMenuItem("Настройки звука");
+    JMenuItem aboutItem = new JMenuItem("О программе");
     public SSettings ss;
     public NetworkSettings ns;
+    public About about;
     public boolean recording = false;
     public Sound binarySound = null;
     public JFrame frame;
@@ -36,7 +50,6 @@ public class SoundRecord extends ModuleGUI {
     public JPanel controlsPanel;
     public JPanel startPanel;
     public JPanel stopPPanel;
-    public JButton sets;
     public JButton check;
     public JButton save;
     public JButton start;
@@ -45,8 +58,6 @@ public class SoundRecord extends ModuleGUI {
     public JLabel stopLabel;
     public boolean checked = false;
     public interop exchange;
-    public JMenu file;
-    public JMenu Settings;
     AppAktor akt;
 
     public Color StartBackgroundColor;
@@ -56,6 +67,7 @@ public class SoundRecord extends ModuleGUI {
         initSoundSettingFrame();
         initListeners();
         initinterop();
+        initAboutFrame();
         prepareAktor();
 
     }
@@ -70,18 +82,39 @@ public class SoundRecord extends ModuleGUI {
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        frame = new JFrame("Меню записи звука");
+        frame = new JFrame("EBS GUI Client 1.2");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
+        menuBar = new JMenuBar();
+
+        fileMenu = new JMenu("Файл");
+        EditMenu = new JMenu("Правка");
+        helpMenu = new JMenu("Помощь");
+        settsMenu = new JMenu("Настройкм");
+        exitItem = new JMenuItem("Выйти");
+
+        nsItem = new JMenuItem("Настройки сервиса");
+        ssItem = new JMenuItem("Настройки звука");
+        aboutItem = new JMenuItem("О программе");
+        helpMenu.add(aboutItem);
+        settsMenu.add(nsItem);
+        settsMenu.add(ssItem);
+        fileMenu.add(exitItem);
+        menuBar.add(fileMenu);
+        menuBar.add(EditMenu);
+        menuBar.add(helpMenu);
+        EditMenu.add(settsMenu);
+        frame.setJMenuBar(menuBar);
+
         panel = new JPanel(new BorderLayout());
 
         frame.getContentPane().add(panel, BorderLayout.PAGE_END);
 
-        sets = new JButton("Настройки звука");
+
         check = new JButton("Проверить записанный фрагмент");
         save = new JButton("Сохранить фрагмент в WAV...");
-        panel.add(sets, BorderLayout.WEST);
-        panel.add(check, BorderLayout.CENTER);
+        panel.add(check, BorderLayout.WEST);
         panel.add(save, BorderLayout.EAST);
 
         var controlPanelLayout = new FlowLayout();
@@ -94,8 +127,8 @@ public class SoundRecord extends ModuleGUI {
 
         start = new JButton("START");
         stop = new JButton("STOP");
-        startLabel = new JLabel("Start");
-        stopLabel=new JLabel("Stop");
+        startLabel = new JLabel("Начать запись звукового фрагмента");
+        stopLabel=new JLabel("Остановить запись");
 
         startPanel.add(start);
         startPanel.add(startLabel);
@@ -108,8 +141,33 @@ public class SoundRecord extends ModuleGUI {
 
         frame.getContentPane().add(controlsPanel, BorderLayout.CENTER);
         save.setEnabled(false);
+        check.setEnabled(false);
 
         frame.setVisible(true);
+
+    }
+
+    private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+        about= new About();
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    about.preperaGUI();
+                    about.initListeners();
+                    about.frame.setLocationRelativeTo(null);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
     }
 
@@ -122,6 +180,7 @@ public class SoundRecord extends ModuleGUI {
                     ns.preperaGUI();
                     ns.initListeners();
                     ns.tryReadData();
+                    ns.frame.setLocationRelativeTo(null);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (UnsupportedLookAndFeelException e) {
@@ -217,15 +276,11 @@ public class SoundRecord extends ModuleGUI {
                 start.setBackground(StartBackgroundColor);
                 binarySound.stopRecord();
                 recording = false;
+                check.setEnabled(true);
             }
         });
 
-        sets.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e2) {
-                ss.frame.setVisible(true);
-            }
-        });
+
 
         check.addActionListener(new ActionListener() {
             @Override
@@ -257,6 +312,71 @@ public class SoundRecord extends ModuleGUI {
                 }
             }
         });
+
+        nsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                ns.frame.setVisible(true);
+            }
+        });
+
+        ssItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                ss.frame.setVisible(true);
+            }
+        });
+
+        aboutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                about.frame.setVisible(true);
+            }
+        });
+
+        exitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+
+
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e2) {
+                FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
+                FilenameFilter wavFilter = new FilenameFilter() {
+                    public boolean accept(File dir, String name) {
+                        String lowercaseName = name.toLowerCase();
+                        if (lowercaseName.endsWith(".wav")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+                fd.setFilenameFilter(wavFilter);
+                fd.setVisible(true);
+
+                var savingFile = fd.getDirectory()+fd.getFile();
+                System.out.print(savingFile);
+                try {
+                    var content = Files.readAllBytes(new File(tempfile).toPath());
+                    var fos = new FileOutputStream(savingFile);
+                    fos.write(content);
+                    fos.close();
+                    showMessageDialog(null, "Файл"+savingFile+" сохранен!");
+                    new File(tempfile).delete();
+                    save.setEnabled(false);
+                    check.setEnabled(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
     }
 
 
