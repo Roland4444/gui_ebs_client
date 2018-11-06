@@ -62,13 +62,7 @@ public class SoundRecord extends ModuleGUI {
 
     public Color StartBackgroundColor;
     public SoundRecord() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        preperaGUI();
-        initNetworkSettinFrame();
-        initSoundSettingFrame();
-        initListeners();
-        initinterop();
-        initAboutFrame();
-        prepareAktor();
+
 
     }
 
@@ -143,14 +137,14 @@ public class SoundRecord extends ModuleGUI {
         save.setEnabled(false);
         check.setEnabled(false);
 
-        frame.setVisible(true);
+
 
     }
 
     private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         about= new About();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
                     about.preperaGUI();
@@ -174,7 +168,7 @@ public class SoundRecord extends ModuleGUI {
     private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         ns=new NetworkSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
                     ns.preperaGUI();
@@ -203,7 +197,7 @@ public class SoundRecord extends ModuleGUI {
 
         ss = new SSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
                     ss.preperaGUI();
@@ -258,7 +252,7 @@ public class SoundRecord extends ModuleGUI {
                     start.setBackground(StartBackgroundColor);
                     recording=false;
                     return;
-                } catch (java.lang.IllegalArgumentException e){
+                } catch (IllegalArgumentException e){
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА => ПРОВЕРЬТЕ ПРАВИЛЬНОСТЬ ЗВУКОВЫХ НАСТРОЕК");
                     start.setBackground(StartBackgroundColor);
                     recording=false;
@@ -391,6 +385,14 @@ public class SoundRecord extends ModuleGUI {
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         SoundRecord sr = new SoundRecord();
+        sr.preperaGUI();
+        sr.initNetworkSettinFrame();
+        sr.initSoundSettingFrame();
+        sr.initListeners();
+        sr.initinterop();
+        sr.initAboutFrame();
+        sr.prepareAktor();
+        sr.frame.setVisible(true);
     }
 
     public class AppAktor extends JAktor {

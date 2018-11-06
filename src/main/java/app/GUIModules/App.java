@@ -73,7 +73,7 @@ public class App extends ModuleGUI {
     private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
         ss = new SSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
                     ss.preperaGUI();
