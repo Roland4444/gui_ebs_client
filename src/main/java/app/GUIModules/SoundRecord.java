@@ -96,6 +96,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     public void enableSave(){
+        System.out.println("\n\n\nControl Passsed!!!\n\n\n");
         save.setEnabled(true);
         saveItem.setEnabled(true);
     }
@@ -110,11 +111,20 @@ public class SoundRecord extends ModuleGUI {
         checkItem.setEnabled(false);
     }
 
+    public void enablePlay(){
+        playItem.setEnabled(true);
+    };
+
+
+    public void disablePlay(){
+      playItem.setEnabled(false);
+
+    };
 
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        frame = new JFrame("EBS GUI Client 1.2");
+        frame = new JFrame("EBS GUI Client 1.5");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
@@ -203,6 +213,7 @@ public class SoundRecord extends ModuleGUI {
 
         disableSave();
         disableCheck();
+        disablePlay();
 
 
     }
@@ -338,6 +349,7 @@ public class SoundRecord extends ModuleGUI {
                 recording = false;
                 check.setEnabled(true);
                 checkItem.setEnabled(true);
+                enablePlay();
             }
         });
 
@@ -468,6 +480,13 @@ public class SoundRecord extends ModuleGUI {
         akt.save=save;
         akt.setAddress("http://127.0.0.1:14444/");
         akt.spawn();
+        akt.on_success=new OnSuccess() {
+            @Override
+            public void passed() {
+                enableSave();
+                disableCheck();
+            }
+        };
       //  showMessageDialog(null, "AKtor spawned");
     }
 
@@ -483,8 +502,13 @@ public class SoundRecord extends ModuleGUI {
         sr.frame.setVisible(true);
     }
 
+    interface OnSuccess{
+        public void passed();
+    }
+
     public class AppAktor extends JAktor {
         public interop checkedViaForm;
+        public OnSuccess on_success;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();
         Boolean justSpawned=false;
@@ -502,8 +526,10 @@ public class SoundRecord extends ModuleGUI {
             if (tableRequest.get(resp.ID)!=null){
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
-                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0))
-                { save.setEnabled(true);}
+                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0)) {
+                    save.setEnabled(true);
+                    on_success.passed();
+                }
         //        else
           //          this.label_resultCheck.setText("проверка не пройдена");
 

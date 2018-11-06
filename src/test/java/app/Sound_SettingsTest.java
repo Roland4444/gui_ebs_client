@@ -41,16 +41,20 @@ class Sound_SettingsTest {
 
     @Test
     public void testLambda(){
-        assertEquals(5, X);
+
         lambda L = new lambda();
-
+        L.C=new callable() {
+            @Override
+            public void call() {
+                X=5;
+            }
+        };
+        L.C.call();
+        assertEquals(5, X);
 
 
     }
 
-    public void setX(){
-        X=5;
-    }
 
     class lambda{
         public callable C;
