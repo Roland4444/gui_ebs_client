@@ -9,6 +9,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Sound_SettingsTest {
+    public int X = 0;
 
     @Test
     void saveSetiingsToBytes() throws IOException {
@@ -36,4 +37,27 @@ class Sound_SettingsTest {
         System.out.println(ss1.sampleRate+"<>" + ss2.sampleRate);
         System.out.println(ss1.sampleSizeInBits+"<>" + ss2.sampleSizeInBits);
     }
+
+
+    @Test
+    public void testLambda(){
+        assertEquals(5, X);
+        lambda L = new lambda();
+
+
+
+    }
+
+    public void setX(){
+        X=5;
+    }
+
+    class lambda{
+        public callable C;
+    }
+
+    interface callable{
+        public void call();
+    }
+
 }

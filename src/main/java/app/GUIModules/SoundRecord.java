@@ -13,7 +13,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -22,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.CompletionException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
+
 
 public class SoundRecord extends ModuleGUI {
     timeBasedUUID uuid = new timeBasedUUID();
@@ -35,11 +38,24 @@ public class SoundRecord extends ModuleGUI {
     JMenu EditMenu;
     JMenu helpMenu ;
     JMenu settsMenu;
+    JMenu workMenu;
+
+    JMenu playItem ;
+    JMenu saveItem ;
+    JMenuItem checkItem ;
     JMenuItem exitItem ;
 
-    JMenuItem nsItem = new JMenuItem("Настройки сервиса");
-    JMenuItem ssItem = new JMenuItem("Настройки звука");
-    JMenuItem aboutItem = new JMenuItem("О программе");
+    JMenuItem nsItem;
+    JMenuItem ssItem;
+    JMenuItem aboutItem;
+
+    JMenuItem playslot1 ;
+    JMenuItem playslot2 ;
+    JMenuItem playslot3 ;
+    JMenuItem playcurrent;
+    JMenuItem saveslot1 ;
+    JMenuItem saveslot2;
+    JMenuItem saveslot3;
     public SSettings ss;
     public NetworkSettings ns;
     public About about;
@@ -74,6 +90,28 @@ public class SoundRecord extends ModuleGUI {
         exchange.resultloadso=-2;
     }
 
+    public void disableSave(){
+        save.setEnabled(false);
+        saveItem.setEnabled(false);
+    }
+
+    public void enableSave(){
+        save.setEnabled(true);
+        saveItem.setEnabled(true);
+    }
+
+    public void enableCheck(){
+        check.setEnabled(false);
+        checkItem.setEnabled(false);
+    }
+
+    public void disableCheck(){
+        check.setEnabled(false);
+        checkItem.setEnabled(false);
+    }
+
+
+
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame = new JFrame("EBS GUI Client 1.2");
@@ -83,22 +121,50 @@ public class SoundRecord extends ModuleGUI {
         menuBar = new JMenuBar();
 
         fileMenu = new JMenu("Файл");
-        EditMenu = new JMenu("Правка");
-        helpMenu = new JMenu("Помощь");
-        settsMenu = new JMenu("Настройкм");
         exitItem = new JMenuItem("Выйти");
+        fileMenu.add(exitItem);
 
+        EditMenu = new JMenu("Правка");
         nsItem = new JMenuItem("Настройки сервиса");
         ssItem = new JMenuItem("Настройки звука");
-        aboutItem = new JMenuItem("О программе");
-        helpMenu.add(aboutItem);
+        settsMenu = new JMenu("Настройкм");
         settsMenu.add(nsItem);
         settsMenu.add(ssItem);
-        fileMenu.add(exitItem);
+        EditMenu.add(settsMenu);
+
+        workMenu = new JMenu("Сервис");
+        playItem = new JMenu("Воспроизвести");
+        checkItem = new JMenuItem("Проверить записанный фрагмент");
+        saveItem = new JMenu("Сохранить фрагмент в слот...");
+        playcurrent = new JMenuItem("Текущий фрагмент");
+        playslot1 = new JMenuItem("Слот1");
+        playslot2 = new JMenuItem("Слот2");
+        playslot3 = new JMenuItem("Слот3");
+        saveslot1 = new JMenuItem("Слот1");
+        saveslot2 = new JMenuItem("Слот2");
+        saveslot3 = new JMenuItem("Слот3");
+        playItem.add(playcurrent);
+        playItem.add(playslot1);
+        playItem.add(playslot2);
+        playItem.add(playslot3);
+
+        saveItem.add(saveslot1);
+        saveItem.add(saveslot2);
+        saveItem.add(saveslot3);
+
+        workMenu.add(checkItem);
+        workMenu.add(playItem);
+        workMenu.add(saveItem);
+
+        helpMenu = new JMenu("Помощь");
+        aboutItem = new JMenuItem("О программе");
+        helpMenu.add(aboutItem);
+
         menuBar.add(fileMenu);
         menuBar.add(EditMenu);
+        menuBar.add(workMenu);
         menuBar.add(helpMenu);
-        EditMenu.add(settsMenu);
+
         frame.setJMenuBar(menuBar);
 
         panel = new JPanel(new BorderLayout());
@@ -134,9 +200,9 @@ public class SoundRecord extends ModuleGUI {
         controlsPanel.add(stopPPanel, BorderLayout.EAST);
 
         frame.getContentPane().add(controlsPanel, BorderLayout.CENTER);
-        save.setEnabled(false);
-        check.setEnabled(false);
 
+        disableSave();
+        disableCheck();
 
 
     }
@@ -271,12 +337,11 @@ public class SoundRecord extends ModuleGUI {
                 binarySound.stopRecord();
                 recording = false;
                 check.setEnabled(true);
+                checkItem.setEnabled(true);
             }
         });
 
-
-
-        check.addActionListener(new ActionListener() {
+        var checkAction = new AbstractAction("check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
                 byte[] fileContent = null;
@@ -305,7 +370,28 @@ public class SoundRecord extends ModuleGUI {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
                 }
             }
-        });
+        };
+
+        String bind = "check";
+
+        var voidAction = new AbstractAction(bind){
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                showMessageDialog(null, "void");
+            }
+        };
+
+        checkAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
+        check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke("ctrl C"), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
+        //KeyStroke.getKeyStroke("ctrl B")
+
+        check.getActionMap().put(bind, checkAction);
+
+
+
+
+        check.addActionListener(checkAction);
 
         nsItem.addActionListener(new ActionListener() {
             @Override
@@ -334,6 +420,8 @@ public class SoundRecord extends ModuleGUI {
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
+
+
 
 
         save.addActionListener(new ActionListener() {
@@ -380,7 +468,7 @@ public class SoundRecord extends ModuleGUI {
         akt.save=save;
         akt.setAddress("http://127.0.0.1:14444/");
         akt.spawn();
-        showMessageDialog(null, "AKtor spawned");
+      //  showMessageDialog(null, "AKtor spawned");
     }
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
