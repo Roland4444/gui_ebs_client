@@ -27,6 +27,12 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class SoundRecord extends ModuleGUI {
+    public final String slot1 = "slot1.wav";
+    public final String slot2 = "slot2.wav";
+    public final String slot3 = "slot3.wav";
+
+
+
     timeBasedUUID uuid = new timeBasedUUID();
     public final String tempfile = "temp.wav";
 
@@ -353,6 +359,8 @@ public class SoundRecord extends ModuleGUI {
             }
         });
 
+
+
         var checkAction = new AbstractAction("check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
@@ -384,6 +392,58 @@ public class SoundRecord extends ModuleGUI {
             }
         };
 
+        var save1Action = new AbstractAction("save1"){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    var fos = new FileOutputStream(slot1);
+                    fos.write(Files.readAllBytes(new File(tempfile).toPath()));
+                    fos.close();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        };
+
+        var save2Action = new AbstractAction("save2"){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    var fos = new FileOutputStream(slot2);
+                    fos.write(Files.readAllBytes(new File(tempfile).toPath()));
+                    fos.close();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        };
+
+        var save3Action = new AbstractAction("save3"){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    var fos = new FileOutputStream(slot3);
+                    fos.write(Files.readAllBytes(new File(tempfile).toPath()));
+                    fos.close();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        };
+
+        saveslot1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke("ctrl S 1"), "save1");
+
+        saveslot2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke("ctrl S 2"), "save2");
+
+
         String bind = "check";
 
         var voidAction = new AbstractAction(bind){
@@ -395,12 +455,10 @@ public class SoundRecord extends ModuleGUI {
 
         checkAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                KeyStroke.getKeyStroke("ctrl C"), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
-        //KeyStroke.getKeyStroke("ctrl B")
+               KeyStroke.getKeyStroke("control alt 1"), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
+        //KeyStroke.getKeyStroke("ctrl B") ///ctrl C
 
         check.getActionMap().put(bind, checkAction);
-
-
 
 
         check.addActionListener(checkAction);
@@ -500,6 +558,8 @@ public class SoundRecord extends ModuleGUI {
         sr.initAboutFrame();
         sr.prepareAktor();
         sr.frame.setVisible(true);
+
+
     }
 
     interface OnSuccess{

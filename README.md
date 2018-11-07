@@ -10,6 +10,7 @@ Layouts in SWING => https://www.intuit.ru/studies/courses/16/16/lecture/27125?pa
 Menu in SWING => https://javaswing.wordpress.com/2010/02/20/jmenubar/
 Adding key listeners => https://www.codejava.net/java-se/swing/setting-shortcut-key-and-hotkey-for-menu-item-and-button-in-swing
 Lambda => https://metanit.com/java/tutorial/9.2.php
+KeyStrokes => https://examples.javacodegeeks.com/desktop-java/swing/java-swing-key-binding-example/
 
 отношение сигнал-шум для звука 20-100 дБ;
  глубина квантования 8-32 бит;  =>24 bit;

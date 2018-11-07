@@ -3,6 +3,7 @@ package app;
 import app.Essens.Sound_Settings;
 import org.junit.jupiter.api.Test;
 
+import java.awt.event.KeyEvent;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -10,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class Sound_SettingsTest {
     public int X = 0;
+
+    @Test
+    void voidTest(){
+        System.out.println(KeyEvent.getKeyText(KeyEvent.VK_F1));
+    }
 
     @Test
     void saveSetiingsToBytes() throws IOException {
