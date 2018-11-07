@@ -40,7 +40,6 @@ public class SoundRecord extends ModuleGUI {
     public final String play_slot2 = "playslot2" ;
     public final String play_slot3 = "playslot3" ;
 
-
     public final String saveslot1_shortcut = "control 1";
     public final String saveslot2_shortcut = "control 2";
     public final String saveslot3_shortcut = "control 3";
@@ -104,7 +103,7 @@ public class SoundRecord extends ModuleGUI {
     AppAktor akt;
 
     public Color StartBackgroundColor;
-    public SoundRecord() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+    public SoundRecord() {
 
 
     }
