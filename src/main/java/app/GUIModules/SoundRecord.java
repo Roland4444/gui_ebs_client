@@ -1,4 +1,5 @@
 package app.GUIModules;
+
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
@@ -7,7 +8,6 @@ import essens.InputMessage;
 import essens.ResponceMessage;
 import essens.TablesEBSCheck;
 import impl.JAktor;
-
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
@@ -15,13 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
+
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -30,7 +30,22 @@ public class SoundRecord extends ModuleGUI {
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
+    public final String ctrlC = "control C";
+    public final String playslot1_shortcut = "alt 1";
+    public final String playslot2_shortcut = "alt 2";
+    public final String playslot3_shortcut = "alt 3";
 
+    public final String saveslot1_shortcut = "control 1";
+    public final String saveslot2_shortcut = "control 2";
+    public final String saveslot3_shortcut = "control 3";
+    public final String startrecord="startrecord";
+    public final String stoprecord="stoprecord";
+    public final String startrec_shortcut = "control S";
+    public final String stoptrec_shortcut = "control F";
+
+    public boolean slot1ready=false;
+    public boolean slot2ready=false;
+    public boolean slot3ready=false;
 
 
     timeBasedUUID uuid = new timeBasedUUID();
@@ -62,6 +77,7 @@ public class SoundRecord extends ModuleGUI {
     JMenuItem saveslot1 ;
     JMenuItem saveslot2;
     JMenuItem saveslot3;
+
     public SSettings ss;
     public NetworkSettings ns;
     public About about;
@@ -73,7 +89,6 @@ public class SoundRecord extends ModuleGUI {
     public JPanel startPanel;
     public JPanel stopPPanel;
     public JButton check;
-    public JButton save;
     public JButton start;
     public JButton stop;
     public JLabel startLabel;
@@ -97,19 +112,17 @@ public class SoundRecord extends ModuleGUI {
     }
 
     public void disableSave(){
-        save.setEnabled(false);
         saveItem.setEnabled(false);
     }
 
     public void enableSave(){
         System.out.println("\n\n\nControl Passsed!!!\n\n\n");
-        save.setEnabled(true);
         saveItem.setEnabled(true);
     }
 
     public void enableCheck(){
-        check.setEnabled(false);
-        checkItem.setEnabled(false);
+        check.setEnabled(true);
+        checkItem.setEnabled(true);
     }
 
     public void disableCheck(){
@@ -123,7 +136,12 @@ public class SoundRecord extends ModuleGUI {
 
 
     public void disablePlay(){
-      playItem.setEnabled(false);
+      playcurrent.setEnabled(false);
+      playslot1.setEnabled(false);
+      playslot2.setEnabled(false);
+      playslot3.setEnabled(false);
+
+
 
     };
 
@@ -189,9 +207,8 @@ public class SoundRecord extends ModuleGUI {
 
 
         check = new JButton("Проверить записанный фрагмент");
-        save = new JButton("Сохранить фрагмент в WAV...");
         panel.add(check, BorderLayout.WEST);
-        panel.add(save, BorderLayout.EAST);
+
 
         var controlPanelLayout = new FlowLayout();
         controlPanelLayout.setHgap(100);
@@ -303,13 +320,15 @@ public class SoundRecord extends ModuleGUI {
     }
 
 
+
+
     @Override
     public void initListeners() {
-        start.addActionListener(new ActionListener() {
+
+        var startRecord = new AbstractAction(startrecord){
             @Override
-            public void actionPerformed(ActionEvent e2) {
+            public void actionPerformed(ActionEvent e1) {
                 System.out.println("Pressed");
-                save.setEnabled(false);
                 checked=false;
                 StartBackgroundColor = start.getBackground();
                 start.setBackground(Color.RED);
@@ -343,21 +362,32 @@ public class SoundRecord extends ModuleGUI {
                 }
                 recording=true;
             }
-        });
+        };
 
-        stop.addActionListener(new ActionListener() {
+        var stopRecord = new  AbstractAction(stoprecord){
             @Override
-            public void actionPerformed(ActionEvent e2) {
+            public void actionPerformed(ActionEvent e1) {
                 if (!recording)
                     return;
                 start.setBackground(StartBackgroundColor);
                 binarySound.stopRecord();
                 recording = false;
-                check.setEnabled(true);
-                checkItem.setEnabled(true);
                 enablePlay();
+                enableCheck();
+                playcurrent.setEnabled(true);
             }
-        });
+        };
+
+        start.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(startrec_shortcut), startrecord);
+        start.getActionMap().put(startrecord, startRecord);
+        start.addActionListener(startRecord);
+
+
+        stop.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(stoptrec_shortcut), stoprecord);
+        stop.getActionMap().put(stoprecord, stopRecord);
+        stop.addActionListener(stopRecord);
 
 
 
@@ -395,10 +425,14 @@ public class SoundRecord extends ModuleGUI {
         var save1Action = new AbstractAction("save1"){
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 try {
                     var fos = new FileOutputStream(slot1);
                     fos.write(Files.readAllBytes(new File(tempfile).toPath()));
                     fos.close();
+                    showMessageDialog(null, "Успешно сохранен!");
+                    slot1ready=true;
+                    playslot1.setEnabled(true);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
@@ -414,6 +448,9 @@ public class SoundRecord extends ModuleGUI {
                     var fos = new FileOutputStream(slot2);
                     fos.write(Files.readAllBytes(new File(tempfile).toPath()));
                     fos.close();
+                    showMessageDialog(null, "Успешно сохранен!");
+                    slot2ready=true;
+                    playslot2.setEnabled(true);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
@@ -429,6 +466,9 @@ public class SoundRecord extends ModuleGUI {
                     var fos = new FileOutputStream(slot3);
                     fos.write(Files.readAllBytes(new File(tempfile).toPath()));
                     fos.close();
+                    showMessageDialog(null, "Успешно сохранен!");
+                    slot3ready=true;
+                    playslot3.setEnabled(true);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
@@ -438,10 +478,22 @@ public class SoundRecord extends ModuleGUI {
         };
 
         saveslot1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                KeyStroke.getKeyStroke("ctrl S 1"), "save1");
+                KeyStroke.getKeyStroke(saveslot1_shortcut), slot1);
+        saveslot1.getActionMap().put(slot1, save1Action);
+        saveslot1.addActionListener(save1Action);
+
 
         saveslot2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                KeyStroke.getKeyStroke("ctrl S 2"), "save2");
+                KeyStroke.getKeyStroke(saveslot2_shortcut), slot2);
+        saveslot2.getActionMap().put(slot2, save2Action);
+        saveslot2.addActionListener(save1Action);
+
+        saveslot3.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(saveslot3_shortcut), slot3);
+        saveslot3.getActionMap().put(slot3, save3Action);
+        saveslot3.addActionListener(save1Action);
+
+
 
 
         String bind = "check";
@@ -455,7 +507,7 @@ public class SoundRecord extends ModuleGUI {
 
         checkAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-               KeyStroke.getKeyStroke("control alt 1"), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
+               KeyStroke.getKeyStroke(ctrlC), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
         //KeyStroke.getKeyStroke("ctrl B") ///ctrl C
 
         check.getActionMap().put(bind, checkAction);
@@ -494,40 +546,7 @@ public class SoundRecord extends ModuleGUI {
 
 
 
-        save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e2) {
-                FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
-                FilenameFilter wavFilter = new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
-                        String lowercaseName = name.toLowerCase();
-                        if (lowercaseName.endsWith(".wav")) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                };
-                fd.setFilenameFilter(wavFilter);
-                fd.setVisible(true);
 
-                var savingFile = fd.getDirectory()+fd.getFile();
-                System.out.print(savingFile);
-                try {
-                    var content = Files.readAllBytes(new File(tempfile).toPath());
-                    var fos = new FileOutputStream(savingFile);
-                    fos.write(content);
-                    fos.close();
-                    showMessageDialog(null, "Файл"+savingFile+" сохранен!");
-                    new File(tempfile).delete();
-                    save.setEnabled(false);
-                    check.setEnabled(false);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
 
     }
 
@@ -535,7 +554,6 @@ public class SoundRecord extends ModuleGUI {
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
-        akt.save=save;
         akt.setAddress("http://127.0.0.1:14444/");
         akt.spawn();
         akt.on_success=new OnSuccess() {
@@ -571,11 +589,9 @@ public class SoundRecord extends ModuleGUI {
         public OnSuccess on_success;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();
-        Boolean justSpawned=false;
         @Override
         public void receive(byte[] message) throws IOException {
             System.out.println("Received!!!! via console");
-            // showMessageDialog(null, "JUST RECEIVED");
             var resp = ResponceMessage.restoreBytesToResponceMessage(message);
             System.out.println("\n\n\nRECEIVED");
             try {
@@ -587,7 +603,6 @@ public class SoundRecord extends ModuleGUI {
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
                 if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0)) {
-                    save.setEnabled(true);
                     on_success.passed();
                 }
         //        else

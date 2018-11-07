@@ -49,4 +49,11 @@ class SoundTest {
         TargetDataLine line = (TargetDataLine) AudioSystem.getLine(l[0]);
         assertNotEquals(null, line);
     }
+
+    @Test
+    void playWav() throws IOException {
+        Sound_Settings ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+        Sound binarySound = new Sound(ss);
+        binarySound.playSound("out.wav");
+    }
 }
