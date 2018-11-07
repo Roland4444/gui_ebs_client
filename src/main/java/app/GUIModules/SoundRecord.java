@@ -30,10 +30,16 @@ public class SoundRecord extends ModuleGUI {
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
-    public final String ctrlC = "control C";
+    public final String check_shortcut = "control C";
+    public final String playcurrent_shortcut = "alt Q";
     public final String playslot1_shortcut = "alt 1";
     public final String playslot2_shortcut = "alt 2";
     public final String playslot3_shortcut = "alt 3";
+    public final String play_current = "playcurrent" ;
+    public final String play_slot1 = "playslot1" ;
+    public final String play_slot2 = "playslot2" ;
+    public final String play_slot3 = "playslot3" ;
+
 
     public final String saveslot1_shortcut = "control 1";
     public final String saveslot2_shortcut = "control 2";
@@ -170,13 +176,13 @@ public class SoundRecord extends ModuleGUI {
         playItem = new JMenu("Воспроизвести");
         checkItem = new JMenuItem("Проверить записанный фрагмент");
         saveItem = new JMenu("Сохранить фрагмент в слот...");
-        playcurrent = new JMenuItem("Текущий фрагмент");
-        playslot1 = new JMenuItem("Слот1");
-        playslot2 = new JMenuItem("Слот2");
-        playslot3 = new JMenuItem("Слот3");
-        saveslot1 = new JMenuItem("Слот1");
-        saveslot2 = new JMenuItem("Слот2");
-        saveslot3 = new JMenuItem("Слот3");
+        playcurrent = new JMenuItem("Текущий фрагмент   (Ctrl+q)");
+        playslot1 = new JMenuItem("Слот1    "+playslot1_shortcut);
+        playslot2 = new JMenuItem("Слот2    "+playslot2_shortcut);
+        playslot3 = new JMenuItem("Слот3    "+playslot3_shortcut);
+        saveslot1 = new JMenuItem("Слот1    (Ctrl+1)");
+        saveslot2 = new JMenuItem("Слот2    (Ctrl+2)");
+        saveslot3 = new JMenuItem("Слот3    (Ctrl+3)");
         playItem.add(playcurrent);
         playItem.add(playslot1);
         playItem.add(playslot2);
@@ -206,7 +212,7 @@ public class SoundRecord extends ModuleGUI {
         frame.getContentPane().add(panel, BorderLayout.PAGE_END);
 
 
-        check = new JButton("Проверить записанный фрагмент");
+        check = new JButton("Проверить записанный фрагмент  (Ctrl+C)");
         panel.add(check, BorderLayout.WEST);
 
 
@@ -220,8 +226,8 @@ public class SoundRecord extends ModuleGUI {
 
         start = new JButton("START");
         stop = new JButton("STOP");
-        startLabel = new JLabel("Начать запись звукового фрагмента");
-        stopLabel=new JLabel("Остановить запись");
+        startLabel = new JLabel("Начать запись звукового фрагмента  (Ctrl+S)");
+        stopLabel=new JLabel("Остановить запись     (Ctrl+F)");
 
         startPanel.add(start);
         startPanel.add(startLabel);
@@ -493,7 +499,58 @@ public class SoundRecord extends ModuleGUI {
         saveslot3.getActionMap().put(slot3, save3Action);
         saveslot3.addActionListener(save1Action);
 
+        var playCurrent = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                binarySound.playSound(tempfile);
+            }
+        };
 
+
+
+        var playSlot1 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Try to play =>"+slot1);
+                binarySound.playSound(slot1);
+            }
+        };
+
+        var playSlot2 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Try to play =>"+slot2);
+                binarySound.playSound(slot2);
+            }
+        };
+
+        var playSlot3 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Try to play =>"+slot3);
+                binarySound.playSound(slot3);
+            }
+        };
+
+        playcurrent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(playcurrent_shortcut), play_current);
+        playcurrent.getActionMap().put(play_current, playCurrent);
+        playcurrent.addActionListener(playCurrent);
+
+        playslot1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(playslot1_shortcut), play_slot1);
+        playslot1.getActionMap().put(play_slot1, playSlot1);
+        playslot1.addActionListener(playSlot1);
+
+        playslot2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(playslot2_shortcut), play_slot2);
+        playslot2.getActionMap().put(play_slot2, playSlot2);
+        playslot2.addActionListener(playSlot2);
+
+        playslot3.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(playslot3_shortcut), play_slot3);
+        playslot3.getActionMap().put(play_slot3, playSlot3);
+        playslot3.addActionListener(playSlot3);
 
 
         String bind = "check";
@@ -507,7 +564,7 @@ public class SoundRecord extends ModuleGUI {
 
         checkAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-               KeyStroke.getKeyStroke(ctrlC), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
+               KeyStroke.getKeyStroke(check_shortcut), bind);// KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), bind);
         //KeyStroke.getKeyStroke("ctrl B") ///ctrl C
 
         check.getActionMap().put(bind, checkAction);
