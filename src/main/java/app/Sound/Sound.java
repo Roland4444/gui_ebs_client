@@ -260,7 +260,7 @@ public class Sound {
         sourceLine.close();
     }
 
-    public void joinWav(String wav1, String wav2, String outputResult) {
+    public void margeWav(String wav1, String wav2, String outputResult) {
         try {
             AudioInputStream clip1 = AudioSystem.getAudioInputStream(new File(wav1));
             AudioInputStream clip2 = AudioSystem.getAudioInputStream(new File(wav2));

@@ -3,7 +3,7 @@ package app.Sound;
 import java.math.BigInteger;
 
 public class Wav {
-    public static String printByte(byte[] arr) {
+    public static String BytetoHexRepresent(byte[] arr) {
         BigInteger out = new BigInteger(1, arr);
         return out.toString(16);
     }
@@ -73,7 +73,7 @@ public class Wav {
     }
 
     public static int getNumberFromBytes(byte[] arr){
-        var result = new BigInteger(1, arr);//String.valueOf(printByte(arr)));
+        var result = new BigInteger(1, arr);//String.valueOf(BytetoHexRepresent(arr)));
         return result.intValue();
     }
 
@@ -93,8 +93,13 @@ public class Wav {
         strBuf.append("subchunk2Id ==>  " +getNumberFromBytes(toBigEndian(getsubchunk2Id(arr)))+"\n");
         strBuf.append("subchunk2Size ==>  " +getNumberFromBytes(toBigEndian(getsubchunk2Size(arr)))+"\n");
         strBuf.append("Data length ==>  " +getdata(arr).length+"\n");
+        strBuf.append("Track length ==>"+Float.valueOf(getdata(arr).length)/Float.valueOf(getNumberFromBytes(toBigEndian(getbyteRate(arr))))+" secs");
 
         return strBuf.toString();
+    }
+
+    public static float getLengthTrack(byte[] arr){
+        return Float.valueOf(getdata(arr).length)/Float.valueOf(getNumberFromBytes(toBigEndian(getbyteRate(arr))));
     }
 
     public static byte[] toBigEndian(byte[] arr){

@@ -579,8 +579,8 @@ public class SoundRecord extends ModuleGUI {
                     e1.printStackTrace();
                 }
                 binarySound = new Sound(ss);
-                binarySound.joinWav(slot1, slot2, tempmerged);
-                binarySound.joinWav(tempmerged, slot3, resultmerged);
+                binarySound.margeWav(slot1, slot2, tempmerged);
+                binarySound.margeWav(tempmerged, slot3, resultmerged);
                 showMessageDialog(null, "Merge complete!");
             }
         };
