@@ -39,6 +39,10 @@ public class SoundRecord extends ModuleGUI {
     public final String play_slot1 = "playslot1" ;
     public final String play_slot2 = "playslot2" ;
     public final String play_slot3 = "playslot3" ;
+    public final String tempmerged = "merged.wav";
+    public final String resultmerged = "result.wav";
+    public final String merge_shortcut = "control M";
+    public final String merge= "merge";
 
     public final String saveslot1_shortcut = "control 1";
     public final String saveslot2_shortcut = "control 2";
@@ -82,6 +86,8 @@ public class SoundRecord extends ModuleGUI {
     JMenuItem saveslot1 ;
     JMenuItem saveslot2;
     JMenuItem saveslot3;
+
+    JMenuItem mergeSlots;
 
     public SSettings ss;
     public NetworkSettings ns;
@@ -194,6 +200,10 @@ public class SoundRecord extends ModuleGUI {
         workMenu.add(checkItem);
         workMenu.add(playItem);
         workMenu.add(saveItem);
+
+        mergeSlots = new JMenuItem("Склеить образцы");
+
+        workMenu.add(mergeSlots);
 
         helpMenu = new JMenu("Помощь");
         aboutItem = new JMenuItem("О программе");
@@ -501,6 +511,13 @@ public class SoundRecord extends ModuleGUI {
         var playCurrent = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Sound_Settings ss = null;
+                try {
+                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                binarySound = new Sound(ss);
                 binarySound.playSound(tempfile);
             }
         };
@@ -552,6 +569,28 @@ public class SoundRecord extends ModuleGUI {
         playslot3.addActionListener(playSlot3);
 
 
+        var mergeAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Sound_Settings ss = null;
+                try {
+                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                binarySound = new Sound(ss);
+                binarySound.joinWav(slot1, slot2, tempmerged);
+                binarySound.joinWav(tempmerged, slot3, resultmerged);
+                showMessageDialog(null, "Merge complete!");
+            }
+        };
+
+        mergeSlots.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(merge_shortcut), merge);
+        mergeSlots.getActionMap().put(merge, mergeAction);
+        mergeSlots.addActionListener(mergeAction);
+
+
         String bind = "check";
 
         var voidAction = new AbstractAction(bind){
@@ -598,12 +637,6 @@ public class SoundRecord extends ModuleGUI {
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
-
-
-
-
-
-
     }
 
 

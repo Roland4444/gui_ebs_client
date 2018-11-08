@@ -11,6 +11,7 @@ Menu in SWING => https://javaswing.wordpress.com/2010/02/20/jmenubar/
 Adding key listeners => https://www.codejava.net/java-se/swing/setting-shortcut-key-and-hotkey-for-menu-item-and-button-in-swing
 Lambda => https://metanit.com/java/tutorial/9.2.php
 KeyStrokes => https://examples.javacodegeeks.com/desktop-java/swing/java-swing-key-binding-example/
+Wav description => https://audiocoding.ru/article/2008/05/22/wav-file-structure.html
 
 отношение сигнал-шум для звука 20-100 дБ;
  глубина квантования 8-32 бит;  =>24 bit;
@@ -18,3 +19,10 @@ KeyStrokes => https://examples.javacodegeeks.com/desktop-java/swing/java-swing-k
  длина записи 5-35 секунд;
  количество каналов в записи от 1 (моно режим) до 2 (стерео режим);
  размер проверяемых данных 100-1500 Кб.
+
+
+playSound (filename. offset1 , offset2 )
+more offset1 => more drops from end to begin(flushed ended)
+more offset2 => more drop from begin in output play; good for positioning;
+
+DURATION wav => https://stackoverflow.com/questions/2709508/how-to-learn-wav-duration-in-java-media-frame-work/2716637
