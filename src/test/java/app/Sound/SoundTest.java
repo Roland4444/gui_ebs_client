@@ -205,7 +205,7 @@ class SoundTest {
         fos.close();
         Sound_Settings ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
         Sound binarySound = new Sound(ss);
-       // binarySound.playSound(prepared);
+       // BinarySound.playSound(prepared);
         byte[] worked=Files.readAllBytes(new File(prepared).toPath());
         byte[] manipulated = new byte[worked.length];
         System.out.println("CONTENT==>"+Wav.BytetoHexRepresent(Wav.getdata(worked)));

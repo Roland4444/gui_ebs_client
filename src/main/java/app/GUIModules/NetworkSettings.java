@@ -16,7 +16,7 @@ import java.nio.file.Files;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class NetworkSettings extends ModuleGUI {
-    private final String settingFiles="ns.bin";
+    private final String settingFiles="NetworkSettings.bin";
     private final String defaultAdress =  "http://127.0.0.1:12121/";
     private IPSetts defaultSets = new IPSetts( defaultAdress);
     public JFrame frame;
