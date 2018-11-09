@@ -66,94 +66,79 @@ public class SSettings  extends ModuleGUI {
 
 
     public SSettings(){
-
-    }
-
-    @Override
-    public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-
         frame = new JFrame("Меню настроек звука");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         panelControlButtons = new JPanel(new BorderLayout());
-        frame.getContentPane().add(panelControlButtons, BorderLayout.PAGE_END);
-
         saveSets = new JButton("Сохранить настройки");
         loadSets = new JButton("Загрузить настройки");
         saveAsSets = new JButton("Сохранить..");
-        panelControlButtons.add(loadSets, BorderLayout.WEST);
-        panelControlButtons.add(saveSets, BorderLayout.EAST);
-        panelControlButtons.add(saveAsSets, BorderLayout.CENTER);
-
         var gr_layout= new GridLayout(4,                1);
         gr_layout.setVgap(20);
-
         SetsPane = new JPanel(gr_layout);
-
-        frame.getContentPane().add(SetsPane, BorderLayout.PAGE_START);
-
         sampleRatePane = new JPanel(new GridLayout());
-        SetsPane.add(sampleRatePane);
-
         sampleRateLabel = new JLabel("Частота дискретизации(sampleRate)");
         sampleRateInput = new JTextField("",3);
-
-
-        sampleRatePane.add(sampleRateLabel);
-        sampleRatePane.add(sampleRateInput);
-
         sampleSizeInBitsPane = new JPanel(new GridLayout());
-        SetsPane.add(sampleSizeInBitsPane);
-
         sampleSizeInBitsLabel = new JLabel("Разрядность звука(sampleSizeInBits)");
         sampleSizeInBitsInput = new JTextField();
-
-        sampleSizeInBitsPane.add(sampleSizeInBitsLabel);
-        sampleSizeInBitsPane.add(sampleSizeInBitsInput);
-
-
-
         channelsPane = new JPanel(new GridLayout());
         SetsPane.add(channelsPane);
-
         channelsLabel = new JLabel("Число каналов звука(channels)");
         channelsInput = new JTextField("",3);
-
-        channelsPane.add(channelsLabel);
-        channelsPane.add(channelsInput);
-
-
-
         frameSizePane = new JPanel(new GridLayout());
-        SetsPane.add(frameSizePane);
-
         frameSizeLabel = new JLabel("Размер кадра звука(frameSize)");
         frameSizeInput = new JTextField("",3);
-
-        frameSizePane.add(frameSizeLabel);
-        frameSizePane.add(frameSizeInput);
-
-
-
         frameRatePane = new JPanel(new GridLayout());
-        SetsPane.add(frameRatePane);
-
         frameRateLabel = new JLabel("Число кадров в секунду звука(frameRate)");
         frameRateInput = new JTextField("",3);
-
-        frameRatePane.add(frameRateLabel);
-        frameRatePane.add(frameRateInput);
-
-
         bigEndianPane = new JPanel(new GridLayout());
-        SetsPane.add(bigEndianPane);
-
         checkBoxPanel = new JPanel(new GridLayout());
-
         bigEndianLabel = new JLabel("BigEndian?");
         check = new CheckboxGroup();
         true_=new Checkbox ("True");
         false_=new Checkbox ("False");
+        indexmixerPane = new JPanel(new GridLayout());
+        SetsPane.add(indexmixerPane);
+        indexmixerLabel = new JLabel("Номер миксера(mixer#)");
+        mixerchooser = new Choice();
+    }
+
+    @Override
+    public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(panelControlButtons, BorderLayout.PAGE_END);
+        panelControlButtons.add(loadSets, BorderLayout.WEST);
+        panelControlButtons.add(saveSets, BorderLayout.EAST);
+        panelControlButtons.add(saveAsSets, BorderLayout.CENTER);
+        var gr_layout= new GridLayout(4,                1);
+        gr_layout.setVgap(20);
+
+        frame.getContentPane().add(SetsPane, BorderLayout.PAGE_START);
+        SetsPane.add(sampleRatePane);
+
+        sampleRatePane.add(sampleRateLabel);
+        sampleRatePane.add(sampleRateInput);
+
+        SetsPane.add(sampleSizeInBitsPane);
+
+        sampleSizeInBitsPane.add(sampleSizeInBitsLabel);
+        sampleSizeInBitsPane.add(sampleSizeInBitsInput);
+
+        SetsPane.add(channelsPane);
+
+        channelsPane.add(channelsLabel);
+        channelsPane.add(channelsInput);
+        SetsPane.add(frameSizePane);
+
+        frameSizePane.add(frameSizeLabel);
+        frameSizePane.add(frameSizeInput);
+
+        SetsPane.add(frameRatePane);
+
+        frameRatePane.add(frameRateLabel);
+        frameRatePane.add(frameRateInput);
+
+        SetsPane.add(bigEndianPane);
+
         true_.setCheckboxGroup(check);
         false_.setCheckboxGroup(check);
 
@@ -162,12 +147,7 @@ public class SSettings  extends ModuleGUI {
         checkBoxPanel.add(false_);
         bigEndianPane.add(checkBoxPanel);
 
-        indexmixerPane = new JPanel(new GridLayout());
         SetsPane.add(indexmixerPane);
-
-        indexmixerLabel = new JLabel("Номер миксера(mixer#)");
-
-        mixerchooser = new Choice();
 
         Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
         var counter=0;
@@ -178,8 +158,6 @@ public class SSettings  extends ModuleGUI {
         indexmixerPane.add(indexmixerLabel);
         indexmixerPane.add(mixerchooser);
         frame.pack();
-
-
     }
 
     public void loadSets(String FileName) throws IOException {

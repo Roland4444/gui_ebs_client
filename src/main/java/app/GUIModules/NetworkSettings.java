@@ -16,6 +16,25 @@ import java.nio.file.Files;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class NetworkSettings extends ModuleGUI {
+    public NetworkSettings(){
+        frame=new JFrame("Сетевые настройки");
+
+        info = new JLabel("Введите адрес сервиса проверки биометрических данных");
+        ButtonSaveExitpanel = new JPanel(new BorderLayout());
+
+        saveSets = new JButton("Сохранить и закрыть");
+        Exit = new JButton("Закрыть без сохранения");
+
+        serverNameLabel = new JLabel("http://");
+        portLabel=new JLabel(":");
+        ender = new JLabel("/");
+
+        serverAdress = new JTextField("", 10);
+        port=new JTextField("", 6);
+
+        SettingPanel = new JPanel(new FlowLayout());
+    }
+
     private final String settingFiles="NetworkSettings.bin";
     private final String defaultAdress =  "http://127.0.0.1:12121/";
     private IPSetts defaultSets = new IPSetts( defaultAdress);
@@ -37,11 +56,6 @@ public class NetworkSettings extends ModuleGUI {
     private JPanel SettingPanel;
 
     private JPanel ButtonSaveExitpanel ;
-
-    public NetworkSettings() throws IOException, InterruptedException {
-
-
-    }
 
     public String getPort(String fulladdress){
         int init = fulladdress.lastIndexOf(":");
@@ -76,28 +90,10 @@ public class NetworkSettings extends ModuleGUI {
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        frame=new JFrame("Сетевые настройки");
-
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        info = new JLabel("Введите адрес сервиса проверки биометрических данных");
-        ButtonSaveExitpanel = new JPanel(new BorderLayout());
         frame.getContentPane().add(ButtonSaveExitpanel, BorderLayout.PAGE_END);
-
-        saveSets = new JButton("Сохранить и закрыть");
-        Exit = new JButton("Закрыть без сохранения");
-
         ButtonSaveExitpanel.add(saveSets, BorderLayout.WEST);
         ButtonSaveExitpanel.add(Exit, BorderLayout.EAST);
-
-        serverNameLabel = new JLabel("http://");
-        portLabel=new JLabel(":");
-        ender = new JLabel("/");
-
-        serverAdress = new JTextField("", 10);
-        port=new JTextField("", 6);
-
-        SettingPanel = new JPanel(new FlowLayout());
 
 
         frame.getContentPane().add(info, BorderLayout.PAGE_START);
@@ -133,6 +129,14 @@ public class NetworkSettings extends ModuleGUI {
                     e1.printStackTrace();
                 }
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                try {
+                    tryReadData();
+                    System.out.println("Reload setts...");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
 
             }
         });

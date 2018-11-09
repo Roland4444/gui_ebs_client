@@ -96,7 +96,7 @@ class SoundTest {
         double durationInSeconds = (frames+0.0) / format.getFrameRate();
         System.out.println("out.wav DURATION =>"+durationInSeconds);
         System.out.println("FRame length =>"+frames);
-        System.out.println("Frame rate=>"+format.getFrameRate());
+        System.out.println("frame rate=>"+format.getFrameRate());
     }
 
     @Test
@@ -108,7 +108,7 @@ class SoundTest {
         double durationInSeconds = (frames+0.0) / format.getFrameRate();
         System.out.println("out.wav DURATION =>"+durationInSeconds);
         System.out.println("FRame length =>"+frames);
-        System.out.println("Frame rate=>"+format.getFrameRate());
+        System.out.println("frame rate=>"+format.getFrameRate());
         file = new File("out5.wav");
         audioInputStream = AudioSystem.getAudioInputStream(file);
         format = audioInputStream.getFormat();

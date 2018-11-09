@@ -109,8 +109,41 @@ public class SoundRecord extends ModuleGUI {
 
     public Color StartBackgroundColor;
     public SoundRecord() {
-
-
+        frame = new JFrame("EBS GUI Client 1.5");
+        MenuBar = new JMenuBar();
+        FileMenu = new JMenu("Файл");
+        ExitItem = new JMenuItem("Выйти");
+        EditMenu = new JMenu("Правка");
+        NsItem = new JMenuItem("Настройки сервиса");
+        SsItem = new JMenuItem("Настройки звука");
+        SettsMenu = new JMenu("Настройкм");
+        WorkMenu = new JMenu("Сервис");
+        PlayItem = new JMenu("Воспроизвести");
+        CheckItem = new JMenuItem("Проверить записанный фрагмент");
+        SaveItem = new JMenu("Сохранить фрагмент в слот...");
+        Playcurrent = new JMenuItem("Текущий фрагмент   (Ctrl+q)");
+        Playslot1 = new JMenuItem("Слот1    "+playslot1_shortcut);
+        Playslot2 = new JMenuItem("Слот2    "+playslot2_shortcut);
+        Playslot3 = new JMenuItem("Слот3    "+playslot3_shortcut);
+        Saveslot1 = new JMenuItem("Слот1    (Ctrl+1)");
+        Saveslot2 = new JMenuItem("Слот2    (Ctrl+2)");
+        Saveslot3 = new JMenuItem("Слот3    (Ctrl+3)");
+        MergerSlots = new JMenuItem("Склеить образцы");
+        helpMenu = new JMenu("Помощь");
+        AboutItem = new JMenuItem("О программе");
+        Panel = new JPanel(new BorderLayout());
+        Check = new JButton("Проверить записанный фрагмент  (Ctrl+C)");
+        Panel.add(Check, BorderLayout.WEST);
+        var controlPanelLayout = new FlowLayout();
+        controlPanelLayout.setHgap(100);
+        controlPanelLayout.setVgap(40);
+        ControlsPanel = new JPanel(controlPanelLayout);
+        StartPanel = new JPanel(new GridLayout(2,1));
+        StopPPanel = new JPanel(new GridLayout(2,1));
+        Start = new JButton("START");
+        Stop = new JButton("STOP");
+        StartLabel = new JLabel("Начать запись звукового фрагмента  (Ctrl+S)");
+        StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
     }
 
     public void initinterop(){
@@ -136,6 +169,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     public void disableCheck(){
+        System.out.println("Disabling check");
         Check.setEnabled(false);
         CheckItem.setEnabled(false);
     }
@@ -158,35 +192,14 @@ public class SoundRecord extends ModuleGUI {
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        Frame = new JFrame("EBS GUI Client 1.5");
-        Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Frame.setSize(600, 400);
-        Frame.setLocationRelativeTo(null);
-        MenuBar = new JMenuBar();
-
-        FileMenu = new JMenu("Файл");
-        ExitItem = new JMenuItem("Выйти");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
         FileMenu.add(ExitItem);
-
-        EditMenu = new JMenu("Правка");
-        NsItem = new JMenuItem("Настройки сервиса");
-        SsItem = new JMenuItem("Настройки звука");
-        SettsMenu = new JMenu("Настройкм");
         SettsMenu.add(NsItem);
         SettsMenu.add(SsItem);
         EditMenu.add(SettsMenu);
 
-        WorkMenu = new JMenu("Сервис");
-        PlayItem = new JMenu("Воспроизвести");
-        CheckItem = new JMenuItem("Проверить записанный фрагмент");
-        SaveItem = new JMenu("Сохранить фрагмент в слот...");
-        Playcurrent = new JMenuItem("Текущий фрагмент   (Ctrl+q)");
-        Playslot1 = new JMenuItem("Слот1    "+playslot1_shortcut);
-        Playslot2 = new JMenuItem("Слот2    "+playslot2_shortcut);
-        Playslot3 = new JMenuItem("Слот3    "+playslot3_shortcut);
-        Saveslot1 = new JMenuItem("Слот1    (Ctrl+1)");
-        Saveslot2 = new JMenuItem("Слот2    (Ctrl+2)");
-        Saveslot3 = new JMenuItem("Слот3    (Ctrl+3)");
         PlayItem.add(Playcurrent);
         PlayItem.add(Playslot1);
         PlayItem.add(Playslot2);
@@ -200,12 +213,8 @@ public class SoundRecord extends ModuleGUI {
         WorkMenu.add(PlayItem);
         WorkMenu.add(SaveItem);
 
-        MergerSlots = new JMenuItem("Склеить образцы");
-
         WorkMenu.add(MergerSlots);
 
-        helpMenu = new JMenu("Помощь");
-        AboutItem = new JMenuItem("О программе");
         helpMenu.add(AboutItem);
 
         MenuBar.add(FileMenu);
@@ -213,29 +222,11 @@ public class SoundRecord extends ModuleGUI {
         MenuBar.add(WorkMenu);
         MenuBar.add(helpMenu);
 
-        Frame.setJMenuBar(MenuBar);
+        frame.setJMenuBar(MenuBar);
 
-        Panel = new JPanel(new BorderLayout());
+        frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
 
-        Frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
-
-
-        Check = new JButton("Проверить записанный фрагмент  (Ctrl+C)");
         Panel.add(Check, BorderLayout.WEST);
-
-
-        var controlPanelLayout = new FlowLayout();
-        controlPanelLayout.setHgap(100);
-        controlPanelLayout.setVgap(40);
-
-        ControlsPanel = new JPanel(controlPanelLayout);
-        StartPanel = new JPanel(new GridLayout(2,1));
-        StopPPanel = new JPanel(new GridLayout(2,1));
-
-        Start = new JButton("START");
-        Stop = new JButton("STOP");
-        StartLabel = new JLabel("Начать запись звукового фрагмента  (Ctrl+S)");
-        StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
 
         StartPanel.add(Start);
         StartPanel.add(StartLabel);
@@ -246,12 +237,11 @@ public class SoundRecord extends ModuleGUI {
         ControlsPanel.add(StartPanel, BorderLayout.WEST);
         ControlsPanel.add(StopPPanel, BorderLayout.EAST);
 
-        Frame.getContentPane().add(ControlsPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(ControlsPanel, BorderLayout.CENTER);
 
         disableSave();
         disableCheck();
         disablePlay();
-
 
     }
 
@@ -633,7 +623,7 @@ public class SoundRecord extends ModuleGUI {
         ExitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Frame.dispatchEvent(new WindowEvent(Frame, WindowEvent.WINDOW_CLOSING));
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
     }
@@ -663,7 +653,7 @@ public class SoundRecord extends ModuleGUI {
         sr.initinterop();
         sr.initAboutFrame();
         sr.prepareAktor();
-        sr.Frame.setVisible(true);
+        sr.frame.setVisible(true);
 
 
     }

@@ -23,7 +23,7 @@ public class Sound {
 
     public void printSetts(Sound_Settings sets) {
         System.out.println("CHANNELS =>" + sets.channels);
-        System.out.println("Frame rate =>" + sets.frameRate);
+        System.out.println("frame rate =>" + sets.frameRate);
         System.out.println("frameSize =>" + sets.frameSize);
         System.out.println("sampleRate =>" + sets.sampleRate);
         System.out.println("sampleSizeInBits =>" + sets.sampleSizeInBits);
