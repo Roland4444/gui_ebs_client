@@ -1,18 +1,33 @@
 package app.GUIModules;
 
+import app.Essens.SoundBundle;
 import app.abstractions.ModuleGUI;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MergeFrame extends ModuleGUI {
+    public Map<Character, Boolean> dictionary = new HashMap<>();
+    public final String create_bundle_shortcut = "control B";
+    AbstractAction bundleAction;
+    public final String bundleaction = "bundle";
     public final int width=5;
     public JPanel Section09, Panel;
     public JPanel Section90;
     public JPanel Section090;
     public JMenuBar Menubar;
-    public JMenu File, Edit;
+    public JMenu File_, Edit;
 
     JPanel ContainerPanel1;
     JPanel leftPanel1;
@@ -57,11 +72,14 @@ public class MergeFrame extends ModuleGUI {
     private JLabel lEnd2;
     private JLabel lEnd3;
 
+    JMenuItem createSoundBundle;
+
     public MergeFrame(){
+        initDict();
         frame = new JFrame("Модуль подготовки голосового слепка");
         Menubar = new JMenuBar();
-        File = new JMenu("Файл");
-        Edit = new JMenu("Сервис");
+        File_ = new JMenu("Файл");
+        Edit = new JMenu("Правка");
         Section90=new JPanel();
         Section090 =new JPanel();
         Panel = new JPanel(new GridLayout(1,3));
@@ -100,8 +118,63 @@ public class MergeFrame extends ModuleGUI {
         l090 =new JLabel("Случайная Секция");
         t090Begin =new JTextField("",width);
         t090End =new JTextField("",width);
+        createSoundBundle = new JMenuItem("Сформировать звуковой слепок");
     }
 
+    public boolean isnumber(String input){
+        for (int i=0; i<input.length();i++){
+            if (dictionary.get(input.charAt(i)) == null)
+                return false;
+        }
+        return true;
+    }
+
+    public boolean isbadField(String input){
+        if (input.length()==0) return true;
+        return !isnumber(input);
+    }
+
+
+
+
+    public void prepareActions(){
+        bundleAction = new AbstractAction(bundleaction){
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                if ((isbadField(t09Begin.getText())) || (isbadField(t09End.getText())) ||
+                (isbadField(t90Begin.getText())) || (isbadField(t90End.getText())) ||
+                (isbadField(t090Begin.getText())) || isbadField(t090End.getText())){
+                    showMessageDialog(null, "Проверьте правильность и полноту введенных данных");
+                    return;
+                }
+                SoundBundle sb = new SoundBundle();
+                sb.begin09=Float.parseFloat(t09Begin.getText());
+                sb.end09=Float.parseFloat(t09End.getText());
+                sb.begin90=Float.parseFloat(t90Begin.getText());
+                sb.end90=Float.parseFloat(t90End.getText());
+                sb.begin090=Float.parseFloat(t090Begin.getText());
+                sb.end090=Float.parseFloat(t090End.getText());
+                try {
+                    sb.bigWavContent = Files.readAllBytes(new File("result.wav").toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    FileOutputStream  fos = new FileOutputStream("SOUND_BUNDLE.bin");
+                    fos.write(SoundBundle.saveToByte(sb));
+                    fos.close();
+                    showMessageDialog(null, "Блоб сохранен!");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+    }
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -109,8 +182,10 @@ public class MergeFrame extends ModuleGUI {
         frame.setSize(600, 300);
 
         frame.setJMenuBar(Menubar);
-        Menubar.add(File);
+        Menubar.add(File_);
         Menubar.add(Edit);
+
+        Edit.add(createSoundBundle);
 
         frame.getContentPane().add(Panel, BorderLayout.PAGE_START);
 
@@ -165,6 +240,11 @@ public class MergeFrame extends ModuleGUI {
 
     @Override
     public void initListeners() {
+        prepareActions();
+        createSoundBundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(create_bundle_shortcut), bundleaction);
+        createSoundBundle.getActionMap().put(bundleaction, bundleAction);
+        createSoundBundle.addActionListener(bundleAction);
 
     }
 
@@ -173,6 +253,22 @@ public class MergeFrame extends ModuleGUI {
         MF.preperaGUI();
         MF.initListeners();
         MF.frame.setVisible(true);
+
+    }
+
+    public void initDict(){
+        this.dictionary.put('.', true);
+        this.dictionary.put('0', true);
+        this.dictionary.put('1', true);
+        this.dictionary.put('2', true);
+        this.dictionary.put('3', true);
+        this.dictionary.put('4', true);
+        this.dictionary.put('5', true);
+        this.dictionary.put('6', true);
+        this.dictionary.put('7', true);
+        this.dictionary.put('8', true);
+        this.dictionary.put('9', true);
+
 
     }
 }
