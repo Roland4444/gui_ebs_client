@@ -27,6 +27,18 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class SoundRecord extends ModuleGUI {
+    AbstractAction mergeAction;
+    AbstractAction voidAction;
+    AbstractAction startRecord;
+    AbstractAction stopRecord;
+    AbstractAction checkAction;
+    AbstractAction save1Action;
+    AbstractAction save2Action;
+    AbstractAction save3Action;
+    AbstractAction playCurrent;
+    AbstractAction playSlot1;
+    AbstractAction playSlot2;
+    AbstractAction playSlot3;
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
@@ -43,6 +55,9 @@ public class SoundRecord extends ModuleGUI {
     public final String resultmerged = "result.wav";
     public final String merge_shortcut = "control M";
     public final String merge= "merge";
+    public final String letsmarked = "letsmarked";
+
+
 
     public final String saveslot1_shortcut = "control 1";
     public final String saveslot2_shortcut = "control 2";
@@ -64,6 +79,7 @@ public class SoundRecord extends ModuleGUI {
     public Map<String, Integer> tableRequest = new HashMap<>();
     JMenuBar MenuBar;
 
+    JMenuItem letsMarked;
     JMenu FileMenu;
     JMenu EditMenu;
     JMenu helpMenu ;
@@ -88,6 +104,7 @@ public class SoundRecord extends ModuleGUI {
     JMenuItem Saveslot3;
 
     JMenuItem MergerSlots;
+
 
     public SSettings SoundSettings;
     public NetworkSettings NetworkSettings;
@@ -144,6 +161,7 @@ public class SoundRecord extends ModuleGUI {
         Stop = new JButton("STOP");
         StartLabel = new JLabel("Начать запись звукового фрагмента  (Ctrl+S)");
         StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
+        letsMarked = new JMenuItem("Промаркировать секции");
     }
 
     public void initinterop(){
@@ -184,10 +202,13 @@ public class SoundRecord extends ModuleGUI {
       Playslot1.setEnabled(false);
       Playslot2.setEnabled(false);
       Playslot3.setEnabled(false);
-
-
-
     };
+
+    public void disableLetsMarked(){
+        letsMarked.setEnabled(false);
+        MergerSlots.setEnabled(false);
+    }
+
 
 
     @Override
@@ -242,6 +263,7 @@ public class SoundRecord extends ModuleGUI {
         disableSave();
         disableCheck();
         disablePlay();
+        disableLetsMarked();
 
     }
 
@@ -325,11 +347,9 @@ public class SoundRecord extends ModuleGUI {
 
 
 
+    public void initActions(){
 
-    @Override
-    public void initListeners() {
-
-        var startRecord = new AbstractAction(startrecord){
+        startRecord = new AbstractAction(startrecord){
             @Override
             public void actionPerformed(ActionEvent e1) {
                 System.out.println("Pressed");
@@ -368,7 +388,7 @@ public class SoundRecord extends ModuleGUI {
             }
         };
 
-        var stopRecord = new  AbstractAction(stoprecord){
+        stopRecord = new  AbstractAction(stoprecord){
             @Override
             public void actionPerformed(ActionEvent e1) {
                 if (!recording)
@@ -382,20 +402,7 @@ public class SoundRecord extends ModuleGUI {
             }
         };
 
-        Start.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                KeyStroke.getKeyStroke(startrec_shortcut), startrecord);
-        Start.getActionMap().put(startrecord, startRecord);
-        Start.addActionListener(startRecord);
-
-
-        Stop.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                KeyStroke.getKeyStroke(stoptrec_shortcut), stoprecord);
-        Stop.getActionMap().put(stoprecord, stopRecord);
-        Stop.addActionListener(stopRecord);
-
-
-
-        var checkAction = new AbstractAction("Check"){
+        checkAction = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
                 byte[] fileContent = null;
@@ -426,7 +433,7 @@ public class SoundRecord extends ModuleGUI {
             }
         };
 
-        var save1Action = new AbstractAction("save1"){
+        save1Action = new AbstractAction("save1"){
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -437,6 +444,8 @@ public class SoundRecord extends ModuleGUI {
                     showMessageDialog(null, "Успешно сохранен!");
                     slot1ready=true;
                     Playslot1.setEnabled(true);
+                    checkAllSlots();
+
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
@@ -445,7 +454,7 @@ public class SoundRecord extends ModuleGUI {
             }
         };
 
-        var save2Action = new AbstractAction("save2"){
+        save2Action = new AbstractAction("save2"){
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -455,6 +464,7 @@ public class SoundRecord extends ModuleGUI {
                     showMessageDialog(null, "Успешно сохранен!");
                     slot2ready=true;
                     Playslot2.setEnabled(true);
+                    checkAllSlots();
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
@@ -463,7 +473,7 @@ public class SoundRecord extends ModuleGUI {
             }
         };
 
-        var save3Action = new AbstractAction("save3"){
+        save3Action = new AbstractAction("save3"){
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -472,6 +482,7 @@ public class SoundRecord extends ModuleGUI {
                     fos.close();
                     showMessageDialog(null, "Успешно сохранен!");
                     slot3ready=true;
+                    checkAllSlots();
                     Playslot3.setEnabled(true);
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
@@ -480,6 +491,93 @@ public class SoundRecord extends ModuleGUI {
                 }
             }
         };
+
+        playCurrent = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Sound_Settings ss = null;
+                try {
+                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                BinarySound = new Sound(ss);
+                BinarySound.playSound(Tempfile);
+            }
+        };
+
+
+
+        playSlot1 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Try to play =>"+slot1);
+                BinarySound.playSound(slot1);
+            }
+        };
+
+        playSlot2 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Try to play =>"+slot2);
+                BinarySound.playSound(slot2);
+            }
+        };
+
+        playSlot3 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Try to play =>"+slot3);
+                BinarySound.playSound(slot3);
+            }
+        };
+
+
+
+        mergeAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Sound_Settings ss = null;
+                try {
+                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                BinarySound = new Sound(ss);
+                BinarySound.margeWav(slot1, slot2, tempmerged);
+                BinarySound.margeWav(tempmerged, slot3, resultmerged);
+                showMessageDialog(null, "Merge complete!");
+            }
+        };
+
+
+        String bind = "Check";
+
+        voidAction = new AbstractAction(bind){
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                showMessageDialog(null, "void");
+            }
+        };
+
+
+    }
+
+
+    @Override
+    public void initListeners() {
+        initActions();
+
+        Start.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(startrec_shortcut), startrecord);
+        Start.getActionMap().put(startrecord, startRecord);
+        Start.addActionListener(startRecord);
+
+
+        Stop.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(stoptrec_shortcut), stoprecord);
+        Stop.getActionMap().put(stoprecord, stopRecord);
+        Stop.addActionListener(stopRecord);
 
         Saveslot1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(saveslot1_shortcut), slot1);
@@ -496,46 +594,6 @@ public class SoundRecord extends ModuleGUI {
                 KeyStroke.getKeyStroke(saveslot3_shortcut), slot3);
         Saveslot3.getActionMap().put(slot3, save3Action);
         Saveslot3.addActionListener(save1Action);
-
-        var playCurrent = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Sound_Settings ss = null;
-                try {
-                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                BinarySound = new Sound(ss);
-                BinarySound.playSound(Tempfile);
-            }
-        };
-
-
-
-        var playSlot1 = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Try to play =>"+slot1);
-                BinarySound.playSound(slot1);
-            }
-        };
-
-        var playSlot2 = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Try to play =>"+slot2);
-                BinarySound.playSound(slot2);
-            }
-        };
-
-        var playSlot3 = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Try to play =>"+slot3);
-                BinarySound.playSound(slot3);
-            }
-        };
 
         Playcurrent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(playcurrent_shortcut), play_current);
@@ -557,23 +615,6 @@ public class SoundRecord extends ModuleGUI {
         Playslot3.getActionMap().put(play_slot3, playSlot3);
         Playslot3.addActionListener(playSlot3);
 
-
-        var mergeAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Sound_Settings ss = null;
-                try {
-                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                BinarySound = new Sound(ss);
-                BinarySound.margeWav(slot1, slot2, tempmerged);
-                BinarySound.margeWav(tempmerged, slot3, resultmerged);
-                showMessageDialog(null, "Merge complete!");
-            }
-        };
-
         MergerSlots.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(merge_shortcut), merge);
         MergerSlots.getActionMap().put(merge, mergeAction);
@@ -581,13 +622,6 @@ public class SoundRecord extends ModuleGUI {
 
 
         String bind = "Check";
-
-        var voidAction = new AbstractAction(bind){
-            @Override
-            public void actionPerformed(ActionEvent e1) {
-                showMessageDialog(null, "void");
-            }
-        };
 
         checkAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         Check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -626,6 +660,11 @@ public class SoundRecord extends ModuleGUI {
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
+    }
+
+    public void checkAllSlots(){
+        if (slot1ready && slot2ready && slot3ready)
+            MergerSlots.setEnabled(true);
     }
 
 
