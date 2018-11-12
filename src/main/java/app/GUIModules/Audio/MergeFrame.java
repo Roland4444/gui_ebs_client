@@ -1,4 +1,4 @@
-package app.GUIModules;
+package app.GUIModules.Audio;
 
 import app.Essens.SoundBundle;
 import app.abstractions.ModuleGUI;
@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,9 +25,8 @@ public class MergeFrame extends ModuleGUI {
     AbstractAction bundleAction;
     public final String bundleaction = "bundle";
     public final int width=5;
-    public JPanel Section09, Panel;
-    public JPanel Section90;
-    public JPanel Section090;
+    public JPanel Panel;
+
     public JMenuBar Menubar;
     public JMenu File_, Edit;
 
@@ -65,6 +66,7 @@ public class MergeFrame extends ModuleGUI {
 
     public JPanel BeginPanel090;
     public JPanel EndPanel090;
+    public JMenuItem ExitItem;
     private JLabel lBegin1;
     private JLabel lBegin2;
     private JLabel lBegin3;
@@ -80,8 +82,6 @@ public class MergeFrame extends ModuleGUI {
         Menubar = new JMenuBar();
         File_ = new JMenu("Файл");
         Edit = new JMenu("Правка");
-        Section90=new JPanel();
-        Section090 =new JPanel();
         Panel = new JPanel(new GridLayout(1,3));
         ContentPanel1 = new JPanel(new BorderLayout());
         ContentPanel2 = new JPanel(new BorderLayout());
@@ -119,6 +119,7 @@ public class MergeFrame extends ModuleGUI {
         t090Begin =new JTextField("",width);
         t090End =new JTextField("",width);
         createSoundBundle = new JMenuItem("Сформировать звуковой слепок");
+        ExitItem = new JMenuItem("Выйти");
     }
 
     public boolean isnumber(String input){
@@ -135,6 +136,18 @@ public class MergeFrame extends ModuleGUI {
     }
 
 
+    public boolean increasingCheck(){
+        float f1 = Float.parseFloat(t09Begin.getText());
+        float f2=Float.parseFloat(t90End.getText());
+        float f3=Float.parseFloat(t90Begin.getText());
+        float f4=Float.parseFloat(t90End.getText());
+        float f5 =Float.parseFloat(t090Begin.getText());
+        float f6 =Float.parseFloat(t090End.getText());
+        if ((f1<f2) && (f2<f3) && (f3<f4) && (f4<f5) && (f5<f6))
+            return true;
+        return false;
+    }
+
 
 
     public void prepareActions(){
@@ -145,6 +158,10 @@ public class MergeFrame extends ModuleGUI {
                 (isbadField(t90Begin.getText())) || (isbadField(t90End.getText())) ||
                 (isbadField(t090Begin.getText())) || isbadField(t090End.getText())){
                     showMessageDialog(null, "Проверьте правильность и полноту введенных данных");
+                    return;
+                }
+                if (!increasingCheck()){
+                    showMessageDialog(null, "Данные должны быть в порядке возрастания");
                     return;
                 }
                 SoundBundle sb = new SoundBundle();
@@ -184,6 +201,7 @@ public class MergeFrame extends ModuleGUI {
         frame.setJMenuBar(Menubar);
         Menubar.add(File_);
         Menubar.add(Edit);
+        File_.add(ExitItem);
 
         Edit.add(createSoundBundle);
 
@@ -196,7 +214,6 @@ public class MergeFrame extends ModuleGUI {
         Panel.add(ContentPanel1);
         Panel.add(ContentPanel2);
         Panel.add(ContentPanel3);
-
 
     }
 
@@ -245,6 +262,13 @@ public class MergeFrame extends ModuleGUI {
                 KeyStroke.getKeyStroke(create_bundle_shortcut), bundleaction);
         createSoundBundle.getActionMap().put(bundleaction, bundleAction);
         createSoundBundle.addActionListener(bundleAction);
+
+        ExitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
 
     }
 

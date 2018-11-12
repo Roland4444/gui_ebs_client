@@ -1,4 +1,4 @@
-package app.GUIModules;
+package app.GUIModules.Audio;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
 
@@ -36,7 +36,6 @@ public class SSettings  extends ModuleGUI {
     public JTextField sampleSizeInBitsInput;
 
     public JPanel channelsPane ;
-
 
     public JLabel channelsLabel;
     public JTextField channelsInput;

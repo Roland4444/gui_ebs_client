@@ -1,5 +1,7 @@
-package app.GUIModules;
+package app.GUIModules.Audio;
 
+import app.GUIModules.About;
+import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
@@ -39,6 +41,7 @@ public class SoundRecord extends ModuleGUI {
     AbstractAction playSlot1;
     AbstractAction playSlot2;
     AbstractAction playSlot3;
+    AbstractAction createBundle;
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
@@ -47,6 +50,7 @@ public class SoundRecord extends ModuleGUI {
     public final String playslot1_shortcut = "alt 1";
     public final String playslot2_shortcut = "alt 2";
     public final String playslot3_shortcut = "alt 3";
+    public final String createbundle_shortcut = "alt B";
     public final String play_current = "Playcurrent" ;
     public final String play_slot1 = "Playslot1" ;
     public final String play_slot2 = "Playslot2" ;
@@ -56,6 +60,7 @@ public class SoundRecord extends ModuleGUI {
     public final String merge_shortcut = "control M";
     public final String merge= "merge";
     public final String letsmarked = "letsmarked";
+    public final String createbundle = "createbundle";
 
 
 
@@ -105,10 +110,13 @@ public class SoundRecord extends ModuleGUI {
 
     JMenuItem MergerSlots;
 
+    JMenuItem CreateBundle;
+
 
     public SSettings SoundSettings;
-    public NetworkSettings NetworkSettings;
-    public About About;
+    public app.GUIModules.NetworkSettings NetworkSettings;
+    public app.GUIModules.About About;
+    public MergeFrame MF;
     public boolean recording = false;
     public Sound BinarySound = null;
     public JPanel Panel;
@@ -162,6 +170,7 @@ public class SoundRecord extends ModuleGUI {
         StartLabel = new JLabel("Начать запись звукового фрагмента  (Ctrl+S)");
         StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
         letsMarked = new JMenuItem("Промаркировать секции");
+        CreateBundle=new JMenuItem("Создать аудиосборку");
     }
 
     public void initinterop(){
@@ -209,6 +218,14 @@ public class SoundRecord extends ModuleGUI {
         MergerSlots.setEnabled(false);
     }
 
+    public void disableBundle(){
+        CreateBundle.setEnabled(false);
+    }
+
+    public void enableBundle(){
+        CreateBundle.setEnabled(true);
+    }
+
 
 
     @Override
@@ -235,6 +252,7 @@ public class SoundRecord extends ModuleGUI {
         WorkMenu.add(SaveItem);
 
         WorkMenu.add(MergerSlots);
+        WorkMenu.add(CreateBundle);
 
         helpMenu.add(AboutItem);
 
@@ -260,6 +278,8 @@ public class SoundRecord extends ModuleGUI {
 
         frame.getContentPane().add(ControlsPanel, BorderLayout.CENTER);
 
+
+        disableBundle();
         disableSave();
         disableCheck();
         disablePlay();
@@ -345,9 +365,48 @@ public class SoundRecord extends ModuleGUI {
 
     }
 
+    private void initCreateBundle(){
+        MF = new MergeFrame();
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (InstantiationException e1) {
+            e1.printStackTrace();
+        } catch (IllegalAccessException e1) {
+            e1.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e1) {
+            e1.printStackTrace();
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    MF.preperaGUI();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e1) {
+                    e1.printStackTrace();
+                } catch (InstantiationException e1) {
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                }
+                MF.initListeners();
+
+            }
+        });
+    }
+
 
 
     public void initActions(){
+
+        createBundle = new AbstractAction(createbundle) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               MF.frame.setVisible(true);
+            }
+        };
 
         startRecord = new AbstractAction(startrecord){
             @Override
@@ -547,6 +606,7 @@ public class SoundRecord extends ModuleGUI {
                 BinarySound.margeWav(slot1, slot2, tempmerged);
                 BinarySound.margeWav(tempmerged, slot3, resultmerged);
                 showMessageDialog(null, "Merge complete!");
+                enableBundle();
             }
         };
 
@@ -620,6 +680,10 @@ public class SoundRecord extends ModuleGUI {
         MergerSlots.getActionMap().put(merge, mergeAction);
         MergerSlots.addActionListener(mergeAction);
 
+        CreateBundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(createbundle_shortcut), createbundle);
+        CreateBundle.getActionMap().put(createbundle, createBundle);
+        CreateBundle.addActionListener(createBundle);
+
 
         String bind = "Check";
 
@@ -691,6 +755,7 @@ public class SoundRecord extends ModuleGUI {
         sr.initListeners();
         sr.initinterop();
         sr.initAboutFrame();
+        sr.initCreateBundle();
         sr.prepareAktor();
         sr.frame.setVisible(true);
 

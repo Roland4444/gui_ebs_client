@@ -1,4 +1,5 @@
 package app.GUIModules;
+import app.GUIModules.Audio.SSettings;
 import app.abstractions.ModuleGUI;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
