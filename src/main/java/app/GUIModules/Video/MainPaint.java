@@ -1,39 +1,35 @@
 package app.GUIModules.Video;
 
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class MainPaint extends JFrame {
+    private Dimension size = WebcamResolution.HD.getSize();
     final PaintPanel paintPan = new PaintPanel();
     public MainPaint() {
         setTitle("test paint");
-        setSize(800, 400);
+        setSize(1280, 1280);
         setLayout(new BorderLayout());
-
-
-        JButton testButon = new JButton("Display shape");
-        add(paintPan, BorderLayout.CENTER);
-        add(testButon, BorderLayout.PAGE_END);
-
-        testButon.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                paintPan.updateGraphics(50, 50);
-                repaint();
-            }
-        });
+        var	webcam = Webcam.getDefault();
+	webcam.setViewSize(size);
+        var panel = new WebcamPanel(webcam, false);
+	panel.setFPSDisplayed(true);
+        add(panel);
+        if (webcam.isOpen()) 
+            webcam.close();
+	int i = 0;
+        webcam.open();
+	panel.start();
         setVisible(true);
     }
 
     public static void main(String[] args) throws InterruptedException {
          var g=new MainPaint();
-        for (int i=0; i<100;i++){
-            g.paintPan.updateGraphics(50+i*6, 50+i);
-            g.repaint();
-            Thread.sleep(15);
-        }
+      
 
     }
 }
