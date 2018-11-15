@@ -5,4 +5,6 @@ module se.roland.ebs_client{
    requires java.desktop;
    requires java.uuid.generator;
    requires webcam.capture;
+   requires webcam.capture.driver.ipcam;
+   
 }

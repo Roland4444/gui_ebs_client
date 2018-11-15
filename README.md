@@ -34,3 +34,5 @@ more offset2 => more drop from begin in output play; good for positioning;
 DURATION wav => https://stackoverflow.com/questions/2709508/how-to-learn-wav-duration-in-java-media-frame-work/2716637
 
 КС1 2 3 https://контурцентральныйрегион.рф/2017/12/19/ks3-ks2-ks1-v-chem-raznica/
+
+Change resolution  https://elinux.org/Thread:Talk:Jetson/Cameras/How_to_do_I_change_the_USB_camera_resolution%3F/reply

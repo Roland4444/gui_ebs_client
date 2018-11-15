@@ -25,11 +25,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
-
-
 import static javax.swing.JOptionPane.showMessageDialog;
-
-
 public class SoundRecord extends ModuleGUI {
     AbstractAction mergeAction;
     AbstractAction voidAction;
@@ -63,8 +59,7 @@ public class SoundRecord extends ModuleGUI {
     public final String merge_shortcut = "control M";
     public final String merge= "merge";
     public final String letsmarked = "letsmarked";
-    public final String createbundle = "createbundle";
-    
+    public final String createbundle = "createbundle";  
 
 
     public final String saveslot1_shortcut = "control 1";
@@ -598,8 +593,6 @@ public class SoundRecord extends ModuleGUI {
                 BinarySound.playSound(slot3);
             }
         };
-
-
 
         mergeAction = new AbstractAction() {
             @Override
