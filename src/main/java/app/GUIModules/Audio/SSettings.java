@@ -270,5 +270,10 @@ public class SSettings  extends ModuleGUI {
         ss.loadSets("./sound_settings.bin");
     };
 
+    @Override
+    public void initActions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 }

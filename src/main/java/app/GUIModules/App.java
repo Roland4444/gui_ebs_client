@@ -39,6 +39,11 @@ public class App extends ModuleGUI {
     public Map<String, Integer> tableRequest = new HashMap<>();
     AppAktor akt;
 
+    @Override
+    public void initActions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
     public class AppAktor extends JAktor {
         JFrame formBack;

@@ -158,4 +158,9 @@ public class NetworkSettings extends ModuleGUI {
         ns.tryReadData();
         ns.frame.setVisible(true);
     }
+
+    @Override
+    public void initActions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

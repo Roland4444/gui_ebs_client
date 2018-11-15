@@ -54,4 +54,9 @@ public class About extends ModuleGUI {
         ab.frame.setLocationRelativeTo(null);
         ab.frame.setVisible(true);
     }
+
+    @Override
+    public void initActions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
