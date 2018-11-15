@@ -26,12 +26,12 @@
             <version>0.3.12</version>
         </dependency>
         <dependency>
-            <groupId>se.roland</groupId>
+            <groupId>uk.roland</groupId>
             <artifactId>JAKtor</artifactId>
             <version>1.5-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>se.roland</groupId>
+            <groupId>uk.roland</groupId>
             <artifactId>modular_ebs</artifactId>
             <version>1.4-SNAPSHOT</version>
         </dependency>

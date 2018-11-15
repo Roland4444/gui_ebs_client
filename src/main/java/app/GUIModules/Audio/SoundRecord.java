@@ -1,5 +1,6 @@
 package app.GUIModules.Audio;
 
+import app.Essens.CypherImpl;
 import app.GUIModules.About;
 import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
@@ -136,6 +137,7 @@ public class SoundRecord extends ModuleGUI {
 
     public Color StartBackgroundColor;
     public SoundRecord() {
+        cypher = new CypherImpl();
         frame = new JFrame("EBS GUI Client 1.5");
         MenuBar = new JMenuBar();
         FileMenu = new JMenu("Файл");
@@ -742,6 +744,7 @@ public class SoundRecord extends ModuleGUI {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
         akt.setAddress("http://127.0.0.1:14444/");
+        akt.setCypher(cypher);
         akt.spawn();
         akt.on_success=new OnSuccess() {
             @Override
@@ -782,10 +785,9 @@ public class SoundRecord extends ModuleGUI {
             this.cypher=cypher;
         }
         
-        @Override
-        
+        @Override        
         public int send(byte[] message, String address) throws IOException {
-            return this.client.send((message), address);
+            return this.client.send(this.cypher.encrypt(message), address);
         }
         
         @Override
