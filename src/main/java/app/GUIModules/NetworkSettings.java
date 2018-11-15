@@ -34,8 +34,28 @@ public class NetworkSettings extends ModuleGUI {
 
         SettingPanel = new JPanel(new FlowLayout());
     }
+    
+    public NetworkSettings(String sets){
+        settingFiles = sets;
+        frame=new JFrame("Сетевые настройки");
 
-    private final String settingFiles="NetworkSettings.bin";
+        info = new JLabel("Введите адрес сервиса проверки биометрических данных");
+        ButtonSaveExitpanel = new JPanel(new BorderLayout());
+
+        saveSets = new JButton("Сохранить и закрыть");
+        Exit = new JButton("Закрыть без сохранения");
+
+        serverNameLabel = new JLabel("http://");
+        portLabel=new JLabel(":");
+        ender = new JLabel("/");
+
+        serverAdress = new JTextField("", 10);
+        port=new JTextField("", 6);
+
+        SettingPanel = new JPanel(new FlowLayout());
+    }
+
+    private String settingFiles="NetworkSettings.bin";
     private final String defaultAdress =  "http://127.0.0.1:12121/";
     private IPSetts defaultSets = new IPSetts( defaultAdress);
     public JFrame frame;

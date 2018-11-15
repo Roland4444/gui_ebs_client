@@ -28,7 +28,7 @@
         <dependency>
             <groupId>se.roland</groupId>
             <artifactId>JAKtor</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>se.roland</groupId>

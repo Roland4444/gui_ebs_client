@@ -5,6 +5,7 @@ import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
+import app.utils.Cypher;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
 import essens.ResponceMessage;
@@ -42,6 +43,7 @@ public class SoundRecord extends ModuleGUI {
     AbstractAction playSlot2;
     AbstractAction playSlot3;
     AbstractAction createBundle;
+    private Cypher cypher;
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
@@ -61,7 +63,7 @@ public class SoundRecord extends ModuleGUI {
     public final String merge= "merge";
     public final String letsmarked = "letsmarked";
     public final String createbundle = "createbundle";
-
+    
 
 
     public final String saveslot1_shortcut = "control 1";
@@ -171,6 +173,10 @@ public class SoundRecord extends ModuleGUI {
         StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
         letsMarked = new JMenuItem("Промаркировать секции");
         CreateBundle=new JMenuItem("Создать аудиосборку");
+    }
+    
+    public void setCypher(Cypher cypher){
+        this.cypher=cypher;
     }
 
     public void initinterop(){
@@ -312,7 +318,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        NetworkSettings =new NetworkSettings();
+        NetworkSettings =new NetworkSettings("NetworkSettings.bin");
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -771,9 +777,21 @@ public class SoundRecord extends ModuleGUI {
         public OnSuccess on_success;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();
+        private Cypher cypher;
+        public void setCypher(Cypher cypher){
+            this.cypher=cypher;
+        }
+        
         @Override
-        public void receive(byte[] message) throws IOException {
+        
+        public int send(byte[] message, String address) throws IOException {
+            return this.client.send((message), address);
+        }
+        
+        @Override
+        public void receive(byte[] message_) throws IOException {
             System.out.println("Received!!!! via console");
+            byte[] message =  cypher.decrypt(message_);
             var resp = ResponceMessage.restoreBytesToResponceMessage(message);
             System.out.println("\n\n\nRECEIVED");
             try {
