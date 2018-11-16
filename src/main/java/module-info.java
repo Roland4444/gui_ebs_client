@@ -1,4 +1,4 @@
-module se.roland.ebs_client{
+module uk.roland.ebs_client{
    requires opencv;
    requires uk.roland.jaktor;
    requires uk.roland.ebs;
