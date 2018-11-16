@@ -12,5 +12,6 @@ class grabTest {
     void getFrame() throws IOException {
         var grab = new grab();
         assertNotEquals(null, grab.vc);
+        assertNotEquals(null, grab.getFrame());
     }
 }

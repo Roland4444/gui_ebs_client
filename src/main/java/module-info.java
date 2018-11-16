@@ -4,4 +4,5 @@ module uk.roland.ebs_client{
    requires uk.roland.ebs;
    requires java.desktop;
    requires java.uuid.generator;
+   requires jna;
 }
