@@ -38,3 +38,6 @@ DURATION wav => https://stackoverflow.com/questions/2709508/how-to-learn-wav-dur
 Change resolution  https://elinux.org/Thread:Talk:Jetson/Cameras/How_to_do_I_change_the_USB_camera_resolution%3F/reply
 
 Adding so => /lib  https://stackoverflow.com/questions/27088934/unsatisfiedlinkerror-no-opencv-java249-in-java-library-path
+
+
+NEED TO CLEANING UP CRAP DEPENDENCY (OKKAM RAZOR)
