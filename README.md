@@ -36,3 +36,5 @@ DURATION wav => https://stackoverflow.com/questions/2709508/how-to-learn-wav-dur
 КС1 2 3 https://контурцентральныйрегион.рф/2017/12/19/ks3-ks2-ks1-v-chem-raznica/
 
 Change resolution  https://elinux.org/Thread:Talk:Jetson/Cameras/How_to_do_I_change_the_USB_camera_resolution%3F/reply
+
+Adding so => /lib  https://stackoverflow.com/questions/27088934/unsatisfiedlinkerror-no-opencv-java249-in-java-library-path
