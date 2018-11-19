@@ -8,18 +8,19 @@ import org.opencv.highgui.VideoCapture;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class grab {
+    public final String saveTo = "tested.png";
     public VideoCapture vc;
     public grab(){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         vc = new VideoCapture(0);
-        vc.set(3, 1280);
-        vc.set(4, 720);
+        vc.set(3, 1024); //1280);
+        vc.set(4, 1024);//720);
     }
     public byte[] getFrame() throws IOException {
 
@@ -27,12 +28,13 @@ public class grab {
         MatOfByte mem = new MatOfByte();
         if (vc.grab()) {
             vc.retrieve(frame);
-            Highgui.imencode(".bmp", frame, mem);
+            Highgui.imencode(".png", frame, mem);
             Image im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
-            var fos = new FileOutputStream("tested.bmp");
+            var fos = new FileOutputStream(saveTo);
             fos.write(mem.toArray());
             fos.close();
         }
+        System.out.println("Length file =>"+ new File(saveTo).length());
         return mem.toArray();
     }
 

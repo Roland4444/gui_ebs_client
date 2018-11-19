@@ -38,6 +38,12 @@ DURATION wav => https://stackoverflow.com/questions/2709508/how-to-learn-wav-dur
 Change resolution  https://elinux.org/Thread:Talk:Jetson/Cameras/How_to_do_I_change_the_USB_camera_resolution%3F/reply
 
 Adding so => /lib  https://stackoverflow.com/questions/27088934/unsatisfiedlinkerror-no-opencv-java249-in-java-library-path
+TLS Jetty => {https://wiki.eclipse.org/Jetty/Howto/Configure_SSL#Generating_Keys_and_Certificates_with_JDK_keytool,
+        https://github.com/tipsy/javalin/blob/master/src/test/java/io/javalin/examples/HelloWorldSecure.java#L24-L32.
+        https://javalin.io/documentation#sslhttp2}
+        
+APACHE Nginx => {https://www.exoplatform.com/blog/2014/04/17/apache-2-nginx-highly-secure-pfs-ssl-encrypting-reverse-proxy-exo-platform-4-0-web-application}
 
 
-NEED TO CLEANING UP CRAP DEPENDENCY (OKKAM RAZOR)
+NEED TO CLEANING UP CRAP DEPENDENCY (OKKAM RAZOR!!!)
+Change opencv res =>https://stackoverflow.com/questions/10018190/how-to-change-webcam-format-in-javacv)
