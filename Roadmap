@@ -1,7 +1,8 @@
 ToDo:
-    HttpTSL JAKtor test(1.7 version)
+
     PhotoCapture Frame:
             SettingsVideo;
             Pack;
             Send to check;
-    
+
+     HttpTSL JAKtor test(1.7 version)  ?? ; maybe TLS NGAte solve all problem with cyphering

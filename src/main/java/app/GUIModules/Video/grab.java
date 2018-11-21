@@ -16,16 +16,24 @@ import java.io.IOException;
 public class grab {
     public final String saveTo = "tested.png";
     public VideoCapture vc;
+    Mat frame;
+    MatOfByte mem;
     public grab(){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         vc = new VideoCapture(0);
         vc.set(3, 1024); //1280);
         vc.set(4, 1024);//720);
     }
+    public grab(int width, int heigth){
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        vc = new VideoCapture(0);
+        vc.set(3, width); //1280);
+        vc.set(4, heigth);//720);
+    }
     public byte[] getFrame() throws IOException {
 
-        Mat frame = new Mat();
-        MatOfByte mem = new MatOfByte();
+        frame = new Mat();
+        mem = new MatOfByte();
         if (vc.grab()) {
             vc.retrieve(frame);
             Highgui.imencode(".png", frame, mem);
@@ -36,6 +44,7 @@ public class grab {
         }
         System.out.println("Length file =>"+ new File(saveTo).length());
         return mem.toArray();
+
     }
 
 
