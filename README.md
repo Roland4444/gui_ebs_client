@@ -44,6 +44,8 @@ TLS Jetty => {https://wiki.eclipse.org/Jetty/Howto/Configure_SSL#Generating_Keys
         
 APACHE Nginx => {https://www.exoplatform.com/blog/2014/04/17/apache-2-nginx-highly-secure-pfs-ssl-encrypting-reverse-proxy-exo-platform-4-0-web-application}
 
+voice biometry
+http://marf.sourceforge.net/docs/marf/0.3.0.6/report.pdf
 
 NEED TO CLEANING UP CRAP DEPENDENCY (OKKAM RAZOR!!!)
 Change opencv res =>https://stackoverflow.com/questions/10018190/how-to-change-webcam-format-in-javacv)
