@@ -1,11 +1,16 @@
 package app.Sound;
 
+import app.GUIModules.Video.grab;
 import org.junit.jupiter.api.Test;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.highgui.VideoCapture;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,7 +58,72 @@ class WavTest {
         fos.write(header);
         fos.write(data);
         fos.close();
+    }
+
+    @Test
+    void strewam() throws IOException {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        VideoCapture capture = new VideoCapture(0);
+
+        // Reading the next video frame from the camera
+        Mat matrix = new Mat();
+
+        //Instantiate JFrame
+        JFrame frame = new JFrame();
+        frame.setSize(640, 480);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
+        //When we find the user close our window.
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.out.println("Frame closing...");
+                frame.setVisible(false);
+                capture.release();
+            }
+        });
+
+        ImageIcon icon = new ImageIcon("tested.png"); // Inserts the image icon
+        JLabel label = new JLabel(icon); //Label of ImageIcon
+
+        frame.getContentPane().add(label);
+        frame.pack();
+        frame.setVisible(true);
+        // Instantiating the imgcodecs class
+
+        // Where we will save the image.
+
+        // If camera is opened
+        if (capture.isOpened()) {
+
+
+            // While there is next video frame
+            while (capture.read(matrix)) {
+                System.out.println("Retrieving Frames...");
+                var gr = new grab(640, 480);
+                byte[] arrImg=null;
+                try {
+                    arrImg= gr.getFrame();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+
+
+                // Creating BuffredImage from the matrix
+                BufferedImage image = ImageIO.read(new ByteArrayInputStream(arrImg));
+
+                //Saving the mat to an image.
+
+                ImageIcon icon2 =  new ImageIcon(image);
+
+
+
+                label.setIcon(icon2);
+                label.updateUI();
+
+            }
+        }
     }
 }

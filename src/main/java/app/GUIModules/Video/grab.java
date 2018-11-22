@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class grab {
     public final String saveTo = "tested.png";
+    public final static String saveTo_ = "tested.png";
     public VideoCapture vc;
     Mat frame;
     MatOfByte mem;
@@ -43,7 +44,9 @@ public class grab {
             fos.close();
         }
         System.out.println("Length file =>"+ new File(saveTo).length());
+        vc.release();
         return mem.toArray();
+
 
     }
 
