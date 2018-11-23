@@ -127,7 +127,7 @@ class processor {
     private CascadeClassifier face_cascade;
     // Create a constructor method
     public processor(){
-        face_cascade=new CascadeClassifier("/home/hochberg/Research/OpenCV/opencv-2.4.8/data/haarcascades/haarcascade_profileface.xml");
+        face_cascade=new CascadeClassifier("cascade.xml");
         if(face_cascade.empty())
         {
             System.out.println("--(!)Error loading A\n");

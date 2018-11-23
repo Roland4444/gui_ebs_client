@@ -5,10 +5,13 @@ import java.io.*;
 public class Video_Settings implements Serializable {
     public int width;
     public int heigth;
+    public boolean CheckFaces;
 
-    public Video_Settings(int x, int y){
+    public Video_Settings(int x, int y, boolean checkFaces){
+        this.CheckFaces=checkFaces;
         this.width=x;
         this.heigth=y;
+
     }
 
     public static byte[] saveSetiingsToBytes(Video_Settings input) {

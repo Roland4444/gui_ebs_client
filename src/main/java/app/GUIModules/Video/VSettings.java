@@ -1,12 +1,8 @@
 package app.GUIModules.Video;
 
-import app.Essens.Sound_Settings;
 import app.Essens.Video_Settings;
-import app.GUIModules.Audio.SSettings;
 import app.abstractions.ModuleGUI;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class VSettings extends ModuleGUI {
+
+    public Video_Settings default_;
     public final String defaultFileName = "./video_settings.bin";
     public final static String defaultFileName_static = "./video_settings.bin";
     public JFrame frame;
@@ -29,18 +27,24 @@ public class VSettings extends ModuleGUI {
     public JButton saveAsSets;
 
     public JPanel SetsPane ;
-    public JPanel XSettsPane;
 
+    public JPanel XSettsPane;
     public JLabel XLabel;
     public JTextField XInput;
 
     public JPanel YSettsPane;
-
-
     public JLabel YLabel;
     public JTextField YInput;
 
-    public VSettings(){
+    public JPanel CheckPanel;
+    public JLabel CheckLabel;
+    public JCheckBox CheckBox;
+
+
+
+    public VSettings() throws IOException {
+        System.out.println("Create default");
+        default_= new Video_Settings(640,480, false);
         frame = new JFrame("Меню настроек Видео");
         panelControlButtons = new JPanel(new BorderLayout());
         saveSets = new JButton("Сохранить настройки");
@@ -56,8 +60,23 @@ public class VSettings extends ModuleGUI {
         YLabel = new JLabel("Высота изображения");
         YInput = new JTextField();
 
+        CheckPanel = new JPanel(new GridLayout());
+        CheckBox = new JCheckBox();
+        CheckLabel = new JLabel("Выделять лицо?");
+
+        if (!new File(VSettings.defaultFileName_static).exists()){
+            System.out.println("CREATING NEW FILE!!!");
+            var fos = new FileOutputStream(VSettings.defaultFileName_static);
+            fos.write(Video_Settings.saveSetiingsToBytes(this.default_));
+            fos.close();
+        }
+
     }
 
+    public Video_Settings buildVS(){
+        Video_Settings vs = new Video_Settings(Integer.parseInt(XInput.getText()), Integer.parseInt(YInput.getText()), CheckBox.isSelected());
+        return vs;
+    }
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -80,6 +99,10 @@ public class VSettings extends ModuleGUI {
         YSettsPane.add(YLabel);
         YSettsPane.add(YInput);
 
+        SetsPane.add(CheckPanel);
+        CheckPanel.add(CheckLabel);
+        CheckPanel.add(CheckBox);
+
 
 
         frame.pack();
@@ -90,6 +113,7 @@ public class VSettings extends ModuleGUI {
         Video_Settings vs = Video_Settings.restoreBytesToSetiings(arr_sets);
         XInput.setText(String.valueOf(vs.width));
         YInput.setText(String.valueOf(vs.heigth));
+        CheckBox.setSelected(vs.CheckFaces);
 
     }
 
@@ -98,10 +122,9 @@ public class VSettings extends ModuleGUI {
         saveSets.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
-                Video_Settings vs = new Video_Settings(Integer.parseInt(XInput.getText()),
-                        Integer.parseInt(YInput.getText()));
+
                 try {
-                    new FileOutputStream(defaultFileName).write(Video_Settings.saveSetiingsToBytes(vs));
+                    new FileOutputStream(defaultFileName).write(Video_Settings.saveSetiingsToBytes(buildVS()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -112,8 +135,6 @@ public class VSettings extends ModuleGUI {
         saveAsSets.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e2) {
-                Video_Settings vs = new Video_Settings(Integer.parseInt(XInput.getText()),
-                        Integer.parseInt(YInput.getText()));
                 FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
                 fd.setDirectory("./");
                 fd.setVisible(true);
@@ -128,7 +149,7 @@ public class VSettings extends ModuleGUI {
                     }
                 }
                 try {
-                    new FileOutputStream(fullpathtoCheckFile).write(Video_Settings.saveSetiingsToBytes(vs));
+                    new FileOutputStream(fullpathtoCheckFile).write(Video_Settings.saveSetiingsToBytes(buildVS()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

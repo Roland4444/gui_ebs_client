@@ -1,5 +1,4 @@
 package app.GUIModules.Video;
-
 import app.Essens.CypherImpl;
 import app.Essens.Video_Settings;
 import app.GUIModules.About;
@@ -10,15 +9,15 @@ import app.utils.Cypher;
 import essens.ResponceMessage;
 import essens.TablesEBSCheck;
 import impl.JAktor;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
+import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
+import org.opencv.objdetect.CascadeClassifier;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -28,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+
+
 public class PhotoMake extends ModuleGUI {
     grab gr;
     AbstractAction drawinCanvas;
@@ -40,14 +41,12 @@ public class PhotoMake extends ModuleGUI {
     public final String makeshot_shortcut = "control S";
     public final String openVideoFrame_shortcut = "control H";
     public final String openvideoframe = "openvideoframe";
-
+    public Video_Settings VideoSetts;
     public final String IMG_PATH = "tested.png";
-
     camera cam;
 
     public Map<String, Integer> tableRequest = new HashMap<>();
     JMenuBar MenuBar;
-
 
     JMenu FileMenu;
     JMenu EditMenu;
@@ -114,7 +113,9 @@ public class PhotoMake extends ModuleGUI {
         Check = new JButton("Проверить фото  (Ctrl+C)");
         OpenHelp = new JButton("Запустить камеру (Ctrl+H)");
 
-        PhotoPanel = new JPanel(new BorderLayout());
+        var blt = new BorderLayout();
+
+        PhotoPanel = new JPanel(blt);
         ButtonPanel = new JPanel(new BorderLayout());
 
         Start = new JButton("Сделать фото");
@@ -190,9 +191,6 @@ public class PhotoMake extends ModuleGUI {
         cam =new camera();
         cam.mounted=LabelCam;
     }
-
-
-
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -226,6 +224,8 @@ public class PhotoMake extends ModuleGUI {
 
        // ButtonPanel.add(Start);
         ButtonPanel.add(Start);
+
+
 
         PhotoPanel.add(LabelCam, BorderLayout.WEST);
 
@@ -316,6 +316,8 @@ public class PhotoMake extends ModuleGUI {
                 }
             }
         });
+        VideoSetts = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
+
 
     }
 
@@ -375,13 +377,13 @@ public class PhotoMake extends ModuleGUI {
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
-                Video_Settings vs=null;
+
                 try {
-                    vs = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
+                    VideoSetts = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                gr = new grab(vs.width, vs.heigth);
+                gr = new grab(VideoSetts.width, VideoSetts.heigth);
                 byte[] arrImg=null;
                 try {
                    arrImg= gr.getFrame();
@@ -445,8 +447,6 @@ public class PhotoMake extends ModuleGUI {
 
 
     }
-
-
     public void setAktor(AppAktor jktr){
         this.akt=jktr;
     }
@@ -465,7 +465,6 @@ public class PhotoMake extends ModuleGUI {
                 disableCheck();
             }
         };
-      //  showMessageDialog(null, "AKtor spawned");
     }
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
@@ -518,9 +517,6 @@ public class PhotoMake extends ModuleGUI {
                 if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0)) {
                     on_success.passed();
                 }
-        //        else
-          //          this.label_resultCheck.setText("проверка не пройдена");
-
             }
         }
     }
@@ -565,6 +561,8 @@ public class PhotoMake extends ModuleGUI {
             if (vc.isOpened()) {
                 while (true) {
                     vc.read(mat);
+                    if (VideoSetts.CheckFaces)
+                        detectFace(mat);
                     var mem = new MatOfByte();
                     Highgui.imencode(".png", mat, mem);
                     try {
@@ -572,6 +570,7 @@ public class PhotoMake extends ModuleGUI {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
                     var icon2 = new ImageIcon(im.getScaledInstance(
                             im.getWidth(null) / 2,
                             im.getHeight(null) / 2,
@@ -579,10 +578,22 @@ public class PhotoMake extends ModuleGUI {
 
                     mounted.setIcon(icon2);
                     mounted.updateUI();
-
-
                 }
             }
+        }
+
+        public void detectFace(Mat img){
+            MatOfRect faceDetections = new MatOfRect();
+            CascadeClassifier faceDetector = new CascadeClassifier("cascade.xml");
+            faceDetector.detectMultiScale(img, faceDetections);
+
+            System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
+            for (Rect rect : faceDetections.toArray()) {
+                Core.rectangle(img, new org.opencv.core.Point(rect.x, rect.y), new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height),
+                        new Scalar(0, 0, 0), 5);
+            }
+
+
         }
     }
 
