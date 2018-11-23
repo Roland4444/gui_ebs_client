@@ -1,5 +1,6 @@
 package app.GUIModules.Video;
 
+import app.Essens.OnClosed;
 import app.Essens.Video_Settings;
 import app.abstractions.ModuleGUI;
 
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 
 public class VSettings extends ModuleGUI {
 
+    public OnClosed onclosed;
     public Video_Settings default_;
     public final String defaultFileName = "./video_settings.bin";
     public final static String defaultFileName_static = "./video_settings.bin";
@@ -180,6 +182,7 @@ public class VSettings extends ModuleGUI {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
+                onclosed.onClosed();
                 System.out.println("Higing window!!!!");
                 frame.setVisible(false);
             }

@@ -1,5 +1,6 @@
 package app.GUIModules.Video;
 import app.Essens.CypherImpl;
+import app.Essens.OnClosed;
 import app.Essens.Video_Settings;
 import app.GUIModules.About;
 import app.GUIModules.Audio.MergeFrame;
@@ -17,7 +18,6 @@ import org.opencv.objdetect.CascadeClassifier;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -225,8 +225,6 @@ public class PhotoMake extends ModuleGUI {
        // ButtonPanel.add(Start);
         ButtonPanel.add(Start);
 
-
-
         PhotoPanel.add(LabelCam, BorderLayout.WEST);
 
         PhotoPanel.add(labelImg, BorderLayout.EAST);
@@ -236,9 +234,6 @@ public class PhotoMake extends ModuleGUI {
         disableBundle();
         disableSave();
         disableCheck();
-
-
-
     }
 
     private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
@@ -290,12 +285,17 @@ public class PhotoMake extends ModuleGUI {
                 }
             }
         });
-
-
     }
     private void initVideoSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
-
         VideoSettings = new VSettings();
+        VideoSettings.onclosed = new OnClosed() {
+            @Override
+            public void onClosed() {
+                if (cam.cameraWorks)
+                    cam.stopIt();
+                startCam();
+            }
+        };
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -317,8 +317,6 @@ public class PhotoMake extends ModuleGUI {
             }
         });
         VideoSetts = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
-
-
     }
 
     private void initCreateBundle(){
@@ -353,8 +351,6 @@ public class PhotoMake extends ModuleGUI {
         });
     }
 
-
-
     public void initActions(){
         drawinCanvas = new AbstractAction() {
             @Override
@@ -371,7 +367,8 @@ public class PhotoMake extends ModuleGUI {
         makeShot = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cam.stopIt();
+                if (cam.cameraWorks)
+                    cam.stopIt();
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e1) {
@@ -402,6 +399,7 @@ public class PhotoMake extends ModuleGUI {
                 labelImg.setIcon(icon);
                 labelImg.updateUI();
                 startCam();
+                enableCheck();
                // gr.
             }
         };
@@ -416,6 +414,7 @@ public class PhotoMake extends ModuleGUI {
         openVideoFrame = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 startCam();
             }
         };
@@ -532,6 +531,7 @@ public class PhotoMake extends ModuleGUI {
         }
         cam.vs=vs;
         cam.start();
+
     }
 
     public class interop{
@@ -546,13 +546,16 @@ public class PhotoMake extends ModuleGUI {
         public Video_Settings vs;
         public Image im;
         VideoCapture vc;
+        public boolean cameraWorks=false;
 
         public void stopIt(){
             vc.release();
             this.interrupt();
+            cameraWorks=false;
         }
 
         public void run() {
+            cameraWorks=true;
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
             vc = new VideoCapture(0);
             vc.set(3, vs.width); //1280);
@@ -592,8 +595,6 @@ public class PhotoMake extends ModuleGUI {
                 Core.rectangle(img, new org.opencv.core.Point(rect.x, rect.y), new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height),
                         new Scalar(0, 0, 0), 5);
             }
-
-
         }
     }
 
