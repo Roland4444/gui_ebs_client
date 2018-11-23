@@ -31,6 +31,7 @@ import java.util.Map;
 
 public class PhotoMake extends ModuleGUI {
     grab gr;
+    Scalar scalar;
     AbstractAction drawinCanvas;
     AbstractAction makeShot;
     AbstractAction videoSetts;
@@ -126,6 +127,8 @@ public class PhotoMake extends ModuleGUI {
         CreateFinal = new JMenuItem("Создать финальную сборку(аудио + фото)");
 
         camPanel = new CamPanel();
+
+        scalar = new Scalar(25, 255, 17);
 
         if (new File(IMG_PATH).exists()){
             img = ImageIO.read(new File(IMG_PATH));
@@ -593,7 +596,7 @@ public class PhotoMake extends ModuleGUI {
             System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
             for (Rect rect : faceDetections.toArray()) {
                 Core.rectangle(img, new org.opencv.core.Point(rect.x, rect.y), new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height),
-                        new Scalar(0, 0, 0), 5);
+                        scalar, 5);
             }
         }
     }
