@@ -49,3 +49,6 @@ http://marf.sourceforge.net/docs/marf/0.3.0.6/report.pdf
 
 NEED TO CLEANING UP CRAP DEPENDENCY (OKKAM RAZOR!!!)
 Change opencv res =>https://stackoverflow.com/questions/10018190/how-to-change-webcam-format-in-javacv)
+
+
+Detect face => https://blog.openshift.com/day-12-opencv-face-detection-for-java-developers/
