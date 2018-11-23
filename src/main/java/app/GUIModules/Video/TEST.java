@@ -2,6 +2,11 @@ package app.GUIModules.Video;
 
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.highgui.Highgui;
+import org.opencv.highgui.VideoCapture;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,6 +29,7 @@ public class TEST extends ModuleGUI {
     JLabel Limgtvå;
     JPanel MainPanel;
     JButton testButton;
+    JLabel  TopLabel;
 
     public TEST() throws IOException {
         frame = new JFrame("tested");
@@ -47,6 +54,7 @@ public class TEST extends ModuleGUI {
         );
         Limgtvå = new JLabel(icon2);
         testButton = new JButton("test");
+        TopLabel = new JLabel("this is top label");
     }
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -59,6 +67,8 @@ public class TEST extends ModuleGUI {
         frame.setVisible(true);
 
         MainPanel.add(testButton, BorderLayout.SOUTH);
+
+        MainPanel.add(TopLabel, BorderLayout.NORTH);
 
     }
 
@@ -80,20 +90,58 @@ public class TEST extends ModuleGUI {
     }
 
 
-    public void prepareandrunThread(){
+    public void prepareandrunThread() throws InterruptedException {
         var thr = new modifier();
         thr.mounted=Limgtvå;
         thr.arr=arr;
         thr.start();
+
+        var thr2=new camera();
+        thr2.mounted=TopLabel;
+        thr2.start();
+
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException {
         TEST test = new TEST();
         test.preperaGUI();
         test.initListeners();
         test.prepareandrunThread();
 
 
+    }
+
+    class camera extends Thread {
+        public JLabel mounted;
+        Image im;
+        public void run() {
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+            var vc = new VideoCapture(0);
+            vc.set(3, 640); //1280);
+            vc.set(4, 480);//720);
+            var mat = new Mat();
+            if (vc.isOpened()) {
+                while (true) {
+                    vc.read(mat);
+                    var mem = new MatOfByte();
+                    Highgui.imencode(".png", mat, mem);
+                    try {
+                        im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    var icon2 = new ImageIcon(im.getScaledInstance(
+                            im.getWidth(null) / 4,
+                            im.getHeight(null) / 4,
+                            Image.SCALE_SMOOTH));
+
+                    mounted.setIcon(icon2);
+                    mounted.updateUI();
+
+
+                }
+            }
+        }
     }
 
     class modifier extends Thread{
@@ -118,7 +166,6 @@ public class TEST extends ModuleGUI {
                             Image_.getWidth(null)/4,
                             Image_.getHeight(null)/4,
                             Image.SCALE_SMOOTH));
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
