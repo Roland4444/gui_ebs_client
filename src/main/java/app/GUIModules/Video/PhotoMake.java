@@ -354,7 +354,6 @@ public class PhotoMake extends ModuleGUI {
 
 
     public void initActions(){
-
         drawinCanvas = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -364,14 +363,18 @@ public class PhotoMake extends ModuleGUI {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                //  camPanel.paint(gr);
-
             }
         };
 
         makeShot = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                cam.stopIt();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 Video_Settings vs=null;
                 try {
                     vs = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
@@ -392,15 +395,11 @@ public class PhotoMake extends ModuleGUI {
                     e1.printStackTrace();
                 }
                 System.out.println("img=>"+arrImg);
-                ImageIcon icon =  new ImageIcon(
-                        img.getScaledInstance(
-                                img.getWidth(null)/2,
-                                img.getHeight(null)/2,
-                                Image.SCALE_SMOOTH )
-                );
+                ImageIcon icon =  new ImageIcon(img.getScaledInstance(img.getWidth(null)/2,img.getHeight(null)/2, Image.SCALE_SMOOTH ));
 
                 labelImg.setIcon(icon);
                 labelImg.updateUI();
+                startCam();
                // gr.
             }
         };
@@ -415,20 +414,9 @@ public class PhotoMake extends ModuleGUI {
         openVideoFrame = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Video_Settings vs = null;
-                try {
-                    vs = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                cam.vs=vs;
-                cam.start();
+                startCam();
             }
         };
-
-
-
-
     }
 
 
@@ -492,8 +480,6 @@ public class PhotoMake extends ModuleGUI {
         sr.prepareAktor();
         sr.prepereThreads();
         sr.frame.setVisible(true);
-
-
     }
 
     interface OnSuccess{
@@ -537,6 +523,19 @@ public class PhotoMake extends ModuleGUI {
 
             }
         }
+    }
+
+    public void startCam(){
+        cam =new camera();
+        cam.mounted=LabelCam;
+        Video_Settings vs = null;
+        try {
+            vs = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        cam.vs=vs;
+        cam.start();
     }
 
     public class interop{
