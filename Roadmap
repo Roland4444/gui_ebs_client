@@ -6,3 +6,29 @@ ToDo:
             Send to check;
 
      HttpTSL JAKtor test(1.7 version)  ?? ; maybe TLS NGAte solve all problem with cyphering
+
+
+
+
+
+
+     ROADMAP PROJECT EBS::
+
+            CALL CPP with red & green @ BKK adaptor; (live?)//Dropped
+
+            INSTALL CSP AND CALL FOR SIMPLE SIGN;..droped; use mock
+
+            MOCK KV2 and test to sign ;  => Using simple Crypto Pro CSP API; so     ^^^ mock;
+
+                                                                                     ||
+
+            create bundle photo + voice;
+            Receive service this Bundle;
+            esia;
+
+            upgrade sm3 to sm5 =>{
+                service oeriented;
+                intake POST request asyncronous process;
+                not while loop();
+                not stored procedures();
+            }

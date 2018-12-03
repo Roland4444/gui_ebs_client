@@ -63,11 +63,7 @@ class Sound_SettingsTest {
     
     @Test
     public void testLambda4(){
-
-       
         assertEquals(5, 5);
-
-
     }
 
 

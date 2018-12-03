@@ -7,6 +7,8 @@ import app.GUIModules.Audio.MergeFrame;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.ModuleGUI;
 import app.utils.Cypher;
+import app.utils.timeBasedUUID;
+import essens.InputMessage;
 import essens.ResponceMessage;
 import essens.TablesEBSCheck;
 import impl.JAktor;
@@ -24,26 +26,37 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class PhotoMake extends ModuleGUI {
     grab gr;
     Scalar scalar;
+    AbstractAction checkAction;
     AbstractAction drawinCanvas;
     AbstractAction makeShot;
     AbstractAction videoSetts;
     AbstractAction openVideoFrame;
+    AbstractAction closeHelp;
     private Cypher cypher;
 
+    public final String chackaction = "check action";
+    public final String checkaction_shortcut = "control C";
     public final String makeshot = "makeshot";
     public final String makeshot_shortcut = "control S";
     public final String openVideoFrame_shortcut = "control H";
     public final String openvideoframe = "openvideoframe";
+    public final String closeHelp_shortcut="control Z";
+    public final String closehelp="closehelp";
     public Video_Settings VideoSetts;
     public final String IMG_PATH = "tested.png";
+    public final String stopped = "stopped.png";
     camera cam;
 
     public Map<String, Integer> tableRequest = new HashMap<>();
@@ -83,6 +96,7 @@ public class PhotoMake extends ModuleGUI {
     public JButton Check;
     public JButton Start;
     public JButton OpenHelp;
+    public JButton CloseHelp;
 
     public JLabel StartLabel;
 
@@ -91,7 +105,7 @@ public class PhotoMake extends ModuleGUI {
     AppAktor akt;
     public CamPanel camPanel;
     public JLabel LabelCam;
-
+    timeBasedUUID Uuid = new timeBasedUUID();
     public PhotoMake() throws IOException {
         cypher = new CypherImpl();
         frame = new JFrame("EBS GUI Client PhotoMake 1.5");
@@ -113,7 +127,7 @@ public class PhotoMake extends ModuleGUI {
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить фото  (Ctrl+C)");
         OpenHelp = new JButton("Запустить камеру (Ctrl+H)");
-
+        CloseHelp = new JButton("Закрыть камеру(Ctrl+Z)");
         var blt = new BorderLayout();
 
         PhotoPanel = new JPanel(blt);
@@ -207,6 +221,7 @@ public class PhotoMake extends ModuleGUI {
         WorkMenu.add(CheckItem);
         Panel.add(Check, BorderLayout.WEST);
         Panel.add(OpenHelp, BorderLayout.EAST);
+        Panel.add(CloseHelp, BorderLayout.CENTER);
         WorkMenu.add(SaveItem);
 
         WorkMenu.add(MergerSlots);
@@ -293,7 +308,7 @@ public class PhotoMake extends ModuleGUI {
         VideoSettings = new VSettings();
         VideoSettings.onclosed = new OnClosed() {
             @Override
-            public void onClosed() {
+            public void onClosed() throws IOException, InterruptedException {
                 if (cam.cameraWorks)
                     cam.stopIt();
                 startCam();
@@ -355,6 +370,21 @@ public class PhotoMake extends ModuleGUI {
     }
 
     public void initActions(){
+        closeHelp = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cam.cameraWorks) {
+                    System.out.println("\n\nStopping cam\n\n");
+                    try {
+                        cam.stopIt();
+                    } catch (IOException | InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
+                }
+            }
+        };
+
         drawinCanvas = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -370,17 +400,18 @@ public class PhotoMake extends ModuleGUI {
         makeShot = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cam.cameraWorks)
-                    cam.stopIt();
+                if (cam.cameraWorks) {
+                    try {
+                        cam.stopIt();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-
-                try {
-                    VideoSetts = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
-                } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 gr = new grab(VideoSetts.width, VideoSetts.heigth);
@@ -421,6 +452,37 @@ public class PhotoMake extends ModuleGUI {
                 startCam();
             }
         };
+
+        checkAction = new AbstractAction("Check"){
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                byte[] fileContent = null;
+                var checkfile = new File(IMG_PATH);
+                try {
+                    fileContent = Files.readAllBytes(checkfile.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                var uuid_ = Uuid.generate();
+                tableRequest.put(uuid_,-3);
+                try {
+                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.tebs.photo, akt.getURL_thisAktor(), uuid_);
+                    System.out.println("\n\n\n\nSTARTING SENDING...");
+                    System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
+                    System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
+                    akt.send(InputMessage.saveMessageToBytes(inp), NetworkSettings.sets.address);
+                    System.out.println("\n\n\n\nSENDING FINISHED!!!...");
+                } catch (UnknownHostException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+                } catch (IOException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+
+                }
+                catch (CompletionException e){
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+                }
+            }
+        };
     }
 
 
@@ -446,6 +508,14 @@ public class PhotoMake extends ModuleGUI {
                 KeyStroke.getKeyStroke(openVideoFrame_shortcut), openvideoframe);
         OpenHelp.getActionMap().put(openvideoframe, openVideoFrame);
         OpenHelp.addActionListener(openVideoFrame);
+
+        CloseHelp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(closeHelp_shortcut), closehelp);
+        CloseHelp.getActionMap().put(closehelp, closeHelp);
+        CloseHelp.addActionListener(closeHelp);
+
+        Check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(checkaction_shortcut), chackaction);
+        Check.getActionMap().put(chackaction, checkAction);
+        Check.addActionListener(checkAction);
 
 
     }
@@ -551,10 +621,23 @@ public class PhotoMake extends ModuleGUI {
         VideoCapture vc;
         public boolean cameraWorks=false;
 
-        public void stopIt(){
-            vc.release();
+        public void stopIt() throws IOException, InterruptedException {
             this.interrupt();
+            vc.release();
+
             cameraWorks=false;
+            ImageIcon icon0=null;
+            var img0 = ImageIO.read(new File(stopped));
+                icon0 =  new ImageIcon(
+                        img0.getScaledInstance(
+                                img0.getWidth(null),
+                                img0.getHeight(null),
+                                Image.SCALE_SMOOTH ));
+            Thread.sleep(1000);
+            System.out.println("Setting up JLabel");
+            mounted.setIcon(icon0);
+
+            mounted.updateUI();
         }
 
         public void run() {
@@ -564,8 +647,8 @@ public class PhotoMake extends ModuleGUI {
             vc.set(3, vs.width); //1280);
             vc.set(4, vs.heigth);//720);
             var mat = new Mat();
-            if (vc.isOpened()) {
-                while (true) {
+            while (vc.isOpened()) {
+             //   while (true) {
                     vc.read(mat);
                     if (VideoSetts.CheckFaces)
                         detectFace(mat);
@@ -584,7 +667,7 @@ public class PhotoMake extends ModuleGUI {
 
                     mounted.setIcon(icon2);
                     mounted.updateUI();
-                }
+            //    }
             }
         }
 

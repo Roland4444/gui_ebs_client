@@ -32,7 +32,6 @@ public class grab {
         vc.set(4, heigth);//720);
     }
     public byte[] getFrame() throws IOException {
-
         frame = new Mat();
         mem = new MatOfByte();
         if (vc.grab()) {
@@ -46,8 +45,6 @@ public class grab {
         System.out.println("Length file =>"+ new File(saveTo).length());
         vc.release();
         return mem.toArray();
-
-
     }
 
 

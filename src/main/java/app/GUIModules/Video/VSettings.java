@@ -182,7 +182,13 @@ public class VSettings extends ModuleGUI {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                onclosed.onClosed();
+                try {
+                    onclosed.onClosed();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 System.out.println("Higing window!!!!");
                 frame.setVisible(false);
             }
