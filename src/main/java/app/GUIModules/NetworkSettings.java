@@ -55,27 +55,27 @@ public class NetworkSettings extends ModuleGUI {
         SettingPanel = new JPanel(new FlowLayout());
     }
 
-    private String settingFiles="NetworkSettings.bin";
-    private final String defaultAdress =  "http://127.0.0.1:12121/";
-    private IPSetts defaultSets = new IPSetts( defaultAdress);
+    public String settingFiles="NetworkSettings.bin";
+    public String defaultAdress =  "http://127.0.0.1:12121/";
+    public IPSetts defaultSets = new IPSetts( defaultAdress);
     public JFrame frame;
 
-    private JButton saveSets;
-    private JButton Exit;
+    public JButton saveSets;
+    public JButton Exit;
 
     public IPSetts sets;
 
 
-    private JTextField serverAdress;
-    private JTextField port;
-    private JLabel serverNameLabel;
-    private JLabel portLabel;
-    private JLabel info;
-    private JLabel ender;
+    public JTextField serverAdress;
+    public JTextField port;
+    public JLabel serverNameLabel;
+    public JLabel portLabel;
+    public JLabel info;
+    public JLabel ender;
 
-    private JPanel SettingPanel;
+    public JPanel SettingPanel;
 
-    private JPanel ButtonSaveExitpanel ;
+    public JPanel ButtonSaveExitpanel ;
 
     public String getPort(String fulladdress){
         int init = fulladdress.lastIndexOf(":");

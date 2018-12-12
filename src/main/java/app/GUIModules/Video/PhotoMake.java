@@ -120,7 +120,7 @@ public class PhotoMake extends ModuleGUI {
         LabelCam = new JLabel();
 
         CheckItem = new JMenuItem("Проверить фото");
-        SaveItem = new JMenu("Сохранить фото");
+        SaveItem = new JMenuItem("Сохранить фото");
         MergerSlots = new JMenuItem("Упаковать аудио и видео");
         helpMenu = new JMenu("Помощь");
         AboutItem = new JMenuItem("О программе");

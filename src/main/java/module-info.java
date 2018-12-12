@@ -1,8 +1,11 @@
 module uk.roland.ebs_client{
    requires opencv;
-   requires uk.roland.jaktor;
-   requires uk.roland.ebs;
+   requires eu.roland.jaktor;
+   requires eu.roland.ebs;
    requires java.desktop;
    requires java.uuid.generator;
    requires jna;
+   requires EBSMessage;
+
+
 }

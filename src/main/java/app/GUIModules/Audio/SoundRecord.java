@@ -736,7 +736,7 @@ public class SoundRecord extends ModuleGUI {
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
-        akt.setAddress("http://127.0.0.1:14444/");
+        akt.setAddress("http://127.0.0.1:15555/");
         akt.setCypher(cypher);
         akt.spawn();
         akt.on_success=new OnSuccess() {
