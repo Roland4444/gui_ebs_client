@@ -6,6 +6,7 @@ import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
@@ -80,19 +81,16 @@ public class SoundRecord extends ModuleGUI {
 
 
     public Map<String, Integer> tableRequest = new HashMap<>();
-    JMenuBar MenuBar;
+
 
     JMenuItem letsMarked;
-    JMenu FileMenu;
-    JMenu EditMenu;
-    JMenu helpMenu ;
+
     JMenu SettsMenu;
     JMenu WorkMenu;
 
     JMenu PlayItem;
     JMenu SaveItem;
     JMenuItem CheckItem;
-    JMenuItem ExitItem;
 
     JMenuItem NsItem;
     JMenuItem SsItem;
@@ -109,7 +107,6 @@ public class SoundRecord extends ModuleGUI {
     JMenuItem MergerSlots;
 
     JMenuItem CreateBundle;
-
 
     public SSettings SoundSettings;
     public app.GUIModules.NetworkSettings NetworkSettings;
@@ -129,9 +126,9 @@ public class SoundRecord extends ModuleGUI {
     public boolean checked = false;
     public interop exchange;
     AppAktor akt;
-
     public Color StartBackgroundColor;
-    public SoundRecord() {
+    public SoundRecord(SettingsContainer sc) {
+        this.SettsContainer = sc;
         cypher = new CypherImpl();
         frame = new JFrame("EBS GUI Client 1.5");
         MenuBar = new JMenuBar();
@@ -153,7 +150,7 @@ public class SoundRecord extends ModuleGUI {
         Saveslot2 = new JMenuItem("Слот2    (Ctrl+2)");
         Saveslot3 = new JMenuItem("Слот3    (Ctrl+3)");
         MergerSlots = new JMenuItem("Склеить образцы");
-        helpMenu = new JMenu("Помощь");
+        HelpMenu = new JMenu("Помощь");
         AboutItem = new JMenuItem("О программе");
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить записанный фрагмент  (Ctrl+C)");
@@ -257,12 +254,12 @@ public class SoundRecord extends ModuleGUI {
         WorkMenu.add(MergerSlots);
         WorkMenu.add(CreateBundle);
 
-        helpMenu.add(AboutItem);
+        HelpMenu.add(AboutItem);
 
         MenuBar.add(FileMenu);
         MenuBar.add(EditMenu);
         MenuBar.add(WorkMenu);
-        MenuBar.add(helpMenu);
+        MenuBar.add(HelpMenu);
 
         frame.setJMenuBar(MenuBar);
 
@@ -315,7 +312,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        NetworkSettings =new NetworkSettings("NetworkSettings.bin");
+        NetworkSettings =new NetworkSettings(SettsContainer.AudioCheckServiceAddrfile);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -736,7 +733,7 @@ public class SoundRecord extends ModuleGUI {
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
-        akt.setAddress("http://127.0.0.1:15555/");
+        akt.setAddress(SettsContainer.AudioClient);
         akt.setCypher(cypher);
         akt.spawn();
         akt.on_success=new OnSuccess() {
@@ -750,7 +747,8 @@ public class SoundRecord extends ModuleGUI {
     }
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        SoundRecord sr = new SoundRecord();
+        var sc = new SettingsContainer();
+        SoundRecord sr = new SoundRecord(sc);
         sr.preperaGUI();
         sr.initNetworkSettinFrame();
         sr.initSoundSettingFrame();

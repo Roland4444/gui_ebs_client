@@ -1,24 +1,19 @@
 package app.GUIModules.Interface;
 import Message.*;
-import app.GUIModules.Audio.SoundRecord;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.Extractor;
 import app.utils.timeBasedUUID;
-import essens.InputMessage;
 import essens.ResponceMessage;
 import essens.TablesEBSCheck;
 import impl.JAktor;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
@@ -26,13 +21,22 @@ import java.util.concurrent.CompletionException;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class FindESIAFrame extends ModuleGUI {
+
     public final String saveRecivedOID="OID.bin";
+
+    public final String exititem_shortcut="alt F4";
+    public final String exititem= "close frame";
+    public final String opensetts = "opensetts";
+    public final String opensetts_shortcut = "control S";
+
 
     public Map<String, Integer> tableRequest = new HashMap<>();
 
-    public AbstractAction OpenSetts;
+    public AbstractAction openSetts;
     public AbstractAction sendRequestInESIA;
-    public AbstractAction SaveReceuvedOID;
+    public AbstractAction saveReceuvedOID;
+    public AbstractAction closeFrame;
+    public AbstractAction exitItem;
     public JLabel LsenderPanel;
 
     public JLabel LOperSnils;
@@ -46,11 +50,11 @@ public class FindESIAFrame extends ModuleGUI {
 
     public JLabel LPass;
     public JTextField TPass;
-    public JPanel PSender, Pra, PFIO, PPass;
+    public JPanel PSender, Pra, PFIO, PPass, PButton;
 
-    public JPanel MainPanel, PsnilsPanel;
+    public JPanel MainPanel, PsnilsPanel, RootPanel;
 
-    public JButton check, networkSetts, saveOID;
+    public JButton check, OpenSetts, saveOID;
 
     public NetworkSettings ns;
     AppAktor akt;
@@ -58,8 +62,14 @@ public class FindESIAFrame extends ModuleGUI {
 
     private Cypher cypher;
 
-    public FindESIAFrame(){
+    public FindESIAFrame(SettingsContainer sc){
+        this.SettsContainer=sc;
         frame = new JFrame("EBS GUI Client 1.5");
+        MenuBar = new JMenuBar();
+        FileMenu = new JMenu("Файл");
+        ExitItem = new JMenuItem("Выйти");
+        EditMenu = new JMenu("Правка");
+        HelpMenu = new JMenu("Помощь");
         LsenderPanel=new JLabel("Отправитель");
         LOperSnils=new JLabel("Снилс оператора");
         Lra = new JLabel("Идентификатор центра обслуживания");
@@ -75,12 +85,15 @@ public class FindESIAFrame extends ModuleGUI {
         PFIO = new JPanel(new GridLayout());
         PPass = new JPanel(new GridLayout());
         var gr_l = new GridLayout(10,1);
+        RootPanel = new JPanel(new BorderLayout());
 
         MainPanel = new JPanel(gr_l);
         PsnilsPanel = new JPanel(new GridLayout());
         timeBasedUUID Uuid = new timeBasedUUID();
+        OpenSetts = new JButton("Открыть настройки (Ctrl+S)");
 
-        ns = new NetworkSettings("smev3service.bin");
+
+        PButton = new JPanel(new GridLayout());
     }
 
     public void enableSave(){
@@ -93,9 +106,24 @@ public class FindESIAFrame extends ModuleGUI {
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800,600);
         frame.setVisible(true);
-        frame.getContentPane().add(MainPanel);
+        frame.getContentPane().add(RootPanel);
+
+
+
+        MenuBar.add(FileMenu);
+        MenuBar.add(EditMenu);
+        MenuBar.add(HelpMenu);
+
+        FileMenu.add(ExitItem);
+
+        frame.setJMenuBar(MenuBar);
+      //  MenuBar.add(FileMenu, )
+        RootPanel.add(MainPanel, BorderLayout.NORTH);
+
+        RootPanel.add(PButton, BorderLayout.SOUTH);
 
         MainPanel.add(LsenderPanel);
         MainPanel.add(PSender);
@@ -117,41 +145,74 @@ public class FindESIAFrame extends ModuleGUI {
         PPass.add(LPass);
         PPass.add(TPass);
 
+        PButton.add(OpenSetts);
+
         frame.pack();
-        ns.info.setText("Введите адрес сервиса СМЕВ3");
 
     }
 
     @Override
     public void initListeners() {
+        initActions();
+
+        OpenSetts.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(opensetts_shortcut), opensetts);
+        OpenSetts.getActionMap().put(opensetts, openSetts);
+        OpenSetts.addActionListener(openSetts);
+
+
+        ExitItem.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(exititem_shortcut), exititem);
+        ExitItem.getActionMap().put(exititem, exitItem);
+        ExitItem.addActionListener(exitItem);
+
 
     }
 
     @Override
     public void initActions() {
+        openSetts = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ns.frame.setVisible(true);
+            }
+        };
+
+
+        exitItem = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+               frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            };
+        };
+
+
+
+
+
         sendRequestInESIA= new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
-                byte[] fileContent = null;
-
                 var uuid_ = Uuid.generate();
                 tableRequest.put(uuid_,-3);
                 try {
                     var msg = new ESIAFindMessage();
-                    msg.OperatorSnils=TOperSnils.getText();
                     var FIO = Extractor.getFIO(TFIO.getText());
+                    var Pass = Extractor.getPass(TPass.getText());
                     if (FIO.size()<3){
                         showMessageDialog(null, "заполните ФИО!");
                         return;
-
                     }
+                    msg.UUID=uuid_;
+                    msg.Ra=Tra.getText();
+                    msg.OperatorSnils=TOperSnils.getText();
                     msg.Surname=FIO.get(0);
                     msg.Name=FIO.get(1);
                     msg.MiddleName=FIO.get(2);
                     msg.OperatorSnils=TOperSnils.getText();
-                    msg.Passnumber
-
-                    akt.send(InputMessage.saveMessageToBytes(inp), ns.sets.address);
+                    msg.Passseria=Pass.get(0);
+                    msg.Passnumber=Pass.get(1);
+                    akt.send(ESIAFindMessage.saveESIAFindMessage(msg), ns.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                 } catch (IOException e) {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
@@ -167,14 +228,11 @@ public class FindESIAFrame extends ModuleGUI {
 
 
 
-    public static void main(String[] args ) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        var fr = new FindESIAFrame();
-        fr.preperaGUI();
-    }
+
 
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
-        akt.setAddress("http://127.0.0.1:17777/");
+        akt.setAddress(SettsContainer.ESIAClient);
         akt.setCypher(cypher);
         akt.spawn();
         akt.on_success=new OnSuccess() {
@@ -187,10 +245,47 @@ public class FindESIAFrame extends ModuleGUI {
         //  showMessageDialog(null, "AKtor spawned");
     }
 
+    public static void main(String[] args ) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException {
+        var fr = new FindESIAFrame(new SettingsContainer());
+        fr.preperaGUI();
+        fr.prepareAktor();
+        fr.initNetworkSettinFrame();
+        fr.initListeners();
+    }
+
     interface OnSuccess{
         public void passed();
     }
 
+
+    private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        ns = new NetworkSettings(SettsContainer.Smev3addressfile);
+        ns.info.setText("Введите адрес сервиса СМЕВ3");
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    ns.preperaGUI();
+                    ns.initListeners();
+                    ns.tryReadData();
+
+            } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            };
+    });
+    }
 
 
 

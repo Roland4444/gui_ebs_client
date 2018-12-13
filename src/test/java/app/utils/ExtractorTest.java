@@ -31,6 +31,6 @@ class ExtractorTest {
         ArrayList arr = new ArrayList();
         arr.add(seria);
         arr.add(number);
-        assertEquals(Extractor.getPass(seria+number));
+        assertEquals(Extractor.getPass(seria+number), arr);
     }
 }

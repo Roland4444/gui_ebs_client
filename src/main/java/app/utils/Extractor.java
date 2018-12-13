@@ -19,6 +19,18 @@ public class Extractor {
     }
 
     public static ArrayList<String> getPass(String input){
-        return null;
+        String seria="";
+        String number="";
+        ArrayList arr=new ArrayList();
+        for (int i=0; i<input.length();i++){
+            if (i<4){
+                seria+=input.charAt(i);
+                continue;
+            }
+            number+=input.charAt(i);
+        }
+        arr.add(seria);
+        arr.add(number);
+        return arr;
     }
 }

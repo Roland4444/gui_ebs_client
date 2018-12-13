@@ -6,6 +6,7 @@ import app.GUIModules.About;
 import app.GUIModules.Audio.MergeFrame;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.timeBasedUUID;
 import essens.InputMessage;
@@ -60,17 +61,12 @@ public class PhotoMake extends ModuleGUI {
     camera cam;
 
     public Map<String, Integer> tableRequest = new HashMap<>();
-    JMenuBar MenuBar;
 
-    JMenu FileMenu;
-    JMenu EditMenu;
-    JMenu helpMenu ;
     JMenu SettsMenu;
     JMenu WorkMenu;
 
     JMenuItem SaveItem;
     JMenuItem CheckItem;
-    JMenuItem ExitItem;
 
     JMenuItem NsItem;
     JMenuItem VsItem;
@@ -106,7 +102,8 @@ public class PhotoMake extends ModuleGUI {
     public CamPanel camPanel;
     public JLabel LabelCam;
     timeBasedUUID Uuid = new timeBasedUUID();
-    public PhotoMake() throws IOException {
+    public PhotoMake(SettingsContainer sc) throws IOException {
+        this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame("EBS GUI Client PhotoMake 1.5");
         MenuBar = new JMenuBar();
@@ -122,7 +119,7 @@ public class PhotoMake extends ModuleGUI {
         CheckItem = new JMenuItem("Проверить фото");
         SaveItem = new JMenuItem("Сохранить фото");
         MergerSlots = new JMenuItem("Упаковать аудио и видео");
-        helpMenu = new JMenu("Помощь");
+        HelpMenu = new JMenu("Помощь");
         AboutItem = new JMenuItem("О программе");
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить фото  (Ctrl+C)");
@@ -227,12 +224,12 @@ public class PhotoMake extends ModuleGUI {
         WorkMenu.add(MergerSlots);
         WorkMenu.add(CreateBundle);
 
-        helpMenu.add(AboutItem);
+        HelpMenu.add(AboutItem);
 
         MenuBar.add(FileMenu);
         MenuBar.add(EditMenu);
         MenuBar.add(WorkMenu);
-        MenuBar.add(helpMenu);
+        MenuBar.add(HelpMenu);
 
         frame.setJMenuBar(MenuBar);
 
@@ -279,7 +276,7 @@ public class PhotoMake extends ModuleGUI {
     }
 
     private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        NetworkSettings =new NetworkSettings("NetworkSettingsVid.bin");
+        NetworkSettings =new NetworkSettings(SettsContainer.VideoCheckServiceAddrFile);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -527,7 +524,7 @@ public class PhotoMake extends ModuleGUI {
     private void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
-        akt.setAddress("http://127.0.0.1:14444/");
+        akt.setAddress(SettsContainer.VideoClient);
         akt.setCypher(cypher);
         akt.spawn();
         akt.on_success=new OnSuccess() {
@@ -540,7 +537,7 @@ public class PhotoMake extends ModuleGUI {
     }
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        PhotoMake sr = new PhotoMake();
+        PhotoMake sr = new PhotoMake(new SettingsContainer());
         sr.preperaGUI();
         sr.initNetworkSettinFrame();
         sr.initVideoSettingFrame();
