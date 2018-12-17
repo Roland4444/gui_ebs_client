@@ -1,10 +1,10 @@
 package app.GUIModules;
+import Message.BKKCheck.InputMessage;
+import Message.BKKCheck.ResponceMessage;
+import Table.TablesEBSCheck;
 import app.GUIModules.Audio.SSettings;
 import app.abstractions.ModuleGUI;
 import app.utils.timeBasedUUID;
-import essens.InputMessage;
-import essens.ResponceMessage;
-import essens.TablesEBSCheck;
 import impl.JAktor;
 import javax.swing.*;
 import java.awt.*;

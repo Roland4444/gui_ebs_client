@@ -1,4 +1,7 @@
 package app.GUIModules.Video;
+import Message.BKKCheck.InputMessage;
+import Message.BKKCheck.ResponceMessage;
+import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.Essens.OnClosed;
 import app.Essens.Video_Settings;
@@ -9,9 +12,6 @@ import app.abstractions.ModuleGUI;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.timeBasedUUID;
-import essens.InputMessage;
-import essens.ResponceMessage;
-import essens.TablesEBSCheck;
 import impl.JAktor;
 import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
@@ -334,8 +334,10 @@ public class PhotoMake extends ModuleGUI {
         VideoSetts = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
     }
 
+
+    @Deprecated  //Check
     private void initCreateBundle(){
-        MF = new MergeFrame();
+        MF = new MergeFrame(this.SettsContainer);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException e1) {

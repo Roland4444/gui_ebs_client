@@ -1,19 +1,25 @@
 package app.GUIModules.Interface;
-import Message.*;
+import Message.BKKCheck.ResponceMessage;
+import Message.toSMEV.ESIAFindMessage;
+import Message.toSMEV.MessageSMEV;
+import Table.TablesEBSCheck;
+import app.Essens.CypherImpl;
 import app.GUIModules.NetworkSettings;
+import app.abstractions.Model;
 import app.abstractions.ModuleGUI;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.Extractor;
 import app.utils.timeBasedUUID;
-import essens.ResponceMessage;
-import essens.TablesEBSCheck;
 import impl.JAktor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
@@ -28,12 +34,14 @@ public class FindESIAFrame extends ModuleGUI {
     public final String exititem= "close frame";
     public final String opensetts = "opensetts";
     public final String opensetts_shortcut = "control S";
+    public final String makerequest_shortcut = "control R";
+    public final String makerequest ="makerteq";
 
 
     public Map<String, Integer> tableRequest = new HashMap<>();
 
     public AbstractAction openSetts;
-    public AbstractAction sendRequestInESIA;
+    public AbstractAction makeRequest;
     public AbstractAction saveReceuvedOID;
     public AbstractAction closeFrame;
     public AbstractAction exitItem;
@@ -54,16 +62,19 @@ public class FindESIAFrame extends ModuleGUI {
 
     public JPanel MainPanel, PsnilsPanel, RootPanel;
 
-    public JButton check, OpenSetts, saveOID;
+    public JButton MakeRequest, OpenSetts, saveOID;
 
     public NetworkSettings ns;
     AppAktor akt;
     public timeBasedUUID Uuid ;
 
     private Cypher cypher;
+    public app.abstractions.Model Modell;
 
-    public FindESIAFrame(SettingsContainer sc){
+    public FindESIAFrame(SettingsContainer sc) throws IOException {
+
         this.SettsContainer=sc;
+        cypher = new CypherImpl();
         frame = new JFrame("EBS GUI Client 1.5");
         MenuBar = new JMenuBar();
         FileMenu = new JMenu("Файл");
@@ -92,8 +103,39 @@ public class FindESIAFrame extends ModuleGUI {
         timeBasedUUID Uuid = new timeBasedUUID();
         OpenSetts = new JButton("Открыть настройки (Ctrl+S)");
 
+        MakeRequest = new JButton("Найти запись (Ctrl+F)");
+        PButton = new JPanel();
 
-        PButton = new JPanel(new GridLayout());
+        this.Uuid = new timeBasedUUID();
+
+        if (new File(SettsContainer.DumpModelFile).exists()){
+            Modell = Model.restoredModel(Files.readAllBytes(new File(SettsContainer.DumpModelFile).toPath()));
+        }
+        else
+        {
+            var fos = new FileOutputStream(SettsContainer.DumpModelFile);
+            Modell = new Model("", "","","");
+            fos.write(Model.saveModel(Modell));
+            fos.close();
+        }
+    }
+
+    public void savesession() throws IOException {
+        Modell.SNILS=TOperSnils.getText();
+        Modell.RA=Tra.getText();
+        Modell.Pass=TPass.getText();
+        Modell.FIO=TFIO.getText();
+        var fos = new FileOutputStream(SettsContainer.DumpModelFile);
+        fos.write(Model.saveModel(Modell));
+        fos.close();
+
+    }
+
+    public void restore_last(){
+        TPass.setText(Modell.Pass);
+        TFIO.setText(Modell.FIO);
+        Tra.setText(Modell.RA);
+        TOperSnils.setText(Modell.SNILS);
     }
 
     public void enableSave(){
@@ -146,8 +188,11 @@ public class FindESIAFrame extends ModuleGUI {
         PPass.add(TPass);
 
         PButton.add(OpenSetts);
+        PButton.add(MakeRequest);
 
         frame.pack();
+
+        restore_last();
 
     }
 
@@ -165,6 +210,14 @@ public class FindESIAFrame extends ModuleGUI {
                 KeyStroke.getKeyStroke(exititem_shortcut), exititem);
         ExitItem.getActionMap().put(exititem, exitItem);
         ExitItem.addActionListener(exitItem);
+
+
+        MakeRequest.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(makerequest_shortcut), makerequest);
+        MakeRequest.getActionMap().put(makerequest, makeRequest);
+        MakeRequest.addActionListener(makeRequest);
+
+
 
 
     }
@@ -187,12 +240,14 @@ public class FindESIAFrame extends ModuleGUI {
         };
 
 
-
-
-
-        sendRequestInESIA= new AbstractAction("Check"){
+        makeRequest = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
+                try {
+                    savesession();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 var uuid_ = Uuid.generate();
                 tableRequest.put(uuid_,-3);
                 try {
@@ -203,7 +258,7 @@ public class FindESIAFrame extends ModuleGUI {
                         showMessageDialog(null, "заполните ФИО!");
                         return;
                     }
-                    msg.UUID=uuid_;
+                    msg.ID=uuid_;
                     msg.Ra=Tra.getText();
                     msg.OperatorSnils=TOperSnils.getText();
                     msg.Surname=FIO.get(0);
@@ -212,7 +267,11 @@ public class FindESIAFrame extends ModuleGUI {
                     msg.OperatorSnils=TOperSnils.getText();
                     msg.Passseria=Pass.get(0);
                     msg.Passnumber=Pass.get(1);
-                    akt.send(ESIAFindMessage.saveESIAFindMessage(msg), ns.sets.address);
+                    var datatoWork = ESIAFindMessage.saveESIAFindMessage(msg);
+
+                    var SMEVMsg = new MessageSMEV(uuid_, "findesia", datatoWork, akt.rollbackAdressURL());
+
+                    akt.send(MessageSMEV.saveMessageSMEV(SMEVMsg), ns.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                 } catch (IOException e) {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
@@ -245,7 +304,7 @@ public class FindESIAFrame extends ModuleGUI {
         //  showMessageDialog(null, "AKtor spawned");
     }
 
-    public static void main(String[] args ) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException {
+    public static void main(String[] args ) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException, IOException {
         var fr = new FindESIAFrame(new SettingsContainer());
         fr.preperaGUI();
         fr.prepareAktor();
@@ -286,6 +345,8 @@ public class FindESIAFrame extends ModuleGUI {
             };
     });
     }
+
+
 
 
 

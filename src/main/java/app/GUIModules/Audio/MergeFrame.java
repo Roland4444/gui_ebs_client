@@ -2,6 +2,7 @@ package app.GUIModules.Audio;
 
 import app.Essens.SoundBundle;
 import app.abstractions.ModuleGUI;
+import app.abstractions.SettingsContainer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,7 +23,10 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class MergeFrame extends ModuleGUI {
     public Map<Character, Boolean> dictionary = new HashMap<>();
     public final String create_bundle_shortcut = "control B";
+    public final String launch_helper_shortcut = "control H";
+    public final String lauchhelper = "launchhelper";
     AbstractAction bundleAction;
+    AbstractAction launchHelper;
     public final String bundleaction = "bundle";
     public final int width=5;
     public JPanel Panel;
@@ -67,6 +71,7 @@ public class MergeFrame extends ModuleGUI {
     public JPanel BeginPanel090;
     public JPanel EndPanel090;
     public JMenuItem ExitItem;
+    public JMenuItem LaunchHelper;
     private JLabel lBegin1;
     private JLabel lBegin2;
     private JLabel lBegin3;
@@ -74,9 +79,10 @@ public class MergeFrame extends ModuleGUI {
     private JLabel lEnd2;
     private JLabel lEnd3;
 
-    JMenuItem createSoundBundle;
+    JMenuItem CreateSoundBundle;
 
-    public MergeFrame(){
+    public MergeFrame(SettingsContainer sc){
+        this.SettsContainer=sc;
         initDict();
         frame = new JFrame("Модуль подготовки голосового слепка");
         Menubar = new JMenuBar();
@@ -118,7 +124,8 @@ public class MergeFrame extends ModuleGUI {
         l090 =new JLabel("Случайная Секция");
         t090Begin =new JTextField("",width);
         t090End =new JTextField("",width);
-        createSoundBundle = new JMenuItem("Сформировать звуковой слепок");
+        CreateSoundBundle = new JMenuItem("Сформировать звуковой слепок");
+        LaunchHelper = new JMenuItem("Запустить помошника (Ctrl+H)");
         ExitItem = new JMenuItem("Выйти");
     }
 
@@ -145,12 +152,24 @@ public class MergeFrame extends ModuleGUI {
         float f6 =Float.parseFloat(t090End.getText());
         if ((f1<f2) && (f2<f3) && (f3<f4) && (f4<f5) && (f5<f6))
             return true;
-        return false;
+        return true;//false;
     }
 
 
 
     public void prepareActions(){
+        launchHelper = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Runtime r = Runtime.getRuntime();
+                Process p = null;
+                try {
+                    p = r.exec("./audacity "+ SettsContainer.resultmerged);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         bundleAction = new AbstractAction(bundleaction){
             @Override
             public void actionPerformed(ActionEvent e1) {
@@ -172,7 +191,7 @@ public class MergeFrame extends ModuleGUI {
                 sb.begin090=Float.parseFloat(t090Begin.getText());
                 sb.end090=Float.parseFloat(t090End.getText());
                 try {
-                    sb.bigWavContent = Files.readAllBytes(new File("result.wav").toPath());
+                    sb.bigWavContent = Files.readAllBytes(new File(SettsContainer.resultmerged).toPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -203,7 +222,8 @@ public class MergeFrame extends ModuleGUI {
         Menubar.add(Edit);
         File_.add(ExitItem);
 
-        Edit.add(createSoundBundle);
+        Edit.add(CreateSoundBundle);
+        Edit.add(LaunchHelper);
 
         frame.getContentPane().add(Panel, BorderLayout.PAGE_START);
 
@@ -258,10 +278,10 @@ public class MergeFrame extends ModuleGUI {
     @Override
     public void initListeners() {
         prepareActions();
-        createSoundBundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+        CreateSoundBundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(create_bundle_shortcut), bundleaction);
-        createSoundBundle.getActionMap().put(bundleaction, bundleAction);
-        createSoundBundle.addActionListener(bundleAction);
+        CreateSoundBundle.getActionMap().put(bundleaction, bundleAction);
+        CreateSoundBundle.addActionListener(bundleAction);
 
         ExitItem.addActionListener(new ActionListener() {
             @Override
@@ -270,10 +290,17 @@ public class MergeFrame extends ModuleGUI {
             }
         });
 
+        LaunchHelper.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(launch_helper_shortcut), lauchhelper);
+        LaunchHelper.getActionMap().put(lauchhelper, launchHelper);
+        LaunchHelper.addActionListener(launchHelper);
+
+
+
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        MergeFrame MF = new MergeFrame();
+        MergeFrame MF = new MergeFrame(new SettingsContainer());
         MF.preperaGUI();
         MF.initListeners();
         MF.frame.setVisible(true);

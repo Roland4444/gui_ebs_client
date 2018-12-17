@@ -15,4 +15,6 @@ class NetworkSettingsTest {
         assertEquals("19000", ns.getPort(full));
         assertEquals("127.0.0.1", ns.getAddress(full));
     }
+
+
 }

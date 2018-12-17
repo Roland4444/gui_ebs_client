@@ -1,5 +1,8 @@
 package app.GUIModules.Audio;
 
+import Message.BKKCheck.InputMessage;
+import Message.BKKCheck.ResponceMessage;
+import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
 import app.GUIModules.NetworkSettings;
@@ -9,9 +12,6 @@ import app.abstractions.ModuleGUI;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.timeBasedUUID;
-import essens.InputMessage;
-import essens.ResponceMessage;
-import essens.TablesEBSCheck;
 import impl.JAktor;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
@@ -56,7 +56,7 @@ public class SoundRecord extends ModuleGUI {
     public final String play_slot2 = "Playslot2" ;
     public final String play_slot3 = "Playslot3" ;
     public final String tempmerged = "merged.wav";
-    public final String resultmerged = "result.wav";
+
     public final String merge_shortcut = "control M";
     public final String merge= "merge";
     public final String letsmarked = "letsmarked";
@@ -142,7 +142,7 @@ public class SoundRecord extends ModuleGUI {
         PlayItem = new JMenu("Воспроизвести");
         CheckItem = new JMenuItem("Проверить записанный фрагмент");
         SaveItem = new JMenu("Сохранить фрагмент в слот...");
-        Playcurrent = new JMenuItem("Текущий фрагмент   (Ctrl+q)");
+        Playcurrent = new JMenuItem("Текущий фрагмент   "+playcurrent_shortcut);
         Playslot1 = new JMenuItem("Слот1    "+playslot1_shortcut);
         Playslot2 = new JMenuItem("Слот2    "+playslot2_shortcut);
         Playslot3 = new JMenuItem("Слот3    "+playslot3_shortcut);
@@ -366,7 +366,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     private void initCreateBundle(){
-        MF = new MergeFrame();
+        MF = new MergeFrame(this.SettsContainer);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException e1) {
@@ -602,7 +602,7 @@ public class SoundRecord extends ModuleGUI {
                 }
                 BinarySound = new Sound(ss);
                 BinarySound.margeWav(slot1, slot2, tempmerged);
-                BinarySound.margeWav(tempmerged, slot3, resultmerged);
+                BinarySound.margeWav(tempmerged, slot3, SettsContainer.resultmerged);
                 showMessageDialog(null, "Merge complete!");
                 enableBundle();
             }
