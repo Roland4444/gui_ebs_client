@@ -58,18 +58,26 @@ public class FindESIAFrame extends ModuleGUI {
 
     public JLabel LPass;
     public JTextField TPass;
-    public JPanel PSender, Pra, PFIO, PPass, PButton;
+    public JPanel PSender, Pra, PFIO, PPass, PButton, PMobile, PSnils;
 
     public JPanel MainPanel, PsnilsPanel, RootPanel;
 
     public JButton MakeRequest, OpenSetts, saveOID;
+
+    public JLabel LMobile;
+    public JTextField TMobile;
+
+    public JLabel LSNILS;
+    public JTextField TSNILS;
+
+
 
     public NetworkSettings ns;
     AppAktor akt;
     public timeBasedUUID Uuid ;
 
     private Cypher cypher;
-    public app.abstractions.Model Modell;
+    public Model Modell;
 
     public FindESIAFrame(SettingsContainer sc) throws IOException {
 
@@ -86,12 +94,22 @@ public class FindESIAFrame extends ModuleGUI {
         Lra = new JLabel("Идентификатор центра обслуживания");
         LFIO = new JLabel("ФИО");
         LPass = new JLabel("Паспорт: <серия>-<номер>");
+        LMobile=new JLabel("Мобильный телефон обратившегося (10 значащих цифр)");
+        LSNILS=new JLabel("СНИЛС обратившегося (11 значащих цифр)");
+
         TOperSnils= new JTextField("",3);
         Tra = new JTextField("",3);
         TFIO=new JTextField("",3);
         TPass = new JTextField("",3);
+        TMobile = new JTextField("",3);
+        TSNILS = new JTextField("",3);
+
+
+        PSnils = new JPanel(new GridLayout());
+        PMobile = new JPanel(new GridLayout());
 
         PSender = new JPanel(new GridLayout());
+
         Pra = new JPanel(new GridLayout());
         PFIO = new JPanel(new GridLayout());
         PPass = new JPanel(new GridLayout());
@@ -114,17 +132,19 @@ public class FindESIAFrame extends ModuleGUI {
         else
         {
             var fos = new FileOutputStream(SettsContainer.DumpModelFile);
-            Modell = new Model("", "","","");
+            Modell = new Model("","","","","","");
             fos.write(Model.saveModel(Modell));
             fos.close();
         }
     }
 
     public void savesession() throws IOException {
-        Modell.SNILS=TOperSnils.getText();
+        Modell.SNILSoper=TOperSnils.getText();
         Modell.RA=Tra.getText();
         Modell.Pass=TPass.getText();
         Modell.FIO=TFIO.getText();
+        Modell.SNILS=TSNILS.getText();
+        Modell.Mobile=TMobile.getText();
         var fos = new FileOutputStream(SettsContainer.DumpModelFile);
         fos.write(Model.saveModel(Modell));
         fos.close();
@@ -135,7 +155,9 @@ public class FindESIAFrame extends ModuleGUI {
         TPass.setText(Modell.Pass);
         TFIO.setText(Modell.FIO);
         Tra.setText(Modell.RA);
-        TOperSnils.setText(Modell.SNILS);
+        TOperSnils.setText(Modell.SNILSoper);
+        TSNILS.setText(Modell.SNILS);
+        TMobile.setText(Modell.Mobile);
     }
 
     public void enableSave(){
@@ -172,6 +194,8 @@ public class FindESIAFrame extends ModuleGUI {
         MainPanel.add(Pra);
         MainPanel.add(PFIO);
         MainPanel.add(PPass);
+        MainPanel.add(PSnils);
+        MainPanel.add(PMobile);
 
         PSender.add(PsnilsPanel);
 
@@ -189,6 +213,13 @@ public class FindESIAFrame extends ModuleGUI {
 
         PButton.add(OpenSetts);
         PButton.add(MakeRequest);
+
+        PMobile.add(LMobile);
+        PMobile.add(TMobile);
+
+        PSnils.add(LSNILS);
+        PSnils.add(TSNILS);
+
 
         frame.pack();
 
@@ -218,6 +249,28 @@ public class FindESIAFrame extends ModuleGUI {
         MakeRequest.addActionListener(makeRequest);
     }
 
+    boolean checkFIO(){
+        var FIO = Extractor.getFIO(TFIO.getText());
+        if (FIO.size()<3)
+            return false;
+        return true;
+    };
+
+    boolean checkMobile(){
+        if (TMobile.getText().length()!=10)
+            return false;
+        return true;
+    };
+
+    boolean checkClientSNILS(){
+        if (TSNILS.getText().length() ==0)
+            return false;
+        return true;
+    };
+
+
+
+
     @Override
     public void initActions() {
         openSetts = new AbstractAction() {
@@ -236,6 +289,7 @@ public class FindESIAFrame extends ModuleGUI {
         };
 
 
+
         makeRequest = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
@@ -250,8 +304,16 @@ public class FindESIAFrame extends ModuleGUI {
                     var msg = new ESIAFindMessage();
                     var FIO = Extractor.getFIO(TFIO.getText());
                     var Pass = Extractor.getPass(TPass.getText());
-                    if (FIO.size()<3){
+                    if (!checkFIO()){
                         showMessageDialog(null, "заполните ФИО!");
+                        return;
+                    }
+                    if (!checkMobile()){
+                        showMessageDialog(null, "заполните мобильный телефон клиента => 10 значащих цифр, \nнапример 9604451213");
+                        return;
+                    }
+                    if (!checkClientSNILS()){
+                        showMessageDialog(null, "заполните СНИЛС клиента");
                         return;
                     }
                     msg.ID=uuid_;
@@ -263,6 +325,8 @@ public class FindESIAFrame extends ModuleGUI {
                     msg.OperatorSnils=TOperSnils.getText();
                     msg.Passseria=Pass.get(0);
                     msg.Passnumber=Pass.get(1);
+                    msg.SNILS=TSNILS.getText();
+                    msg.MobileNumber=TMobile.getText();
                     var datatoWork = ESIAFindMessage.saveESIAFindMessage(msg);
 
                     var SMEVMsg = new MessageSMEV(uuid_, "findesia", datatoWork, akt.rollbackAdressURL());

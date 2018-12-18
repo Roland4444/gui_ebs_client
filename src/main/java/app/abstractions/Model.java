@@ -4,15 +4,19 @@ import java.io.*;
 
 
 public class Model implements Serializable {
-    public String SNILS;
+    public String SNILSoper;
     public String RA;
     public String FIO;
     public String Pass;
+    public String SNILS;
+    public String Mobile;
 
-    public Model(String SNILS, String RA, String FIO, String Pass){
+    public Model(String SNILSoper, String RA, String FIO, String Pass, String SNILS, String Mobile){
         this.FIO=FIO;
         this.Pass=Pass;
         this.RA=RA;
+        this.SNILSoper =SNILS;
+        this.Mobile=Mobile;
         this.SNILS=SNILS;
 
     }
