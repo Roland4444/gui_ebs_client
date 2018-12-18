@@ -216,10 +216,6 @@ public class FindESIAFrame extends ModuleGUI {
                 KeyStroke.getKeyStroke(makerequest_shortcut), makerequest);
         MakeRequest.getActionMap().put(makerequest, makeRequest);
         MakeRequest.addActionListener(makeRequest);
-
-
-
-
     }
 
     @Override
