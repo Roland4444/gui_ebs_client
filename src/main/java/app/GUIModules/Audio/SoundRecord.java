@@ -2,6 +2,7 @@ package app.GUIModules.Audio;
 
 import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
+import Message.abstractions.BinaryMessage;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
@@ -478,7 +479,7 @@ public class SoundRecord extends ModuleGUI {
                     System.out.println("\n\n\n\nSTARTING SENDING...");
                     System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
                     System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
-                    akt.send(InputMessage.saveMessageToBytes(inp), NetworkSettings.sets.address);
+                    akt.send(BinaryMessage.savedToBLOB(inp), NetworkSettings.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                 } catch (UnknownHostException e) {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
@@ -785,7 +786,7 @@ public class SoundRecord extends ModuleGUI {
         public void receive(byte[] message_) throws IOException {
             System.out.println("Received!!!! via console");
             byte[] message =  cypher.decrypt(message_);
-            var resp = ResponceMessage.restoreBytesToResponceMessage(message);
+            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
             System.out.println("\n\n\nRECEIVED");
             try {
                 Thread.sleep(500);

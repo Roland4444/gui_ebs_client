@@ -1,6 +1,7 @@
 package app.GUIModules;
 import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
+import Message.abstractions.BinaryMessage;
 import Table.TablesEBSCheck;
 import app.GUIModules.Audio.SSettings;
 import app.abstractions.ModuleGUI;
@@ -55,7 +56,7 @@ public class App extends ModuleGUI {
 
             System.out.println("Received!!!! via console");
             label_resultLoadSo.setText("Changed via AKTOR; Message = Received");
-            var resp = ResponceMessage.restoreBytesToResponceMessage(message);
+            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
             System.out.println("\n\n\nRECEIVED");
             try {
                 Thread.sleep(500);
@@ -186,7 +187,7 @@ public class App extends ModuleGUI {
                         InputMessage inp = new  InputMessage(file.getName(), fileContent,  tebs.voice, akt.getURL_thisAktor(), uuid_);
                         System.out.println("\n\n\n\nSTARTING SENDING...");
                         System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
-                        akt.send(InputMessage.saveMessageToBytes(inp), "http://127.0.0.1:12121/");
+                        akt.send(BinaryMessage.savedToBLOB(inp), "http://127.0.0.1:12121/");
                         System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                     } catch (UnknownHostException e) {
                         e.printStackTrace();

@@ -1,5 +1,6 @@
 package app.GUIModules.Interface;
 import Message.BKKCheck.ResponceMessage;
+import Message.abstractions.BinaryMessage;
 import Message.toSMEV.ESIAFindMessage;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
@@ -327,11 +328,11 @@ public class FindESIAFrame extends ModuleGUI {
                     msg.Passnumber=Pass.get(1);
                     msg.SNILS=TSNILS.getText();
                     msg.MobileNumber=TMobile.getText();
-                    var datatoWork = ESIAFindMessage.saveESIAFindMessage(msg);
+                    byte[] datatoWork = BinaryMessage.savedToBLOB(msg);
 
                     var SMEVMsg = new MessageSMEV(uuid_, "findesia", datatoWork, akt.rollbackAdressURL());
 
-                    akt.send(MessageSMEV.saveMessageSMEV(SMEVMsg), ns.sets.address);
+                    akt.send(BinaryMessage.savedToBLOB(SMEVMsg), ns.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                 } catch (IOException e) {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
@@ -429,7 +430,7 @@ public class FindESIAFrame extends ModuleGUI {
         public void receive(byte[] message_) throws IOException {
             System.out.println("Received!!!! via console");
             byte[] message =  cypher.decrypt(message_);
-            var resp = ResponceMessage.restoreBytesToResponceMessage(message);
+            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
             System.out.println("\n\n\nRECEIVED");
             try {
                 Thread.sleep(500);
