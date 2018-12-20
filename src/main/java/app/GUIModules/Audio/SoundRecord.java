@@ -131,7 +131,7 @@ public class SoundRecord extends ModuleGUI {
     public SoundRecord(SettingsContainer sc) {
         this.SettsContainer = sc;
         cypher = new CypherImpl();
-        frame = new JFrame("EBS GUI Client 1.5");
+        frame = new JFrame(sc.VersionProg);
         MenuBar = new JMenuBar();
         FileMenu = new JMenu("Файл");
         ExitItem = new JMenuItem("Выйти");

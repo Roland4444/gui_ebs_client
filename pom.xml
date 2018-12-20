@@ -6,7 +6,7 @@
 
     <groupId>eu.roland</groupId>
     <artifactId>awt_swing_client</artifactId>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.7-SNAPSHOT</version>
     <properties>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>

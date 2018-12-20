@@ -106,7 +106,7 @@ public class PhotoMake extends ModuleGUI {
     public PhotoMake(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
         cypher = new CypherImpl();
-        frame = new JFrame("EBS GUI Client PhotoMake 1.5");
+        frame = new JFrame(sc.VersionProg);
         MenuBar = new JMenuBar();
         FileMenu = new JMenu("Файл");
         ExitItem = new JMenuItem("Выйти");
