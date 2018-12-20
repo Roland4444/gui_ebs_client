@@ -319,15 +319,15 @@ public class FindESIAFrame extends ModuleGUI {
                     }
                     msg.ID=uuid_;
                     msg.Ra=Tra.getText();
-                    msg.OperatorSnils=TOperSnils.getText();
+                    msg.OperatorSnils=ESIAFindMessage.getSNILSfromplain(TOperSnils.getText());
                     msg.Surname=FIO.get(0);
                     msg.Name=FIO.get(1);
                     msg.MiddleName=FIO.get(2);
-                    msg.OperatorSnils=TOperSnils.getText();
+                    msg.OperatorSnils=ESIAFindMessage.getSNILSfromplain(TOperSnils.getText());
                     msg.Passseria=Pass.get(0);
                     msg.Passnumber=Pass.get(1);
-                    msg.SNILS=TSNILS.getText();
-                    msg.MobileNumber=TMobile.getText();
+                    msg.SNILS=ESIAFindMessage.getSNILSfromplain(TSNILS.getText());
+                    msg.MobileNumber=ESIAFindMessage.getMobilefromplain(TMobile.getText());
                     byte[] datatoWork = BinaryMessage.savedToBLOB(msg);
 
                     var SMEVMsg = new MessageSMEV(uuid_, "findesia", datatoWork, akt.rollbackAdressURL());
