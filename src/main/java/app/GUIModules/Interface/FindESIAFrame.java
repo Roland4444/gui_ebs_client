@@ -1,7 +1,7 @@
 package app.GUIModules.Interface;
-import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import Message.toSMEV.ESIAFind.ESIAFindMessageInitial;
+import Message.toSMEV.ESIAFind.ESIAFindMessageResult;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
@@ -430,8 +430,9 @@ public class FindESIAFrame extends ModuleGUI {
         public void receive(byte[] message_) throws IOException {
             System.out.println("Received!!!! via console");
             byte[] message =  cypher.decrypt(message_);
-            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
+            ESIAFindMessageResult resp = (ESIAFindMessageResult) BinaryMessage.restored(message);
             System.out.println("\n\n\nRECEIVED");
+            showMessageDialog(null, "Status => "+ resp.trusted+"\nOID=>"+resp.oid);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -439,10 +440,7 @@ public class FindESIAFrame extends ModuleGUI {
             }
             if (tableRequest.get(resp.ID)!=null){
                 tableRequest.remove(resp.ID);
-                tableRequest.put(resp.ID, resp.checkResult);
-                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0)) {
-                    on_success.passed();
-                }
+
                 //        else
                 //          this.label_resultCheck.setText("проверка не пройдена");
 
