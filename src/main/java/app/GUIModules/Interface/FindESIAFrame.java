@@ -28,7 +28,7 @@ import java.util.concurrent.CompletionException;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class FindESIAFrame extends ModuleGUI {
-
+    public Color InitialColor;
     public final String saveRecivedOID="OID.bin";
 
     public final String exititem_shortcut="alt F4";
@@ -37,6 +37,8 @@ public class FindESIAFrame extends ModuleGUI {
     public final String opensetts_shortcut = "control S";
     public final String makerequest_shortcut = "control R";
     public final String makerequest ="makerteq";
+    public final String proceedregister = "proceedregister";
+    public final String proceedregister_shortcut = "control P";
 
 
     public Map<String, Integer> tableRequest = new HashMap<>();
@@ -46,6 +48,7 @@ public class FindESIAFrame extends ModuleGUI {
     public AbstractAction saveReceuvedOID;
     public AbstractAction closeFrame;
     public AbstractAction exitItem;
+    public AbstractAction proceedRegister;
     public JLabel LsenderPanel;
 
     public JLabel LOperSnils;
@@ -59,11 +62,13 @@ public class FindESIAFrame extends ModuleGUI {
 
     public JLabel LPass;
     public JTextField TPass;
+    public JMenuItem OpenSetts;
     public JPanel PSender, Pra, PFIO, PPass, PButton, PMobile, PSnils;
 
     public JPanel MainPanel, PsnilsPanel, RootPanel;
 
-    public JButton MakeRequest, OpenSetts, saveOID;
+    public JButton MakeRequest, saveOID;
+    public JButton ProceedRegister;
 
     public JLabel LMobile;
     public JTextField TMobile;
@@ -89,6 +94,7 @@ public class FindESIAFrame extends ModuleGUI {
         FileMenu = new JMenu("Файл");
         ExitItem = new JMenuItem("Выйти");
         EditMenu = new JMenu("Правка");
+
         HelpMenu = new JMenu("Помощь");
         LsenderPanel=new JLabel("Отправитель");
         LOperSnils=new JLabel("Снилс оператора");
@@ -97,14 +103,14 @@ public class FindESIAFrame extends ModuleGUI {
         LPass = new JLabel("Паспорт: <серия>-<номер>");
         LMobile=new JLabel("Мобильный телефон обратившегося (10 значащих цифр)");
         LSNILS=new JLabel("СНИЛС обратившегося (11 значащих цифр)");
-
+        OpenSetts = new JMenuItem("Открыть настройки (Ctrl+S)");
         TOperSnils= new JTextField("",3);
         Tra = new JTextField("",3);
         TFIO=new JTextField("",3);
         TPass = new JTextField("",3);
         TMobile = new JTextField("",3);
         TSNILS = new JTextField("",3);
-
+        ProceedRegister = new JButton("Продолжить регистрацию в ЕБС");
 
         PSnils = new JPanel(new GridLayout());
         PMobile = new JPanel(new GridLayout());
@@ -120,11 +126,10 @@ public class FindESIAFrame extends ModuleGUI {
         MainPanel = new JPanel(gr_l);
         PsnilsPanel = new JPanel(new GridLayout());
         timeBasedUUID Uuid = new timeBasedUUID();
-        OpenSetts = new JButton("Открыть настройки (Ctrl+S)");
 
         MakeRequest = new JButton("Найти запись (Ctrl+F)");
         PButton = new JPanel();
-
+        InitialColor = ProceedRegister.getBackground();
         this.Uuid = new timeBasedUUID();
 
         if (new File(SettsContainer.DumpModelFile).exists()){
@@ -161,6 +166,17 @@ public class FindESIAFrame extends ModuleGUI {
         TMobile.setText(Modell.Mobile);
     }
 
+    public void disableProceed(){
+
+        ProceedRegister.setEnabled(false);
+        ProceedRegister.setBackground(InitialColor);
+    };
+
+    public void enableProceed(){
+        ProceedRegister.setEnabled(true);
+        ProceedRegister.setBackground(Color.green);
+    };
+
     public void enableSave(){
 
     };
@@ -176,12 +192,12 @@ public class FindESIAFrame extends ModuleGUI {
         frame.setVisible(true);
         frame.getContentPane().add(RootPanel);
 
-
+        disableProceed();
 
         MenuBar.add(FileMenu);
         MenuBar.add(EditMenu);
         MenuBar.add(HelpMenu);
-
+        EditMenu.add(OpenSetts);
         FileMenu.add(ExitItem);
 
         frame.setJMenuBar(MenuBar);
@@ -212,8 +228,8 @@ public class FindESIAFrame extends ModuleGUI {
         PPass.add(LPass);
         PPass.add(TPass);
 
-        PButton.add(OpenSetts);
         PButton.add(MakeRequest);
+        PButton.add(ProceedRegister);
 
         PMobile.add(LMobile);
         PMobile.add(TMobile);
@@ -226,6 +242,24 @@ public class FindESIAFrame extends ModuleGUI {
 
         restore_last();
 
+    }
+
+
+    public void unlockinputs(){
+        this.TSNILS.enable();
+        this.TMobile.enable();
+        this.TOperSnils.enable();
+        this.TFIO.enable();
+        this.Tra.enable();
+    }
+
+    public void lockinputs(){
+        this.TSNILS.disable();
+        this.TSNILS.disable();
+        this.TMobile.disable();
+        this.TOperSnils.disable();
+        this.TFIO.disable();
+        this.Tra.disable();
     }
 
     @Override
@@ -294,6 +328,7 @@ public class FindESIAFrame extends ModuleGUI {
         makeRequest = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
+                disableProceed();
                 try {
                     savesession();
                 } catch (IOException e) {
@@ -334,6 +369,7 @@ public class FindESIAFrame extends ModuleGUI {
 
                     akt.send(BinaryMessage.savedToBLOB(SMEVMsg), ns.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
+                    lockinputs();
                 } catch (IOException e) {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
 
@@ -428,10 +464,12 @@ public class FindESIAFrame extends ModuleGUI {
 
         @Override
         public void receive(byte[] message_) throws IOException {
+            unlockinputs();
             System.out.println("Received!!!! via console");
             byte[] message =  cypher.decrypt(message_);
             ESIAFindMessageResult resp = (ESIAFindMessageResult) BinaryMessage.restored(message);
             System.out.println("\n\n\nRECEIVED");
+            enableProceed();
             showMessageDialog(null, "Status => "+ resp.trusted+"\nOID=>"+resp.oid);
             try {
                 Thread.sleep(500);
