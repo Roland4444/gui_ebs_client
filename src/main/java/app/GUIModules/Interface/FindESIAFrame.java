@@ -1,7 +1,7 @@
 package app.GUIModules.Interface;
 import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
-import Message.toSMEV.ESIAFindMessage;
+import Message.toSMEV.ESIAFind.ESIAFindMessageInitial;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
@@ -302,7 +302,7 @@ public class FindESIAFrame extends ModuleGUI {
                 var uuid_ = Uuid.generate();
                 tableRequest.put(uuid_,-3);
                 try {
-                    var msg = new ESIAFindMessage();
+                    var msg = new ESIAFindMessageInitial();
                     var FIO = Extractor.getFIO(TFIO.getText());
                     var Pass = Extractor.getPass(TPass.getText());
                     if (!checkFIO()){
@@ -319,15 +319,15 @@ public class FindESIAFrame extends ModuleGUI {
                     }
                     msg.ID=uuid_;
                     msg.Ra=Tra.getText();
-                    msg.OperatorSnils=ESIAFindMessage.getSNILSfromplain(TOperSnils.getText());
+                    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(TOperSnils.getText());
                     msg.Surname=FIO.get(0);
                     msg.Name=FIO.get(1);
                     msg.MiddleName=FIO.get(2);
-                    msg.OperatorSnils=ESIAFindMessage.getSNILSfromplain(TOperSnils.getText());
+                    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(TOperSnils.getText());
                     msg.Passseria=Pass.get(0);
                     msg.Passnumber=Pass.get(1);
-                    msg.SNILS=ESIAFindMessage.getSNILSfromplain(TSNILS.getText());
-                    msg.MobileNumber=ESIAFindMessage.getMobilefromplain(TMobile.getText());
+                    msg.SNILS=ESIAFindMessageInitial.getSNILSfromplain(TSNILS.getText());
+                    msg.MobileNumber=ESIAFindMessageInitial.getMobilefromplain(TMobile.getText());
                     byte[] datatoWork = BinaryMessage.savedToBLOB(msg);
 
                     var SMEVMsg = new MessageSMEV(uuid_, "findesia", datatoWork, akt.rollbackAdressURL());
