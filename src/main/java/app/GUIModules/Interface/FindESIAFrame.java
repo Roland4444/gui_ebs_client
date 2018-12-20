@@ -68,7 +68,7 @@ public class FindESIAFrame extends ModuleGUI {
     public JPanel MainPanel, PsnilsPanel, RootPanel;
 
     public JButton MakeRequest, saveOID;
-    public JButton ProceedRegister;
+    public JButton ProceedRegister, CreateESIAFRomScratch, UpgradeCurrentEsia;
 
     public JLabel LMobile;
     public JTextField TMobile;
@@ -100,7 +100,7 @@ public class FindESIAFrame extends ModuleGUI {
         LOperSnils=new JLabel("Снилс оператора");
         Lra = new JLabel("Идентификатор центра обслуживания");
         LFIO = new JLabel("ФИО");
-        LPass = new JLabel("Паспорт: <серия>-<номер>");
+        LPass = new JLabel("Паспорт: <серия><номер>(10 значащих цифр)");
         LMobile=new JLabel("Мобильный телефон обратившегося (10 значащих цифр)");
         LSNILS=new JLabel("СНИЛС обратившегося (11 значащих цифр)");
         OpenSetts = new JMenuItem("Открыть настройки (Ctrl+S)");
@@ -111,7 +111,8 @@ public class FindESIAFrame extends ModuleGUI {
         TMobile = new JTextField("",3);
         TSNILS = new JTextField("",3);
         ProceedRegister = new JButton("Продолжить регистрацию в ЕБС");
-
+        CreateESIAFRomScratch = new JButton("Зарегистрировать новую запись в ЕСИА");
+        UpgradeCurrentEsia = new JButton("Подтвердить упрощенную запись в ЕСИА");
         PSnils = new JPanel(new GridLayout());
         PMobile = new JPanel(new GridLayout());
 
@@ -166,24 +167,50 @@ public class FindESIAFrame extends ModuleGUI {
         TMobile.setText(Modell.Mobile);
     }
 
-    public void disableProceed(){
+    public void disableUpgrade(){
+        UpgradeCurrentEsia.setVisible(false);
+        UpgradeCurrentEsia.setEnabled(false);
+        UpgradeCurrentEsia.setBackground(InitialColor);
+    };
 
+    public void enableUpgrade(){
+        UpgradeCurrentEsia.setVisible(true);
+        UpgradeCurrentEsia.setEnabled(true);
+        UpgradeCurrentEsia.setBackground(Color.ORANGE);
+    };
+
+    public void disableCreate(){
+        CreateESIAFRomScratch.setVisible(false);
+        CreateESIAFRomScratch.setEnabled(false);
+        CreateESIAFRomScratch.setBackground(InitialColor);
+    };
+
+    public void enableCreate(){
+        CreateESIAFRomScratch.setVisible(true);
+        CreateESIAFRomScratch.setEnabled(true);
+        CreateESIAFRomScratch.setBackground(Color.YELLOW);
+    }
+
+    public void disableProceed(){
+        ProceedRegister.setVisible(false);
         ProceedRegister.setEnabled(false);
         ProceedRegister.setBackground(InitialColor);
     };
 
     public void enableProceed(){
+        ProceedRegister.setVisible(true);
         ProceedRegister.setEnabled(true);
         ProceedRegister.setBackground(Color.green);
     };
 
-    public void enableSave(){
+    public void disableRequest(){
+        MakeRequest.setEnabled(false);
+    }
 
-    };
+    public void enableRequest(){
+        MakeRequest.setEnabled(true);
+    }
 
-    public void disableCheck(){
-
-    };
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -193,6 +220,8 @@ public class FindESIAFrame extends ModuleGUI {
         frame.getContentPane().add(RootPanel);
 
         disableProceed();
+        disableUpgrade();
+        disableCreate();
 
         MenuBar.add(FileMenu);
         MenuBar.add(EditMenu);
@@ -230,6 +259,8 @@ public class FindESIAFrame extends ModuleGUI {
 
         PButton.add(MakeRequest);
         PButton.add(ProceedRegister);
+        PButton.add(UpgradeCurrentEsia);
+        PButton.add(CreateESIAFRomScratch);
 
         PMobile.add(LMobile);
         PMobile.add(TMobile);
@@ -303,6 +334,12 @@ public class FindESIAFrame extends ModuleGUI {
         return true;
     };
 
+    boolean checkPass(){
+        if (TPass.getText().length() !=10)
+            return false;
+        return true;
+    };
+
 
 
 
@@ -329,6 +366,9 @@ public class FindESIAFrame extends ModuleGUI {
             @Override
             public void actionPerformed(ActionEvent e1) {
                 disableProceed();
+                disableCreate();
+                disableUpgrade();
+                disableRequest();
                 try {
                     savesession();
                 } catch (IOException e) {
@@ -350,6 +390,10 @@ public class FindESIAFrame extends ModuleGUI {
                     }
                     if (!checkClientSNILS()){
                         showMessageDialog(null, "заполните СНИЛС клиента");
+                        return;
+                    }
+                    if (!checkPass()){
+                        showMessageDialog(null, "заполните паспорт клиента");
                         return;
                     }
                     msg.ID=uuid_;
@@ -394,8 +438,7 @@ public class FindESIAFrame extends ModuleGUI {
         akt.on_success=new OnSuccess() {
             @Override
             public void passed() {
-                enableSave();
-                disableCheck();
+
             }
         };
         //  showMessageDialog(null, "AKtor spawned");
@@ -464,25 +507,29 @@ public class FindESIAFrame extends ModuleGUI {
 
         @Override
         public void receive(byte[] message_) throws IOException {
+            ESIAFindMessageResult resp = (ESIAFindMessageResult) BinaryMessage.restored(message_);
+            if (tableRequest.get(resp.ID)==null)
+                return;
+            enableRequest();
             unlockinputs();
             System.out.println("Received!!!! via console");
             byte[] message =  cypher.decrypt(message_);
-            ESIAFindMessageResult resp = (ESIAFindMessageResult) BinaryMessage.restored(message);
+
             System.out.println("\n\n\nRECEIVED");
-            enableProceed();
-            showMessageDialog(null, "Status => "+ resp.trusted+"\nOID=>"+resp.oid);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (tableRequest.get(resp.ID)!=null){
-                tableRequest.remove(resp.ID);
+            if ((resp.oid!=null) && resp.trusted.equals("trusted"))
+                enableProceed();
+            if (resp.oid==null)
+                enableCreate();
+            if ((resp.oid!=null) && (!resp.trusted.equals("trusted")))
+                enableUpgrade();
+        //    showMessageDialog(null, "Status => "+ resp.trusted+"\nOID=>"+resp.oid);
+
+
 
                 //        else
                 //          this.label_resultCheck.setText("проверка не пройдена");
 
-            }
+            tableRequest.remove(resp.ID);
         }
     }
 
