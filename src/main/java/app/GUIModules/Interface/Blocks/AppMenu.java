@@ -15,9 +15,6 @@ public class AppMenu extends JMenuBar {
     public JFrame ParentFrame;
     public JFrame AboutFrame;
     public AppMenu(){
-
-
-
         FileMenu = new JMenu("Файл");
         EditMenu = new JMenu("Правка");
         SettsMenu = new JMenu("Настройкм");

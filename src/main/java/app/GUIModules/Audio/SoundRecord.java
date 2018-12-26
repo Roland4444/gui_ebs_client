@@ -64,7 +64,6 @@ public class SoundRecord extends ModuleGUI {
     public final String letsmarked = "letsmarked";
     public final String createbundle = "createbundle";  
 
-
     public final String saveslot1_shortcut = "control 1";
     public final String saveslot2_shortcut = "control 2";
     public final String saveslot3_shortcut = "control 3";
@@ -84,19 +83,13 @@ public class SoundRecord extends ModuleGUI {
 
     public Map<String, Integer> tableRequest = new HashMap<>();
 
-
     JMenuItem letsMarked;
-
-    JMenu SettsMenu;
-    JMenu WorkMenu;
 
     JMenu PlayItem;
     JMenu SaveItem;
     JMenuItem CheckItem;
 
-    JMenuItem NsItem;
     JMenuItem SsItem;
-    JMenuItem AboutItem;
 
     JMenuItem Playslot1;
     JMenuItem Playslot2;
@@ -135,14 +128,7 @@ public class SoundRecord extends ModuleGUI {
         this.SettsContainer = sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
-        MenuBar = new JMenuBar();
-        FileMenu = new JMenu("Файл");
-        ExitItem = new JMenuItem("Выйти");
-        EditMenu = new JMenu("Правка");
-        NsItem = new JMenuItem("Настройки сервиса");
         SsItem = new JMenuItem("Настройки звука");
-        SettsMenu = new JMenu("Настройкм");
-        WorkMenu = new JMenu("Сервис");
         PlayItem = new JMenu("Воспроизвести");
         CheckItem = new JMenuItem("Проверить записанный фрагмент");
         SaveItem = new JMenu("Сохранить фрагмент в слот...");
@@ -154,8 +140,6 @@ public class SoundRecord extends ModuleGUI {
         Saveslot2 = new JMenuItem("Слот2    (Ctrl+2)");
         Saveslot3 = new JMenuItem("Слот3    (Ctrl+3)");
         MergerSlots = new JMenuItem("Склеить образцы");
-        HelpMenu = new JMenu("Помощь");
-        AboutItem = new JMenuItem("О программе");
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить записанный фрагмент  (Ctrl+C)");
         Panel.add(Check, BorderLayout.WEST);
@@ -238,10 +222,6 @@ public class SoundRecord extends ModuleGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
-        FileMenu.add(ExitItem);
-        SettsMenu.add(NsItem);
-        SettsMenu.add(SsItem);
-        EditMenu.add(SettsMenu);
 
         PlayItem.add(Playcurrent);
         PlayItem.add(Playslot1);
@@ -252,22 +232,16 @@ public class SoundRecord extends ModuleGUI {
         SaveItem.add(Saveslot2);
         SaveItem.add(Saveslot3);
 
-        WorkMenu.add(CheckItem);
-        WorkMenu.add(PlayItem);
-        WorkMenu.add(SaveItem);
+        MainMenu.EditMenu.getItem(0).add(SsItem);
 
-        WorkMenu.add(MergerSlots);
-        WorkMenu.add(CreateBundle);
+        MainMenu.WorkMenu.add(CheckItem);
+        MainMenu.WorkMenu.add(PlayItem);
+        MainMenu.WorkMenu.add(SaveItem);
 
-        HelpMenu.add(AboutItem);
+        MainMenu.WorkMenu.add(MergerSlots);
+        MainMenu.WorkMenu.add(CreateBundle);
 
-        MenuBar.add(FileMenu);
-        MenuBar.add(EditMenu);
-        MenuBar.add(WorkMenu);
-        MenuBar.add(HelpMenu);
-
-        frame.setJMenuBar(MenuBar);
-
+        frame.setJMenuBar(MainMenu);
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
 
         Panel.add(Check, BorderLayout.WEST);
@@ -283,12 +257,13 @@ public class SoundRecord extends ModuleGUI {
 
         frame.getContentPane().add(ControlsPanel, BorderLayout.CENTER);
 
-
         disableBundle();
         disableSave();
         disableCheck();
         disablePlay();
         disableLetsMarked();
+        MainMenu.AboutFrame=About.frame;
+        MainMenu.ParentFrame=this.frame;
 
     }
 
@@ -700,7 +675,7 @@ public class SoundRecord extends ModuleGUI {
 
         Check.addActionListener(checkAction);
 
-        NsItem.addActionListener(new ActionListener() {
+        MainMenu.NsItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e1) {
                 NetworkSettings.frame.setVisible(true);
@@ -711,20 +686,6 @@ public class SoundRecord extends ModuleGUI {
             @Override
             public void actionPerformed(ActionEvent e1) {
                 SoundSettings.frame.setVisible(true);
-            }
-        });
-
-        AboutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e1) {
-                About.frame.setVisible(true);
-            }
-        });
-
-        ExitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
     }
@@ -748,7 +709,6 @@ public class SoundRecord extends ModuleGUI {
                 disableCheck();
             }
         };
-      //  showMessageDialog(null, "AKtor spawned");
     }
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
@@ -764,8 +724,6 @@ public class SoundRecord extends ModuleGUI {
         sr.prepareAktor();
         sr.preperaGUI();
         sr.frame.setVisible(true);
-
-
     }
 
     interface OnSuccess{
