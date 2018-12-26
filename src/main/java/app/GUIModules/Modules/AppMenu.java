@@ -1,4 +1,4 @@
-package app.GUIModules.Interface.Blocks;
+package app.GUIModules.Modules;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
