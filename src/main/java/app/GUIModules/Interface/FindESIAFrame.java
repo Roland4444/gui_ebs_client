@@ -5,6 +5,7 @@ import Message.toSMEV.ESIAFind.ESIAFindMessageResult;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
+import app.GUIModules.Interface.Blocks.EBSOperatorPanel;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.Model;
 import app.abstractions.ModuleGUI;
@@ -35,7 +36,7 @@ public class FindESIAFrame extends ModuleGUI {
     public final String exititem= "close frame";
     public final String opensetts = "opensetts";
     public final String opensetts_shortcut = "control S";
-    public final String makerequest_shortcut = "control R";
+    public final String makerequest_shortcut = "control F";
     public final String makerequest ="makerteq";
     public final String proceedregister = "proceedregister";
     public final String proceedregister_shortcut = "control P";
@@ -76,7 +77,7 @@ public class FindESIAFrame extends ModuleGUI {
     public JLabel LSNILS;
     public JTextField TSNILS;
 
-
+    public EBSOperatorPanel ExtendedPanel;
 
     public NetworkSettings ns;
     AppAktor akt;
@@ -86,7 +87,7 @@ public class FindESIAFrame extends ModuleGUI {
     public Model Modell;
 
     public FindESIAFrame(SettingsContainer sc) throws IOException {
-
+        ExtendedPanel = new EBSOperatorPanel();
         this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
@@ -243,6 +244,8 @@ public class FindESIAFrame extends ModuleGUI {
         MainPanel.add(PSnils);
         MainPanel.add(PMobile);
 
+        MainPanel.add(ExtendedPanel);
+
         PSender.add(PsnilsPanel);
 
         PsnilsPanel.add(LOperSnils);
@@ -313,6 +316,8 @@ public class FindESIAFrame extends ModuleGUI {
                 KeyStroke.getKeyStroke(makerequest_shortcut), makerequest);
         MakeRequest.getActionMap().put(makerequest, makeRequest);
         MakeRequest.addActionListener(makeRequest);
+
+
     }
 
     boolean checkFIO(){
