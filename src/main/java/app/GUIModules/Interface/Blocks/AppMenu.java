@@ -5,20 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-public class Menu extends JMenuBar {
+public class AppMenu extends JMenuBar {
     public JMenu FileMenu;
     public JMenuItem ExitItem;
     public JMenu EditMenu;
     public JMenuItem AboutItem, NsItem;
     public JMenu  WorkMenu, SettsMenu ;;
-    public JMenuBar MenuBar;
     public JMenu HelpMenu;
     public JFrame ParentFrame;
     public JFrame AboutFrame;
-    public Menu(JFrame Parent, JFrame Info){
-        this.ParentFrame=Parent;
-        this.AboutFrame=Info;
-        MenuBar = new JMenuBar();
+    public AppMenu(){
+
+
 
         FileMenu = new JMenu("Файл");
         EditMenu = new JMenu("Правка");
@@ -35,9 +33,10 @@ public class Menu extends JMenuBar {
         SettsMenu.add(NsItem);
         HelpMenu.add(AboutItem);
 
-        MenuBar.add(FileMenu);
-        MenuBar.add(EditMenu);
-        MenuBar.add(HelpMenu);
+        this.add(FileMenu);
+        this.add(EditMenu);
+        this.add(WorkMenu);
+        this.add(HelpMenu);
 
         initListeners();
 

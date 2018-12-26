@@ -6,6 +6,7 @@ import Message.abstractions.BinaryMessage;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
+import app.GUIModules.Interface.Blocks.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
@@ -109,6 +110,8 @@ public class SoundRecord extends ModuleGUI {
 
     JMenuItem CreateBundle;
 
+    public AppMenu MainMenu;
+
     public SSettings SoundSettings;
     public app.GUIModules.NetworkSettings NetworkSettings;
     public app.GUIModules.About About;
@@ -168,6 +171,12 @@ public class SoundRecord extends ModuleGUI {
         StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
         letsMarked = new JMenuItem("Промаркировать секции");
         CreateBundle=new JMenuItem("Создать аудиосборку");
+
+
+    //    MainMenu = new AppMenu();
+
+
+
     }
     
     public void setCypher(Cypher cypher){
@@ -257,12 +266,39 @@ public class SoundRecord extends ModuleGUI {
 
         HelpMenu.add(AboutItem);
 
+
+
+
+
+
         MenuBar.add(FileMenu);
         MenuBar.add(EditMenu);
         MenuBar.add(WorkMenu);
         MenuBar.add(HelpMenu);
 
+
+
+/*
+        MainMenu.EditMenu.getItem(0).add(SsItem);
+        MainMenu.WorkMenu.add(CheckItem);
+        MainMenu.WorkMenu.add(PlayItem);
+        MainMenu.WorkMenu.add(SaveItem);
+
+        MainMenu.WorkMenu.add(MergerSlots);
+        MainMenu.WorkMenu.add(CreateBundle);
+        MainMenu.WorkMenu.add(CheckItem);
+
+        MainMenu.AboutFrame=About.frame;
+        MainMenu.ParentFrame=this.frame;
+
+        */
+    //////    frame.setJMenuBar(MainMenu);
+
+
         frame.setJMenuBar(MenuBar);
+
+
+
 
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
 
@@ -647,12 +683,12 @@ public class SoundRecord extends ModuleGUI {
         Saveslot2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(saveslot2_shortcut), slot2);
         Saveslot2.getActionMap().put(slot2, save2Action);
-        Saveslot2.addActionListener(save1Action);
+        Saveslot2.addActionListener(save2Action);
 
         Saveslot3.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(saveslot3_shortcut), slot3);
         Saveslot3.getActionMap().put(slot3, save3Action);
-        Saveslot3.addActionListener(save1Action);
+        Saveslot3.addActionListener(save3Action);
 
         Playcurrent.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(playcurrent_shortcut), play_current);
@@ -758,6 +794,7 @@ public class SoundRecord extends ModuleGUI {
         sr.initAboutFrame();
         sr.initCreateBundle();
         sr.prepareAktor();
+
         sr.frame.setVisible(true);
 
 
