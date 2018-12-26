@@ -171,12 +171,7 @@ public class SoundRecord extends ModuleGUI {
         StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
         letsMarked = new JMenuItem("Промаркировать секции");
         CreateBundle=new JMenuItem("Создать аудиосборку");
-
-
-    //    MainMenu = new AppMenu();
-
-
-
+        MainMenu = new AppMenu();
     }
     
     public void setCypher(Cypher cypher){
@@ -266,39 +261,12 @@ public class SoundRecord extends ModuleGUI {
 
         HelpMenu.add(AboutItem);
 
-
-
-
-
-
         MenuBar.add(FileMenu);
         MenuBar.add(EditMenu);
         MenuBar.add(WorkMenu);
         MenuBar.add(HelpMenu);
 
-
-
-/*
-        MainMenu.EditMenu.getItem(0).add(SsItem);
-        MainMenu.WorkMenu.add(CheckItem);
-        MainMenu.WorkMenu.add(PlayItem);
-        MainMenu.WorkMenu.add(SaveItem);
-
-        MainMenu.WorkMenu.add(MergerSlots);
-        MainMenu.WorkMenu.add(CreateBundle);
-        MainMenu.WorkMenu.add(CheckItem);
-
-        MainMenu.AboutFrame=About.frame;
-        MainMenu.ParentFrame=this.frame;
-
-        */
-    //////    frame.setJMenuBar(MainMenu);
-
-
         frame.setJMenuBar(MenuBar);
-
-
-
 
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
 
@@ -786,7 +754,7 @@ public class SoundRecord extends ModuleGUI {
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         var sc = new SettingsContainer();
         SoundRecord sr = new SoundRecord(sc);
-        sr.preperaGUI();
+
         sr.initNetworkSettinFrame();
         sr.initSoundSettingFrame();
         sr.initListeners();
@@ -794,7 +762,7 @@ public class SoundRecord extends ModuleGUI {
         sr.initAboutFrame();
         sr.initCreateBundle();
         sr.prepareAktor();
-
+        sr.preperaGUI();
         sr.frame.setVisible(true);
 
 
