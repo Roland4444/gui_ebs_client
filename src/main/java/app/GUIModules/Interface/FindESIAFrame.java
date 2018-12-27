@@ -77,7 +77,7 @@ public class FindESIAFrame extends ModuleGUI {
     public JLabel LSNILS;
     public JTextField TSNILS;
 
-    public EBSOperatorPanel ExtendedPanel;
+//    public EBSOperatorPanel ExtendedPanel;
 
     public NetworkSettings ns;
     AppAktor akt;
@@ -87,7 +87,7 @@ public class FindESIAFrame extends ModuleGUI {
     public Model Modell;
 
     public FindESIAFrame(SettingsContainer sc) throws IOException {
-        ExtendedPanel = new EBSOperatorPanel();
+    //    ExtendedPanel = new EBSOperatorPanel();
         this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
@@ -244,7 +244,7 @@ public class FindESIAFrame extends ModuleGUI {
         MainPanel.add(PSnils);
         MainPanel.add(PMobile);
 
-        MainPanel.add(ExtendedPanel);
+      ////  MainPanel.add(ExtendedPanel);
 
         PSender.add(PsnilsPanel);
 
