@@ -24,7 +24,7 @@ public class EBSOperatorPanel extends JPanel {
         PSNILS=new JPanel(new GridLayout());
         PRA=new JPanel(new GridLayout());
 
-        this.setLayout(new GridLayout(3<, 1));
+        this.setLayout(new GridLayout(3, 1));
         initListeners();
         prepareGUI();
     }
