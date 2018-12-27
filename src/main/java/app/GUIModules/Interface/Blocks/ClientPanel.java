@@ -162,24 +162,24 @@ public class ClientPanel extends JPanel{
 
 
     public ClientPanel(){
-        LSNILS = new JLabel("СНИЛС Клиента");
-        LFIO= new JLabel("ФИО Клиента");
-        LGender= new JLabel("Пол");
-        LBirthdate= new JLabel("Дата рождения");
-        LPass= new JLabel("Серия номер паспорта");
-        LIssuedDatePass= new JLabel("Дата выдачи паспорта");
-        LIssuedPassID= new JLabel("Код подразделения");
-        LIssuedBy= new JLabel("Кем выдан");
-        LMobile= new JLabel("Номер мобильного");
-        LRegion= new JLabel("Регион");
-        LFIAS= new JLabel("Код ФИАС регистрации по паспорту");
-        LAddressStr= new JLabel("Адрес регистрации по паспорту");
-        LZIP= new JLabel("ZIP код");
-        LFrame= new JLabel("Корпус");
-        LFlat= new JLabel("Квартира");
-        LHouse= new JLabel("Дом");
-        LBuilding= new JLabel("Строение");
-        LStreet= new JLabel("Улица");
+        LSNILS = new JLabel("СНИЛС Клиента*\n(*обязательно)");
+        LFIO= new JLabel("ФИО Клиента*");
+        LGender= new JLabel("Пол*");
+        LBirthdate= new JLabel("Дата рождения(по паспорту)*");
+        LPass= new JLabel("Серия номер паспорта*");
+        LIssuedDatePass= new JLabel("Дата выдачи паспорта*");
+        LIssuedPassID= new JLabel("Код подразделения выдавшего паспорт*");
+        LIssuedBy= new JLabel("Кем выдан*");
+        LMobile= new JLabel("Номер мобильного*");
+        LRegion= new JLabel("Регион*");
+        LFIAS= new JLabel("Код ФИАС регистрации по паспорту*");
+        LAddressStr= new JLabel("Адрес регистрации по паспорту*");
+        LZIP= new JLabel("ZIP код(необязательно)?\n(? могут быть получены автоматически)");
+        LFrame= new JLabel("Корпус?");
+        LFlat= new JLabel("Квартира?");
+        LHouse= new JLabel("Дом?");
+        LBuilding= new JLabel("Строение?");
+        LStreet= new JLabel("Улица?");
         LBirthPlace= new JLabel("Место рождения");
 
         TSNILS=new JTextField("",3);;
@@ -226,27 +226,19 @@ public class ClientPanel extends JPanel{
 
         prepareGUI();
         initListeners();
-
-
     }
-
     public void initActions(){
         simple = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 showMessageDialog(null, "changed"+ LiRegion.getSelectedItem());
-
             }
-        };
-
-
-        LiRegion.addActionListener(simple);
+        };//    LiRegion.addActionListener(simple);
     }
 
     public void initListeners (){
         initActions();
     }
-
 
     public void prepareGUI() {
         PFIO.add(LFIO);
@@ -325,10 +317,6 @@ public class ClientPanel extends JPanel{
         this.add( PBuilding);
         this.add( PStreet);
         this.add( PBirthPlace);
-
-
-
-
     }
 
     public static void main(String[] args){
