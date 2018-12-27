@@ -30,8 +30,6 @@ public class EBSOperatorPanel extends JPanel {
     }
 
 
-
-
     public void initActions(){
     }
 

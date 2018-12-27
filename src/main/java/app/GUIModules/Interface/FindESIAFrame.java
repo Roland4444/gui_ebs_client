@@ -6,6 +6,7 @@ import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.Interface.Blocks.EBSOperatorPanel;
+import app.GUIModules.Modules.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.Model;
 import app.abstractions.ModuleGUI;
@@ -85,6 +86,7 @@ public class FindESIAFrame extends ModuleGUI {
 
     private Cypher cypher;
     public Model Modell;
+    public AppMenu MainMenu;
 
     public FindESIAFrame(SettingsContainer sc) throws IOException {
         ExtendedPanel = new EBSOperatorPanel();
@@ -270,7 +272,6 @@ public class FindESIAFrame extends ModuleGUI {
 
         PSnils.add(LSNILS);
         PSnils.add(TSNILS);
-
 
         frame.pack();
 
