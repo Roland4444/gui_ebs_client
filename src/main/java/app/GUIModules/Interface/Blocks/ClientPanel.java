@@ -109,7 +109,6 @@ public class ClientPanel extends JPanel{
         PGender=new JPanel(new GridLayout());
         PBirthdate=new JPanel(new GridLayout());
         PPass=new JPanel(new GridLayout());
-
         PIssuedDatePass=new JPanel(new GridLayout());
         PIssuedPassID=new JPanel(new GridLayout());
         PIssuedBy=new JPanel(new GridLayout());
@@ -134,6 +133,96 @@ public class ClientPanel extends JPanel{
     }
 
     public void prepareGUI() {
+        PFIO.add(LFIO);
+        PFIO.add(TFIO);
+
+        PGender.add(LGender);
+        PGender.add(LiGender);
+
+        PSNILS.add(LSNILS);
+        PSNILS.add(TSNILS);
+
+        PPass.add(LPass);
+        PPass.add(TPass);
+
+        PIssuedDatePass.add(LIssuedDatePass);
+        PIssuedDatePass.add(TIssuedDatePass);
+
+        PIssuedPassID.add(LIssuedPassID);
+        PIssuedPassID.add(TIssuedPassID);
+
+        PIssuedBy.add(LIssuedBy);
+        PIssuedBy.add(TIssuedBy);
+
+        PBirthdate.add(LBirthdate);
+        PBirthdate.add(TBirthdate);
+
+        PBirthPlace.add(LBirthPlace);
+        PBirthPlace.add(TBirthPlace);
+
+        PRegion.add(LRegion);
+        PRegion.add(LiRegion);
+
+        PMobile.add(LMobile);
+        PMobile.add(TMobile);
+
+        PFIAS.add(LFIAS);
+        PFIAS.add(TFIAS);
+
+        PAddressStr.add(LAddressStr);
+        PAddressStr.add(TAddressStr);
+
+        PStreet.add(LStreet);
+        PStreet.add(TStreet);
+
+        PZIP.add(LZIP);
+        PZIP.add(TZIP);
+
+        PFrame.add(LFrame);
+        PFrame.add(TFrame);
+
+        PFlat.add(LFlat);
+        PFlat.add(TFlat);
+
+        PHouse.add(LHouse);
+        PHouse.add(THouse);
+
+        PBuilding.add(LBuilding);
+        PBuilding.add(TBuilding);
+
+        this.add( PSNILS);
+        this.add( PFIO);
+        this.add( PGender);
+        this.add( PBirthdate);
+        this.add( PPass);
+        this.add( PIssuedDatePass);
+        this.add( PIssuedPassID);
+        this.add( PIssuedBy);
+        this.add( PMobile);
+        this.add( PRegion);
+        this.add( PFIAS);
+        this.add( PAddressStr);
+        this.add( PZIP);
+        this.add( PFrame);
+        this.add( PFlat);
+        this.add( PHouse);
+        this.add( PBuilding);
+        this.add( PStreet);
+        this.add( PBirthPlace);
+
+
+
+
+    }
+
+    public static void main(String[] args){
+        ClientPanel p = new ClientPanel();
+        JFrame frame = new JFrame("Test");
+        frame.setSize(500, 500);
+        frame.getContentPane().setLayout(new GridLayout());
+        frame.getContentPane().add(p);
+        frame.pack();
+        frame.setVisible(true);
     }
 
 }
