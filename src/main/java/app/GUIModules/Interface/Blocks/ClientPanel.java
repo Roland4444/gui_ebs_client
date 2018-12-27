@@ -166,7 +166,7 @@ public class ClientPanel extends JPanel{
         LFIO= new JLabel("ФИО Клиента*");
         LGender= new JLabel("Пол*");
         LBirthdate= new JLabel("Дата рождения(по паспорту)*");
-        LPass= new JLabel("Серия номер паспорта*");
+        LPass= new JLabel("Серия номер паспорта(10 значащих цифр)*");
         LIssuedDatePass= new JLabel("Дата выдачи паспорта*");
         LIssuedPassID= new JLabel("Код подразделения выдавшего паспорт*");
         LIssuedBy= new JLabel("Кем выдан*");
@@ -317,6 +317,10 @@ public class ClientPanel extends JPanel{
         this.add( PBuilding);
         this.add( PStreet);
         this.add( PBirthPlace);
+      //  this.remove(PStreet);
+      //  this.remove(PBirthPlace);
+      //  PStreet.setVisible(false);
+      //  PBirthPlace.setVisible(false);
     }
 
     public static void main(String[] args){
