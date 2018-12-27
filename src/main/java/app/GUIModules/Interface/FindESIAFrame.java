@@ -5,6 +5,7 @@ import Message.toSMEV.ESIAFind.ESIAFindMessageResult;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
+import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.EBSOperatorPanel;
 import app.GUIModules.Modules.AppMenu;
 import app.GUIModules.NetworkSettings;
@@ -18,6 +19,7 @@ import impl.JAktor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -87,6 +89,7 @@ public class FindESIAFrame extends ModuleGUI {
     private Cypher cypher;
     public Model Modell;
     public AppMenu MainMenu;
+    public app.GUIModules.About About;
 
     public FindESIAFrame(SettingsContainer sc) throws IOException {
         ExtendedPanel = new EBSOperatorPanel();
@@ -135,6 +138,8 @@ public class FindESIAFrame extends ModuleGUI {
         PButton = new JPanel();
         InitialColor = ProceedRegister.getBackground();
         this.Uuid = new timeBasedUUID();
+
+        MainMenu= new AppMenu();
 
         if (new File(SettsContainer.DumpModelFile).exists()){
             Modell = Model.restoredModel(Files.readAllBytes(new File(SettsContainer.DumpModelFile).toPath()));
@@ -215,6 +220,30 @@ public class FindESIAFrame extends ModuleGUI {
     }
 
 
+    private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+        About = new About();
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    About.preperaGUI();
+                    About.initListeners();
+                    About.frame.setLocationRelativeTo(null);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -232,7 +261,7 @@ public class FindESIAFrame extends ModuleGUI {
         EditMenu.add(OpenSetts);
         FileMenu.add(ExitItem);
 
-        frame.setJMenuBar(MenuBar);
+        frame.setJMenuBar(MainMenu);
       //  MenuBar.add(FileMenu, )
         RootPanel.add(MainPanel, BorderLayout.NORTH);
 
@@ -277,6 +306,9 @@ public class FindESIAFrame extends ModuleGUI {
 
         restore_last();
 
+        MainMenu.AboutFrame=About.frame;
+        MainMenu.ParentFrame=this.frame;
+
     }
 
 
@@ -317,6 +349,13 @@ public class FindESIAFrame extends ModuleGUI {
                 KeyStroke.getKeyStroke(makerequest_shortcut), makerequest);
         MakeRequest.getActionMap().put(makerequest, makeRequest);
         MakeRequest.addActionListener(makeRequest);
+
+        MainMenu.NsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                ns.frame.setVisible(true);
+            }
+        });
 
 
     }
@@ -452,6 +491,7 @@ public class FindESIAFrame extends ModuleGUI {
 
     public static void main(String[] args ) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException, IOException {
         var fr = new FindESIAFrame(new SettingsContainer());
+        fr.initAboutFrame();
         fr.preperaGUI();
         fr.prepareAktor();
         fr.initNetworkSettinFrame();
