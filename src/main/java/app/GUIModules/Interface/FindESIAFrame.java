@@ -459,13 +459,20 @@ public class FindESIAFrame extends ModuleGUI {
                     akt.send(BinaryMessage.savedToBLOB(SMEVMsg), ns.sets.address);
                     System.out.println("\n\n\n\nSENDING FINISHED!!!...");
                     lockinputs();
+
+                    unlockinputs();///<====
+                    enableRequest();
                 } catch (IOException e) {
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
-
+                    unlockinputs();
+                    enableRequest();
                }
                 catch (CompletionException e){
                     showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
-               }
+                    unlockinputs();
+                    enableRequest();
+
+                }
             }
         };
     }
@@ -561,6 +568,11 @@ public class FindESIAFrame extends ModuleGUI {
             unlockinputs();
             System.out.println("Received!!!! via console");
             byte[] message =  cypher.decrypt(message_);
+            if (resp.BioStu!=null){
+                if (resp.BioStu.toUpperCase().equals("Y")){
+                    showMessageDialog(null, "Клиент уже зарегестрирован в ЕБС");
+                }
+            }
 
             System.out.println("\n\n\nRECEIVED");
             if ((resp.oid!=null) && resp.trusted.equals("trusted"))
