@@ -6,6 +6,7 @@ import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
+import app.GUIModules.Interface.Blocks.ClientPanel;
 import app.GUIModules.Interface.Blocks.EBSOperatorPanel;
 import app.GUIModules.Modules.AppMenu;
 import app.GUIModules.NetworkSettings;
@@ -81,6 +82,7 @@ public class FindESIAFrame extends ModuleGUI {
     public JTextField TSNILS;
 
     public EBSOperatorPanel ExtendedPanel;
+    public ClientPanel ClientPanelP;
 
     public NetworkSettings ns;
     AppAktor akt;
@@ -93,6 +95,7 @@ public class FindESIAFrame extends ModuleGUI {
 
     public FindESIAFrame(SettingsContainer sc) throws IOException {
         ExtendedPanel = new EBSOperatorPanel();
+        ClientPanelP = new ClientPanel();
         this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
@@ -130,7 +133,7 @@ public class FindESIAFrame extends ModuleGUI {
         var gr_l = new GridLayout(10,1);
         RootPanel = new JPanel(new BorderLayout());
 
-        MainPanel = new JPanel(gr_l);
+        MainPanel = new JPanel();;    //////// new JPanel(gr_l);
         PsnilsPanel = new JPanel(new GridLayout());
         timeBasedUUID Uuid = new timeBasedUUID();
 
@@ -154,12 +157,12 @@ public class FindESIAFrame extends ModuleGUI {
     }
 
     public void savesession() throws IOException {
-        Modell.SNILSoper=TOperSnils.getText();
-        Modell.RA=Tra.getText();
-        Modell.Pass=TPass.getText();
-        Modell.FIO=TFIO.getText();
-        Modell.SNILS=TSNILS.getText();
-        Modell.Mobile=TMobile.getText();
+        Modell.SNILSoper=ExtendedPanel.TOperSnils.getText();
+        Modell.RA=ExtendedPanel.TRA.getText();
+        Modell.Pass=ClientPanelP.TPass.getText();
+        Modell.FIO=ClientPanelP.TFIO.getText();
+        Modell.SNILS=ClientPanelP.TSNILS.getText();
+        Modell.Mobile=ClientPanelP.TMobile.getText();
         var fos = new FileOutputStream(SettsContainer.DumpModelFile);
         fos.write(Model.saveModel(Modell));
         fos.close();
@@ -167,12 +170,12 @@ public class FindESIAFrame extends ModuleGUI {
     }
 
     public void restore_last(){
-        TPass.setText(Modell.Pass);
-        TFIO.setText(Modell.FIO);
-        Tra.setText(Modell.RA);
-        TOperSnils.setText(Modell.SNILSoper);
-        TSNILS.setText(Modell.SNILS);
-        TMobile.setText(Modell.Mobile);
+        ClientPanelP.TPass.setText(Modell.Pass);
+        ClientPanelP.TFIO.setText(Modell.FIO);
+        ExtendedPanel.TRA.setText(Modell.RA);
+        ExtendedPanel.TOperSnils.setText(Modell.SNILSoper);
+        ClientPanelP.TSNILS.setText(Modell.SNILS);
+        ClientPanelP.TMobile.setText(Modell.Mobile);
     }
 
     public void disableUpgrade(){
@@ -240,14 +243,12 @@ public class FindESIAFrame extends ModuleGUI {
                 }
             }
         });
-
-
     }
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,600);
+        frame.setSize(500,500);
         frame.setVisible(true);
         frame.getContentPane().add(RootPanel);
 
@@ -267,15 +268,24 @@ public class FindESIAFrame extends ModuleGUI {
 
         RootPanel.add(PButton, BorderLayout.SOUTH);
 
-        MainPanel.add(LsenderPanel);
-        MainPanel.add(PSender);
-        MainPanel.add(Pra);
-        MainPanel.add(PFIO);
-        MainPanel.add(PPass);
-        MainPanel.add(PSnils);
-        MainPanel.add(PMobile);
-
         MainPanel.add(ExtendedPanel);
+        MainPanel.add(ClientPanelP);
+
+
+
+        //MainPanel.add(LsenderPanel);
+        //MainPanel.add(PSender);
+        //MainPanel.add(Pra);
+   /////     MainPanel.add(PFIO);
+   /////     MainPanel.add(PPass);
+   /////     MainPanel.add(PSnils);
+   /////     MainPanel.add(PMobile);
+
+
+        ClientPanelP.add(ClientPanelP.PFIO);
+        ClientPanelP.add(ClientPanelP.PPass);
+        ClientPanelP.add(ClientPanelP.PSNILS);
+        ClientPanelP.add(ClientPanelP.PMobile);
 
         PSender.add(PsnilsPanel);
 
@@ -361,26 +371,26 @@ public class FindESIAFrame extends ModuleGUI {
     }
 
     boolean checkFIO(){
-        var FIO = Extractor.getFIO(TFIO.getText());
+        var FIO = Extractor.getFIO(ClientPanelP.TFIO.getText());
         if (FIO.size()<3)
             return false;
         return true;
     };
 
     boolean checkMobile(){
-        if (TMobile.getText().length()!=10)
+        if (ClientPanelP.TMobile.getText().length()!=10)
             return false;
         return true;
     };
 
     boolean checkClientSNILS(){
-        if (TSNILS.getText().length() ==0)
+        if (ClientPanelP.TSNILS.getText().length() ==0)
             return false;
         return true;
     };
 
     boolean checkPass(){
-        if (TPass.getText().length() !=10)
+        if (ClientPanelP.TPass.getText().length() !=10)
             return false;
         return true;
     };
@@ -423,8 +433,8 @@ public class FindESIAFrame extends ModuleGUI {
                 tableRequest.put(uuid_,-3);
                 try {
                     var msg = new ESIAFindMessageInitial();
-                    var FIO = Extractor.getFIO(TFIO.getText());
-                    var Pass = Extractor.getPass(TPass.getText());
+                    var FIO = Extractor.getFIO(ClientPanelP.TFIO.getText());
+                    var Pass = Extractor.getPass(ClientPanelP.TPass.getText());
                     if (!checkFIO()){
                         showMessageDialog(null, "заполните ФИО!");
                         return;
@@ -442,16 +452,17 @@ public class FindESIAFrame extends ModuleGUI {
                         return;
                     }
                     msg.ID=uuid_;
-                    msg.Ra=Tra.getText();
-                    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(TOperSnils.getText());
+                    msg.Ra=ExtendedPanel.TRA.getText();;//Tra.getText();        /////         ExtendedPanel.TRA.getText()
+                    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(ExtendedPanel.TOperSnils.getText());//TOperSnils.getText());      ////   ExtendedPanel.TOperSnils.getText()
+                    System.out.println("OPER SNILS=>"+ESIAFindMessageInitial.getSNILSfromplain(ExtendedPanel.TOperSnils.getText()));
                     msg.Surname=FIO.get(0);
                     msg.Name=FIO.get(1);
                     msg.MiddleName=FIO.get(2);
-                    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(TOperSnils.getText());
+                //    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(TOperSnils.getText());
                     msg.Passseria=Pass.get(0);
                     msg.Passnumber=Pass.get(1);
-                    msg.SNILS=ESIAFindMessageInitial.getSNILSfromplain(TSNILS.getText());
-                    msg.MobileNumber=ESIAFindMessageInitial.getMobilefromplain(TMobile.getText());
+                    msg.SNILS=ESIAFindMessageInitial.getSNILSfromplain(ClientPanelP.TSNILS.getText());
+                    msg.MobileNumber=ESIAFindMessageInitial.getMobilefromplain(ClientPanelP.TMobile.getText());
                     byte[] datatoWork = BinaryMessage.savedToBLOB(msg);
 
                     var SMEVMsg = new MessageSMEV(uuid_, "findesia", datatoWork, akt.rollbackAdressURL());
@@ -545,7 +556,6 @@ public class FindESIAFrame extends ModuleGUI {
 
 
     public class AppAktor extends JAktor {
-
         public OnSuccess on_success;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();
@@ -582,11 +592,8 @@ public class FindESIAFrame extends ModuleGUI {
             if ((resp.oid!=null) && (!resp.trusted.equals("trusted")))
                 enableUpgrade();
         //    showMessageDialog(null, "Status => "+ resp.trusted+"\nOID=>"+resp.oid);
-
-
-
-                //        else
-                //          this.label_resultCheck.setText("проверка не пройдена");
+        //        else
+        //          this.label_resultCheck.setText("проверка не пройдена");
 
             tableRequest.remove(resp.ID);
         }

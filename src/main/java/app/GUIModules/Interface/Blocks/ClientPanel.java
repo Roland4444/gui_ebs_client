@@ -298,35 +298,40 @@ public class ClientPanel extends JPanel{
         PBuilding.add(LBuilding);
         PBuilding.add(TBuilding);
 
-        this.add( PSNILS);
-        this.add( PFIO);
-        this.add( PGender);
-        this.add( PBirthdate);
-        this.add( PPass);
-        this.add( PIssuedDatePass);
-        this.add( PIssuedPassID);
-        this.add( PIssuedBy);
-        this.add( PMobile);
-        this.add( PRegion);
-        this.add( PFIAS);
-        this.add( PAddressStr);
-        this.add( PZIP);
-        this.add( PFrame);
-        this.add( PFlat);
-        this.add( PHouse);
-        this.add( PBuilding);
-        this.add( PStreet);
-        this.add( PBirthPlace);
+
       //  this.remove(PStreet);
       //  this.remove(PBirthPlace);
       //  PStreet.setVisible(false);
       //  PBirthPlace.setVisible(false);
     }
 
+    public void addingComponent(){
+        this.add(PSNILS);
+        this.add(PFIO);
+        this.add(PGender);
+        this.add(PBirthdate);
+        this.add(PPass);
+        this.add(PIssuedDatePass);
+        this.add(PIssuedPassID);
+        this.add(PIssuedBy);
+        this.add(PMobile);
+        this.add(PRegion);
+        this.add(PFIAS);
+        this.add(PAddressStr);
+        this.add(PZIP);
+        this.add(PFrame);
+        this.add(PFlat);
+        this.add(PHouse);
+        this.add(PBuilding);
+        this.add(PStreet);
+        this.add(PBirthPlace);
+    }
+
     public static void main(String[] args){
         ClientPanel p = new ClientPanel();
         JFrame frame = new JFrame("Test");
         frame.setSize(500, 500);
+        p.addingComponent();
         frame.getContentPane().setLayout(new GridLayout());
         frame.getContentPane().add(p);
         frame.pack();
