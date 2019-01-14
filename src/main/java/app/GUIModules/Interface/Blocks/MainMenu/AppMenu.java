@@ -1,4 +1,4 @@
-package app.GUIModules.Modules;
+package app.GUIModules.Interface.Blocks.MainMenu;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

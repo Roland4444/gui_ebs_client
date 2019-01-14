@@ -6,9 +6,9 @@ import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
-import app.GUIModules.Interface.Blocks.ClientPanel;
-import app.GUIModules.Interface.Blocks.EBSOperatorPanel;
-import app.GUIModules.Modules.AppMenu;
+import app.GUIModules.Interface.Blocks.Panels.ClientPanel;
+import app.GUIModules.Interface.Blocks.Panels.EBSOperatorPanel;
+import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.Model;
 import app.abstractions.ModuleGUI;
@@ -65,6 +65,7 @@ public class FindESIAFrame extends ModuleGUI {
     public JLabel LFIO;
     public JTextField TFIO;
 
+
     public JLabel LPass;
     public JTextField TPass;
     public JMenuItem OpenSetts;
@@ -72,7 +73,7 @@ public class FindESIAFrame extends ModuleGUI {
 
     public JPanel MainPanel, PsnilsPanel, RootPanel;
 
-    public JButton MakeRequest, saveOID;
+    public JButton MakeRequest;
     public JButton ProceedRegister, CreateESIAFRomScratch, UpgradeCurrentEsia;
 
     public JLabel LMobile;
@@ -99,12 +100,8 @@ public class FindESIAFrame extends ModuleGUI {
         this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
-        MenuBar = new JMenuBar();
-        FileMenu = new JMenu("Файл");
-        ExitItem = new JMenuItem("Выйти");
-        EditMenu = new JMenu("Правка");
 
-        HelpMenu = new JMenu("Помощь");
+
         LsenderPanel=new JLabel("Отправитель");
         LOperSnils=new JLabel("Снилс оператора");
         Lra = new JLabel("Идентификатор центра обслуживания");
@@ -112,7 +109,7 @@ public class FindESIAFrame extends ModuleGUI {
         LPass = new JLabel("Паспорт: <серия><номер>(10 значащих цифр)");
         LMobile=new JLabel("Мобильный телефон обратившегося (10 значащих цифр)");
         LSNILS=new JLabel("СНИЛС обратившегося (11 значащих цифр)");
-        OpenSetts = new JMenuItem("Открыть настройки (Ctrl+S)");
+
         TOperSnils= new JTextField("",3);
         Tra = new JTextField("",3);
         TFIO=new JTextField("",3);
@@ -256,31 +253,14 @@ public class FindESIAFrame extends ModuleGUI {
         disableUpgrade();
         disableCreate();
 
-        MenuBar.add(FileMenu);
-        MenuBar.add(EditMenu);
-        MenuBar.add(HelpMenu);
-        EditMenu.add(OpenSetts);
-        FileMenu.add(ExitItem);
-
         frame.setJMenuBar(MainMenu);
-      //  MenuBar.add(FileMenu, )
+
         RootPanel.add(MainPanel, BorderLayout.NORTH);
 
         RootPanel.add(PButton, BorderLayout.SOUTH);
 
         MainPanel.add(ExtendedPanel);
         MainPanel.add(ClientPanelP);
-
-
-
-        //MainPanel.add(LsenderPanel);
-        //MainPanel.add(PSender);
-        //MainPanel.add(Pra);
-   /////     MainPanel.add(PFIO);
-   /////     MainPanel.add(PPass);
-   /////     MainPanel.add(PSnils);
-   /////     MainPanel.add(PMobile);
-
 
         ClientPanelP.add(ClientPanelP.PFIO);
         ClientPanelP.add(ClientPanelP.PPass);
@@ -343,16 +323,16 @@ public class FindESIAFrame extends ModuleGUI {
     public void initListeners() {
         initActions();
 
-        OpenSetts.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+        MainMenu.NsItem.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(opensetts_shortcut), opensetts);
-        OpenSetts.getActionMap().put(opensetts, openSetts);
-        OpenSetts.addActionListener(openSetts);
+        MainMenu.NsItem.getActionMap().put(opensetts, openSetts);
+        MainMenu.NsItem.addActionListener(openSetts);
 
 
-        ExitItem.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+        MainMenu.ExitItem.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
                 KeyStroke.getKeyStroke(exititem_shortcut), exititem);
-        ExitItem.getActionMap().put(exititem, exitItem);
-        ExitItem.addActionListener(exitItem);
+        MainMenu.ExitItem.getActionMap().put(exititem, exitItem);
+        MainMenu.ExitItem.addActionListener(exitItem);
 
 
         MakeRequest.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -583,6 +563,9 @@ public class FindESIAFrame extends ModuleGUI {
                     showMessageDialog(null, "Клиент уже зарегестрирован в ЕБС");
                 }
             }
+            FileOutputStream fos = new FileOutputStream(SettsContainer.receivedOIDSave);
+            fos.write(resp.oid.getBytes());
+            fos.close();
 
             System.out.println("\n\n\nRECEIVED");
             if ((resp.oid!=null) && resp.trusted.equals("trusted"))

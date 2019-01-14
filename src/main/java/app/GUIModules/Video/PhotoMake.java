@@ -8,6 +8,7 @@ import app.Essens.OnClosed;
 import app.Essens.Video_Settings;
 import app.GUIModules.About;
 import app.GUIModules.Audio.MergeFrame;
+import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.ModuleGUI;
 import app.abstractions.SettingsContainer;
@@ -103,14 +104,13 @@ public class PhotoMake extends ModuleGUI {
     public CamPanel camPanel;
     public JLabel LabelCam;
     timeBasedUUID Uuid = new timeBasedUUID();
+    public AppMenu MainMenu;
     public PhotoMake(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
         MenuBar = new JMenuBar();
-        FileMenu = new JMenu("Файл");
-        ExitItem = new JMenuItem("Выйти");
-        EditMenu = new JMenu("Правка");
+
         NsItem = new JMenuItem("Настройки сервиса");
         VsItem = new JMenuItem("Настройки видео");
         SettsMenu = new JMenu("Настройкм");
@@ -120,7 +120,7 @@ public class PhotoMake extends ModuleGUI {
         CheckItem = new JMenuItem("Проверить фото");
         SaveItem = new JMenuItem("Сохранить фото");
         MergerSlots = new JMenuItem("Упаковать аудио и видео");
-        HelpMenu = new JMenu("Помощь");
+
         AboutItem = new JMenuItem("О программе");
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить фото  (Ctrl+C)");
@@ -211,10 +211,8 @@ public class PhotoMake extends ModuleGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
-        FileMenu.add(ExitItem);
         SettsMenu.add(NsItem);
         SettsMenu.add(VsItem);
-        EditMenu.add(SettsMenu);
 
         WorkMenu.add(CheckItem);
         Panel.add(Check, BorderLayout.WEST);
@@ -225,12 +223,9 @@ public class PhotoMake extends ModuleGUI {
         WorkMenu.add(MergerSlots);
         WorkMenu.add(CreateBundle);
 
-        HelpMenu.add(AboutItem);
 
-        MenuBar.add(FileMenu);
-        MenuBar.add(EditMenu);
+
         MenuBar.add(WorkMenu);
-        MenuBar.add(HelpMenu);
 
         frame.setJMenuBar(MenuBar);
 

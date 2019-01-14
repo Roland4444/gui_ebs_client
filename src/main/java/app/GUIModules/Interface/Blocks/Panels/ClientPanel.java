@@ -1,4 +1,4 @@
-package app.GUIModules.Interface.Blocks;
+package app.GUIModules.Interface.Blocks.Panels;
 import Message.abstractions.Gender;
 
 import javax.swing.*;

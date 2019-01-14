@@ -6,7 +6,7 @@ import Message.abstractions.BinaryMessage;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
-import app.GUIModules.Modules.AppMenu;
+import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;

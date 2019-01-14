@@ -10,10 +10,6 @@ public  abstract class ModuleGUI {
     public SettingsContainer SettsContainer;
 
     public JMenuBar MenuBar;
-    public JMenu FileMenu;
-    public JMenu EditMenu;
-    public JMenu HelpMenu;
 
-    public JMenuItem ExitItem;
 
 }
