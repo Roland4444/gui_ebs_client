@@ -9,6 +9,6 @@ public class SettingsContainer {
     public final String VideoCheckServiceAddrFile = "NetworkSettingsVid.bin";
     public final String DumpModelFile = "model.bin";
     public final String resultmerged = "result.wav";
-    public final String VersionProg = "EBS GUI Client 2.0.0";
+    public final String VersionProg = "EBS GUI Client 2.1.0";
     public final String receivedOIDSave = "oid.bin";
 }
