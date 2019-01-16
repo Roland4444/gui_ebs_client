@@ -1,4 +1,4 @@
-package app.GUIModules.Interface;
+package app.GUIModules.Interface.ESIA;
 
 import app.abstractions.ModuleGUI;
 

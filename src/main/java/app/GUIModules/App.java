@@ -3,7 +3,6 @@ import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import Table.TablesEBSCheck;
-import app.GUIModules.Audio.SSettings;
 import app.abstractions.ModuleGUI;
 import app.utils.timeBasedUUID;
 import impl.JAktor;
@@ -19,6 +18,7 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import app.GUIModules.Interface.GetBio.Audio.*;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 

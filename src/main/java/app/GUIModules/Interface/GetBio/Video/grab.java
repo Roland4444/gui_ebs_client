@@ -1,4 +1,4 @@
-package app.GUIModules.Video;
+package app.GUIModules.Interface.GetBio.Video;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

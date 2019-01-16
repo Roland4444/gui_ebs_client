@@ -1,4 +1,4 @@
-package app.GUIModules.Audio;
+package app.GUIModules.Interface.GetBio.Audio;
 
 import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
@@ -11,6 +11,7 @@ import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.timeBasedUUID;
@@ -107,7 +108,7 @@ public class SoundRecord extends ModuleGUI {
     public SSettings SoundSettings;
     public app.GUIModules.NetworkSettings NetworkSettings;
     public app.GUIModules.About About;
-    public MergeFrame MF;
+    public MergeAudioFrames MF;
     public boolean recording = false;
     public Sound BinarySound = null;
     public JPanel Panel;
@@ -153,7 +154,7 @@ public class SoundRecord extends ModuleGUI {
         StartLabel = new JLabel("Начать запись звукового фрагмента  (Ctrl+S)");
         StopLabel =new JLabel("Остановить запись     (Ctrl+F)");
         letsMarked = new JMenuItem("Промаркировать секции");
-        CreateBundle=new JMenuItem("Создать аудиосборку");
+        CreateBundle=new JMenuItem("Создать аудиосборку (" +createbundle_shortcut);
         MainMenu = new AppMenu();
     }
     
@@ -345,7 +346,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     private void initCreateBundle(){
-        MF = new MergeFrame(this.SettsContainer);
+        MF = new MergeAudioFrames(this.SettsContainer);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException e1) {
@@ -725,9 +726,7 @@ public class SoundRecord extends ModuleGUI {
         sr.frame.setVisible(true);
     }
 
-    interface OnSuccess{
-        public void passed();
-    }
+
 
     public class AppAktor extends JAktor {
         public interop checkedViaForm;

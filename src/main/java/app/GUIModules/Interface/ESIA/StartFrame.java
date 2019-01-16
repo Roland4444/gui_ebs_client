@@ -1,4 +1,4 @@
-package app.GUIModules.Interface;
+package app.GUIModules.Interface.ESIA;
 import Message.abstractions.BinaryMessage;
 import Message.toSMEV.ESIAFind.ESIAFindMessageInitial;
 import Message.toSMEV.ESIAFind.ESIAFindMessageResult;
@@ -32,9 +32,9 @@ import java.util.concurrent.CompletionException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class FindESIAFrame extends ModuleGUI {
+public class StartFrame extends ModuleGUI {
     public Color InitialColor;
-    public final String saveRecivedOID="OID.bin";
+    public final String saveReceivedOID ="OID.bin";
 
     public final String exititem_shortcut="alt F4";
     public final String exititem= "close frame";
@@ -94,7 +94,7 @@ public class FindESIAFrame extends ModuleGUI {
     public AppMenu MainMenu;
     public app.GUIModules.About About;
 
-    public FindESIAFrame(SettingsContainer sc) throws IOException {
+    public StartFrame(SettingsContainer sc) throws IOException {
         ExtendedPanel = new EBSOperatorPanel();
         ClientPanelP = new ClientPanel();
         this.SettsContainer=sc;
@@ -340,6 +340,12 @@ public class FindESIAFrame extends ModuleGUI {
         MakeRequest.getActionMap().put(makerequest, makeRequest);
         MakeRequest.addActionListener(makeRequest);
 
+        ProceedRegister.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(proceedregister_shortcut), proceedregister);
+        ProceedRegister.getActionMap().put(proceedregister, proceedRegister);
+        ProceedRegister.addActionListener(proceedRegister);
+
+
         MainMenu.NsItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e1) {
@@ -396,6 +402,12 @@ public class FindESIAFrame extends ModuleGUI {
         };
 
 
+        proceedRegister = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                showMessageDialog(null, "Proceed register");
+            }
+        };
 
         makeRequest = new AbstractAction("Check"){
             @Override
@@ -488,7 +500,7 @@ public class FindESIAFrame extends ModuleGUI {
     }
 
     public static void main(String[] args ) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException, IOException {
-        var fr = new FindESIAFrame(new SettingsContainer());
+        var fr = new StartFrame(new SettingsContainer());
         fr.initAboutFrame();
         fr.preperaGUI();
         fr.prepareAktor();

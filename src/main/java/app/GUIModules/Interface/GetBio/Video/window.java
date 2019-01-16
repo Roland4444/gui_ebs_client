@@ -1,18 +1,13 @@
-package app.GUIModules.Video;
+package app.GUIModules.Interface.GetBio.Video;
 
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
@@ -20,7 +15,6 @@ import org.opencv.objdetect.CascadeClassifier;
 import javax.swing.JFrame;
 
 import org.opencv.core.Mat;
-import org.opencv.highgui.VideoCapture;
 
 
 public class window {

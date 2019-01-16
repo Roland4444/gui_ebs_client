@@ -1,4 +1,4 @@
-package app.GUIModules.Video;
+package app.GUIModules.Interface.GetBio.Video;
 import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
@@ -7,10 +7,10 @@ import app.Essens.CypherImpl;
 import app.Essens.OnClosed;
 import app.Essens.Video_Settings;
 import app.GUIModules.About;
-import app.GUIModules.Audio.MergeFrame;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.timeBasedUUID;
@@ -85,7 +85,6 @@ public class PhotoMake extends ModuleGUI {
     public VSettings VideoSettings;
     public app.GUIModules.NetworkSettings NetworkSettings;
     public app.GUIModules.About About;
-    public MergeFrame MF;
 
     public JPanel Panel;
     public JPanel PhotoPanel;
@@ -333,35 +332,7 @@ public class PhotoMake extends ModuleGUI {
 
     @Deprecated  //Check
     private void initCreateBundle(){
-        MF = new MergeFrame(this.SettsContainer);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e1) {
-            e1.printStackTrace();
-        }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    MF.preperaGUI();
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e1) {
-                    e1.printStackTrace();
-                } catch (InstantiationException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
-                }
-                MF.initListeners();
 
-            }
-        });
     }
 
     public void initActions(){
@@ -548,9 +519,7 @@ public class PhotoMake extends ModuleGUI {
         sr.frame.setVisible(true);
     }
 
-    interface OnSuccess{
-        public void passed();
-    }
+
 
     public class AppAktor extends JAktor {
         public interop checkedViaForm;

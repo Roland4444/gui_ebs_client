@@ -1,15 +1,8 @@
 package app.Sound;
 
-import app.GUIModules.Video.grab;
+import app.GUIModules.Interface.GetBio.Video.grab;
 import org.junit.jupiter.api.Test;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.highgui.VideoCapture;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 

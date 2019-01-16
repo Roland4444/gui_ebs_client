@@ -1,4 +1,4 @@
-package app.GUIModules.Audio;
+package app.GUIModules.Interface.GetBio.Audio;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
 

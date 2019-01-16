@@ -1,4 +1,4 @@
-package app.GUIModules.Audio;
+package app.GUIModules.Interface.GetBio.Audio;
 
 import app.Essens.SoundBundle;
 import app.abstractions.ModuleGUI;
@@ -20,10 +20,10 @@ import java.util.Map;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class MergeFrame extends ModuleGUI {
+public class MergeAudioFrames extends ModuleGUI {
     public Map<Character, Boolean> dictionary = new HashMap<>();
     public final String create_bundle_shortcut = "control B";
-    public final String launch_helper_shortcut = "control H";
+    public final String launch_helper_shortcut = "alt H";
     public final String lauchhelper = "launchhelper";
     AbstractAction bundleAction;
     AbstractAction launchHelper;
@@ -46,7 +46,7 @@ public class MergeFrame extends ModuleGUI {
     JPanel leftPanel3;
     JPanel rigthPanel3;
 
-    JPanel ContentPanel1 ;
+    JPanel ContentPanel1;
     JPanel ContentPanel2;
     JPanel ContentPanel3 ;
 
@@ -81,7 +81,7 @@ public class MergeFrame extends ModuleGUI {
 
     JMenuItem CreateSoundBundle;
 
-    public MergeFrame(SettingsContainer sc){
+    public MergeAudioFrames(SettingsContainer sc){
         this.SettsContainer=sc;
         initDict();
         frame = new JFrame("Модуль подготовки голосового слепка");
@@ -124,7 +124,7 @@ public class MergeFrame extends ModuleGUI {
         l090 =new JLabel("Случайная Секция");
         t090Begin =new JTextField("",width);
         t090End =new JTextField("",width);
-        CreateSoundBundle = new JMenuItem("Сформировать звуковой слепок");
+        CreateSoundBundle = new JMenuItem("Сформировать звуковой слепок (Ctrl+B)");
         LaunchHelper = new JMenuItem("Запустить помошника (Ctrl+H)");
         ExitItem = new JMenuItem("Выйти");
     }
@@ -300,7 +300,7 @@ public class MergeFrame extends ModuleGUI {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        MergeFrame MF = new MergeFrame(new SettingsContainer());
+        MergeAudioFrames MF = new MergeAudioFrames(new SettingsContainer());
         MF.preperaGUI();
         MF.initListeners();
         MF.frame.setVisible(true);

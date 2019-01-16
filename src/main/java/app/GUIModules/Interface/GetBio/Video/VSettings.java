@@ -1,4 +1,4 @@
-package app.GUIModules.Video;
+package app.GUIModules.Interface.GetBio.Video;
 
 import app.Essens.OnClosed;
 import app.Essens.Video_Settings;

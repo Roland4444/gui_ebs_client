@@ -162,8 +162,8 @@ public class ClientPanel extends JPanel{
 
 
     public ClientPanel(){
-        LSNILS = new JLabel("СНИЛС Клиента*\n(*обязательно)");
-        LFIO= new JLabel("ФИО Клиента*");
+        LSNILS = new JLabel("СНИЛС Клиента*\n");
+        LFIO= new JLabel("ФИО Клиента*(*обязательно)");
         LGender= new JLabel("Пол*");
         LBirthdate= new JLabel("Дата рождения(по паспорту)*");
         LPass= new JLabel("Серия номер паспорта(10 значащих цифр)*");
