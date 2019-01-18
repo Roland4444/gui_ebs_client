@@ -267,7 +267,7 @@ public class SoundRecord extends ModuleGUI {
 
     }
 
-    private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+    public void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         About = new About();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
@@ -291,7 +291,7 @@ public class SoundRecord extends ModuleGUI {
 
     }
 
-    private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+    public void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         NetworkSettings =new NetworkSettings(SettsContainer.AudioCheckServiceAddrfile);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
@@ -319,7 +319,7 @@ public class SoundRecord extends ModuleGUI {
 
 
     }
-    private void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+    public void initSoundSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
 
         SoundSettings = new SSettings();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -345,7 +345,7 @@ public class SoundRecord extends ModuleGUI {
 
     }
 
-    private void initCreateBundle(){
+    public void initCreateBundle(){
         MF = new MergeAudioFrames(this.SettsContainer);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -696,7 +696,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
 
-    private void prepareAktor() throws InterruptedException {
+    public void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
         akt.setAddress(SettsContainer.AudioClient);

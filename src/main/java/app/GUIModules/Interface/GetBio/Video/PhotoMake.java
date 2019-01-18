@@ -246,7 +246,7 @@ public class PhotoMake extends ModuleGUI {
         disableCheck();
     }
 
-    private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+    public void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         About = new About();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
@@ -270,7 +270,7 @@ public class PhotoMake extends ModuleGUI {
 
     }
 
-    private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+    public void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         NetworkSettings =new NetworkSettings(SettsContainer.VideoCheckServiceAddrFile);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
@@ -296,7 +296,7 @@ public class PhotoMake extends ModuleGUI {
             }
         });
     }
-    private void initVideoSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+    public void initVideoSettingFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
         VideoSettings = new VSettings();
         VideoSettings.onclosed = new OnClosed() {
             @Override
@@ -331,7 +331,7 @@ public class PhotoMake extends ModuleGUI {
 
 
     @Deprecated  //Check
-    private void initCreateBundle(){
+    public void initCreateBundle(){
 
     }
 
@@ -490,7 +490,7 @@ public class PhotoMake extends ModuleGUI {
     }
 
 
-    private void prepareAktor() throws InterruptedException {
+    public void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
         akt.checkedViaForm=exchange;
         akt.setAddress(SettsContainer.VideoClient);
