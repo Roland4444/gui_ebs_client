@@ -1,0 +1,4 @@
+--patch-module
+uk.roland.ebs_client=_
+--add-reads
+uk.roland.ebs_client=ALL-UNNAMED
