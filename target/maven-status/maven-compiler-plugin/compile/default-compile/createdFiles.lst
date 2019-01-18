@@ -5,6 +5,7 @@ app/GUIModules/Interface/GetBio/Audio/SoundRecord$interop.class
 app/GUIModules/Interface/ESIA/CreateESIAFrame.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$2.class
 app/GUIModules/NetworkSettings.class
+app/GUIModules/Interface/GetBio/AppBio$Watcher.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$16.class
 app/GUIModules/Interface/ESIA/StartFrame$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$7.class
@@ -69,7 +70,6 @@ app/abstractions/ModuleGUI.class
 app/GUIModules/Interface/Blocks/MainMenu/AppMenu$2.class
 app/GUIModules/App.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$5.class
-app/GUIModules/Interface/GetBio/AppBio$4.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$camera.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$12.class
@@ -82,6 +82,8 @@ app/GUIModules/Interface/GetBio/Audio/SoundRecord$8.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$1.class
 app/GUIModules/App$1.class
 app/GUIModules/Interface/GetBio/Video/TEST$1.class
+app/GUIModules/Interface/GetBio/Video/PhotoMake$13.class
+app/GUIModules/Interface/GetBio/Audio/SoundRecord$21.class
 app/GUIModules/Interface/GetBio/Video/grab.class
 app/Sound/Sound.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$4.class
