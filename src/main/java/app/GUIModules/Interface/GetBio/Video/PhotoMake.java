@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -141,6 +142,11 @@ public class PhotoMake extends ModuleGUI {
 
         scalar = new Scalar(25, 255, 17);
 
+
+        var fos = new FileOutputStream(SettsContainer.lockPhotomakefile);
+        fos.write("".getBytes());
+        fos.close();
+
         if (new File(IMG_PATH).exists()){
             img = ImageIO.read(new File(IMG_PATH));
             ImageIcon icon =  new ImageIcon(
@@ -156,6 +162,7 @@ public class PhotoMake extends ModuleGUI {
 
         img = null;
         labelImg=new JLabel();
+
 
 
     }
@@ -221,8 +228,6 @@ public class PhotoMake extends ModuleGUI {
 
         WorkMenu.add(MergerSlots);
         WorkMenu.add(CreateBundle);
-
-
 
         MenuBar.add(WorkMenu);
 
@@ -483,7 +488,17 @@ public class PhotoMake extends ModuleGUI {
         Check.getActionMap().put(chackaction, checkAction);
         Check.addActionListener(checkAction);
 
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                var lockPhoto = new File(SettsContainer.lockPhotomakefile);
+                if (lockPhoto.exists()){
+                    lockPhoto.delete();
+                }
+                System.exit(0);
 
+            }
+        });
     }
     public void setAktor(AppAktor jktr){
         this.akt=jktr;

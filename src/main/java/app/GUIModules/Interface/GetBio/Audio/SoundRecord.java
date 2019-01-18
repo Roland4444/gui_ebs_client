@@ -124,7 +124,7 @@ public class SoundRecord extends ModuleGUI {
     public interop exchange;
     AppAktor akt;
     public Color StartBackgroundColor;
-    public SoundRecord(SettingsContainer sc) {
+    public SoundRecord(SettingsContainer sc) throws IOException {
         this.SettsContainer = sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
@@ -156,6 +156,11 @@ public class SoundRecord extends ModuleGUI {
         letsMarked = new JMenuItem("Промаркировать секции");
         CreateBundle=new JMenuItem("Создать аудиосборку (" +createbundle_shortcut);
         MainMenu = new AppMenu();
+
+
+        var fos = new FileOutputStream(SettsContainer.lockSoundRecordfile);
+        fos.write("".getBytes());
+        fos.close();
     }
     
     public void setCypher(Cypher cypher){
@@ -597,6 +602,18 @@ public class SoundRecord extends ModuleGUI {
                 showMessageDialog(null, "void");
             }
         };
+
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                var lockSound = new File(SettsContainer.lockSoundRecordfile);
+                if (lockSound.delete()){
+                    lockSound.delete();
+                }
+                System.exit(0);
+
+            }
+        });
 
 
     }

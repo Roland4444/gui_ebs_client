@@ -11,7 +11,9 @@ import app.abstractions.SettingsContainer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
+
 
 public class AppBio extends ModuleGUI {
     AbstractAction runSoundrecord;
@@ -38,50 +40,9 @@ public class AppBio extends ModuleGUI {
     }
 
 
-    public void initSoundFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        SR =new SoundRecord(new SettingsContainer());
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    SR.initNetworkSettinFrame();
-                    SR.initSoundSettingFrame();
-                    SR.initListeners();
-                    SR.initinterop();
-                    SR.initAboutFrame();
-                    SR.initCreateBundle();
-                    SR.prepareAktor();
-                    SR.preperaGUI();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    System.out.println("DEfault file setting not found");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    };
 
-    public void initPhotoFrame() throws IOException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, InterruptedException {
-        PM = new PhotoMake(new SettingsContainer());
-        PM.preperaGUI();
-        PM.initNetworkSettinFrame();
-        PM.initVideoSettingFrame();
-        PM.initListeners();
-        PM.initinterop();
-        PM.initAboutFrame();
-        PM.initCreateBundle();
-        PM.prepareAktor();
-        PM.prepereThreads();
-       // PM.frame.setVisible(true);
-    };
+
+
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -138,6 +99,8 @@ public class AppBio extends ModuleGUI {
         runPhotomake = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                if (SettsContainer.productionMode)
+                    disablePhoto();
                 try {
                     System.out.println("starting...");
                     Process p = Runtime.getRuntime().exec(SettsContainer.runPhotoMake);
@@ -151,6 +114,8 @@ public class AppBio extends ModuleGUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
+                    if (SettsContainer.productionMode)
+                        disableAudio();
                     System.out.println("starting...");
                     Process p = Runtime.getRuntime().exec(SettsContainer.runSoundRecord);
                 } catch (IOException e) {
@@ -161,18 +126,54 @@ public class AppBio extends ModuleGUI {
 
     }
 
+    private void disableAudio() {
+        RunSound.setEnabled(false);
+    }
+
+    private void disablePhoto() {
+        RunPhoto.setEnabled(false);
+    }
+
+    public void initwatcher(){
+        Watcher watcher = new Watcher();
+        watcher.SoundButton=RunSound;
+        watcher.PhotoButton=RunPhoto;
+        watcher.sc=this.SettsContainer;
+        watcher.start();
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         AppBio app = new AppBio(new SettingsContainer());
         app.initAboutFrame();
         app.preperaGUI();
-        app.initPhotoFrame();
-        app.initSoundFrame();
         app.initActions();
         app.initListeners();
 
-
         app.frame.setVisible(true);
+        app.initwatcher();
 
+    }
+
+    class Watcher extends Thread{
+        JButton PhotoButton, SoundButton;
+        SettingsContainer sc;
+        @Override
+        public void run(){
+            try {
+                while (true){
+                    Thread.sleep(5000);
+                    if (!new File(sc.lockPhotomakefile).exists())
+                        PhotoButton.setEnabled(true);
+                    if (!new File(sc.lockSoundRecordfile).exists())
+                        SoundButton.setEnabled(true);
+                }
+
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
