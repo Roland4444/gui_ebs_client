@@ -110,7 +110,7 @@ public class PhotoMake extends ModuleGUI {
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
         MenuBar = new JMenuBar();
-
+        MainMenu = new AppMenu();
         NsItem = new JMenuItem("Настройки сервиса");
         VsItem = new JMenuItem("Настройки видео");
         SettsMenu = new JMenu("Настройкм");
@@ -217,21 +217,20 @@ public class PhotoMake extends ModuleGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
-        SettsMenu.add(NsItem);
-        SettsMenu.add(VsItem);
-
-        WorkMenu.add(CheckItem);
+        MainMenu.EditMenu.add(VsItem);
+        MainMenu.WorkMenu.add(CheckItem);
         Panel.add(Check, BorderLayout.WEST);
         Panel.add(OpenHelp, BorderLayout.EAST);
         Panel.add(CloseHelp, BorderLayout.CENTER);
-        WorkMenu.add(SaveItem);
 
-        WorkMenu.add(MergerSlots);
-        WorkMenu.add(CreateBundle);
+        MainMenu.WorkMenu.add(SaveItem);
 
-        MenuBar.add(WorkMenu);
+        MainMenu.WorkMenu.add(MergerSlots);
+        MainMenu.WorkMenu.add(CreateBundle);
 
-        frame.setJMenuBar(MenuBar);
+
+
+        frame.setJMenuBar(MainMenu);
 
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
 
@@ -249,6 +248,9 @@ public class PhotoMake extends ModuleGUI {
         disableBundle();
         disableSave();
         disableCheck();
+
+        MainMenu.AboutFrame=About.frame;
+        MainMenu.ParentFrame=frame;
     }
 
     public void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
@@ -468,7 +470,7 @@ public class PhotoMake extends ModuleGUI {
 
         VsItem.addActionListener(videoSetts);
 
-        NsItem.addActionListener(new ActionListener() {
+        MainMenu.NsItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e1) {
                 NetworkSettings.frame.setVisible(true);
@@ -522,7 +524,7 @@ public class PhotoMake extends ModuleGUI {
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         PhotoMake sr = new PhotoMake(new SettingsContainer());
-        sr.preperaGUI();
+
         sr.initNetworkSettinFrame();
         sr.initVideoSettingFrame();
         sr.initListeners();
@@ -531,6 +533,7 @@ public class PhotoMake extends ModuleGUI {
         sr.initCreateBundle();
         sr.prepareAktor();
         sr.prepereThreads();
+        sr.preperaGUI();
         sr.frame.setVisible(true);
     }
 
