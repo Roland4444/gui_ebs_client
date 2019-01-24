@@ -97,7 +97,6 @@ app/GUIModules/App$AppAktor.class
 app/GUIModules/Interface/Blocks/Panels/ClientPanel$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$11.class
 app/Essens/OnClosed.class
-app/Essens/SoundBundle.class
 app/GUIModules/Interface/GetBio/Video/VSettings.class
 app/GUIModules/Interface/ESIA/StartFrame$3.class
 app/GUIModules/Interface/GetBio/Video/TEST$modifier.class

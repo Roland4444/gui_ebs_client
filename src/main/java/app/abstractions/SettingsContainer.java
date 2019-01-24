@@ -16,5 +16,8 @@ public class SettingsContainer {
     public final String lockSoundRecordfile ="srecord.lock";
     public final String lockPhotomakefile ="photom.lock";
     public boolean productionMode=true;
+    public final String SavePhotoToFile = "photoblob.bin";
+    public final String SaveSoundDataWithtagsToFile = "soundblob.bin";
+    public final String SaveClientDataToFile = "EBSMessage.bin";
 
 }

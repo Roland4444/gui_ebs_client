@@ -1,4 +1,5 @@
 package app.GUIModules.Interface.GetBio.Video;
+
 import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
@@ -48,6 +49,7 @@ public class PhotoMake extends ModuleGUI {
     AbstractAction videoSetts;
     AbstractAction openVideoFrame;
     AbstractAction closeHelp;
+    AbstractAction savePhotoBlob;
     private Cypher cypher;
 
     public final String chackaction = "check action";
@@ -61,6 +63,8 @@ public class PhotoMake extends ModuleGUI {
     public Video_Settings VideoSetts;
     public final String IMG_PATH = "tested.png";
     public final String stopped = "stopped.png";
+    public final String savephotoblob = "savePhotoBlob";
+    public final String savephotoblob_shortcut = "alt S";
     camera cam;
 
     public Map<String, Integer> tableRequest = new HashMap<>();

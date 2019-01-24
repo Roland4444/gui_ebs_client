@@ -1,6 +1,7 @@
 package app.GUIModules.Interface.GetBio.Audio;
 
-import app.Essens.SoundBundle;
+
+import Message.toSMEV.EBS.Essens.SoundBundle;
 import app.abstractions.ModuleGUI;
 import app.abstractions.SettingsContainer;
 
