@@ -192,14 +192,14 @@ public class MergeAudioFrames extends ModuleGUI {
                 sb.begin090=Float.parseFloat(t090Begin.getText());
                 sb.end090=Float.parseFloat(t090End.getText());
                 try {
-                    sb.bigWavContent = Files.readAllBytes(new File(SettsContainer.resultmerged).toPath());
+                    sb.fileContent = Files.readAllBytes(new File(SettsContainer.resultmerged).toPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
 
                 try {
-                    FileOutputStream  fos = new FileOutputStream("SOUND_BUNDLE.bin");
+                    FileOutputStream  fos = new FileOutputStream(SettsContainer.SaveSoundDataWithtagsToFile);
                     fos.write(SoundBundle.saveToByte(sb));
                     fos.close();
                     showMessageDialog(null, "Блоб сохранен!");

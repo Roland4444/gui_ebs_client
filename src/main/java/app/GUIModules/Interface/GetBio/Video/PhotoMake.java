@@ -3,6 +3,7 @@ package app.GUIModules.Interface.GetBio.Video;
 import Message.BKKCheck.InputMessage;
 import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
+import Message.toSMEV.EBS.Essens.PhotoBundle;
 import Table.TablesEBSCheck;
 import app.Essens.CypherImpl;
 import app.Essens.OnClosed;
@@ -27,10 +28,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -347,6 +345,37 @@ public class PhotoMake extends ModuleGUI {
     }
 
     public void initActions(){
+        savePhotoBlob = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PhotoBundle pb = new PhotoBundle();
+                try {
+                    pb.fileContent=Files.readAllBytes(new File(IMG_PATH).toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                pb.filename=IMG_PATH;
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(SettsContainer.SavePhotoToFile);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fos.write(BinaryMessage.savedToBLOB(pb));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                showMessageDialog(null, "Файл сохранен!=>"+SettsContainer.SavePhotoToFile);
+
+            }
+        };
+
         closeHelp = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -493,6 +522,10 @@ public class PhotoMake extends ModuleGUI {
         Check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(checkaction_shortcut), chackaction);
         Check.getActionMap().put(chackaction, checkAction);
         Check.addActionListener(checkAction);
+
+        SaveItem.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(savephotoblob_shortcut), savephotoblob);
+        SaveItem.getActionMap().put(savephotoblob, savePhotoBlob);
+        SaveItem.addActionListener(savePhotoBlob);
 
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
