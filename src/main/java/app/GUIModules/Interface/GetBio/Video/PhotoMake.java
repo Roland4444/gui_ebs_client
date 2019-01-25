@@ -48,6 +48,7 @@ public class PhotoMake extends ModuleGUI {
     AbstractAction openVideoFrame;
     AbstractAction closeHelp;
     AbstractAction savePhotoBlob;
+
     private Cypher cypher;
 
     public final String chackaction = "check action";

@@ -7,6 +7,7 @@ public class SettingsContainer {
     public final String Smev3addressfile = "smev3service.bin";
     public final String AudioCheckServiceAddrfile = "NetworkSettings.bin";
     public final String VideoCheckServiceAddrFile = "NetworkSettingsVid.bin";
+    public final String SoundSettings = "sound_settings.bin";
     public final String DumpModelFile = "model.bin";
     public final String resultmerged = "result.wav";
     public final String VersionProg = "EBS GUI Client 2.1.0";
@@ -19,5 +20,8 @@ public class SettingsContainer {
     public final String SavePhotoToFile = "photoblob.bin";
     public final String SaveSoundDataWithtagsToFile = "soundblob.bin";
     public final String SaveClientDataToFile = "EBSMessage.bin";
+    public final String RegisterMnemonic="981601_3T";
+    public final String IdpMnemonic="TESIA";
+
 
 }

@@ -14,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AppBioTest {
     AppBio app = new AppBio(new SettingsContainer());
 
+    AppBioTest() throws IOException {
+    }
+
     @Test
     void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         assertNotEquals(null, app);

@@ -333,7 +333,7 @@ public class SoundRecord extends ModuleGUI {
                 try {
                     SoundSettings.preperaGUI();
                     SoundSettings.initListeners();
-                    SoundSettings.loadSets("./sound_settings.bin");
+                    SoundSettings.loadSets(SettsContainer.SoundSettings);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (UnsupportedLookAndFeelException e) {
@@ -405,7 +405,7 @@ public class SoundRecord extends ModuleGUI {
                 Start.setBackground(Color.RED);
                 Sound_Settings ss = null;
                 try {
-                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(SettsContainer.SoundSettings).toPath()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -541,7 +541,7 @@ public class SoundRecord extends ModuleGUI {
             public void actionPerformed(ActionEvent e) {
                 Sound_Settings ss = null;
                 try {
-                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
+                    ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(SettsContainer.SoundSettings).toPath()));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

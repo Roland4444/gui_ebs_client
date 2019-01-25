@@ -70,8 +70,10 @@ app/abstractions/ModuleGUI.class
 app/GUIModules/Interface/Blocks/MainMenu/AppMenu$2.class
 app/GUIModules/App.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$5.class
+app/GUIModules/Interface/GetBio/AppBio$4.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$camera.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$1.class
+app/GUIModules/Interface/GetBio/Video/PhotoMake$14.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$12.class
 app/utils/Extractor.class
 app/GUIModules/App$4.class
