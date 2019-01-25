@@ -1,11 +1,15 @@
 package app.GUIModules.Interface.GetBio;
 
+import Message.abstractions.BinaryMessage;
+import Message.toSMEV.EBS.Essens.OtherInfo;
 import app.abstractions.SettingsContainer;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -45,5 +49,20 @@ class AppBioTest {
         Thread.sleep(5000);
         assertTrue(new File(app.SettsContainer.lockPhotomakefile).exists());
 
+    }
+
+    @Test
+    void createSimpleOtherInfo() throws IOException {
+        OtherInfo of = new OtherInfo();
+        of.OperSNILS="000-000-600 06";
+        of.RegMnemonic="981601_3T";
+        of.Mnemonic="TESIA";
+        of.OID="1000368305";
+        of.RA="1000300890";
+        SettingsContainer setts = new SettingsContainer();
+        var fos = new FileOutputStream(setts.SaveOtherInfoToFile);
+        fos.write(BinaryMessage.savedToBLOB(of));
+        fos.close();
+        assertTrue(new File(setts.SaveOtherInfoToFile).exists());
     }
 }

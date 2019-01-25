@@ -1,39 +1,61 @@
 package app.GUIModules.Interface.GetBio;
 
 
+import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import Message.abstractions.FileInBinary;
+import Message.toSMEV.EBS.EBSMessage;
+import Message.toSMEV.EBS.Essens.OtherInfo;
 import Message.toSMEV.EBS.Essens.PhotoBundle;
 import Message.toSMEV.EBS.Essens.SoundBundle;
+import Message.toSMEV.MessageSMEV;
+import Table.TablesEBSCheck;
 import app.Essens.Sound_Settings;
 import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.Interface.GetBio.Audio.SoundRecord;
 import app.GUIModules.Interface.GetBio.Video.PhotoMake;
+import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.abstractions.ModuleGUI;
+import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
+import app.utils.Cypher;
+import impl.JAktor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 
 public class AppBio extends ModuleGUI {
+    public Map<String, Integer> tableRequest = new HashMap<>();
     BufferedImage img;
-
+    AbstractAction createFatbundle;
     AbstractAction runSoundrecord;
     AbstractAction runPhotomake;
     AbstractAction watchBundle;
     Sound_Settings ss;
     Sound binarySound;
+    OtherInfo of;
+    public String createfatbundle = "createfatbundle";
+    public String createfatbundle_shortcut = "control F";
+
+    public app.GUIModules.NetworkSettings NetworkSettings;
+    AppAktor akt;
+
     public String runsoundrecord_shortcut = "alt S";
     public String watchbundle_shortcut = "control W";
     public String watchbundle = "watchbundle";
@@ -53,6 +75,10 @@ public class AppBio extends ModuleGUI {
     public JPanel PImage;
     public JLabel LOID;
     public JTextField TOID;
+    public EBSMessage EBSM;
+    public JButton Createfatbundle;
+    PhotoBundle pb= null;
+    SoundBundle sb = null;
     public AppBio(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
         this.MainMenu=new AppMenu();
@@ -68,6 +94,7 @@ public class AppBio extends ModuleGUI {
         PImage =new JPanel(new BorderLayout());
         LOID = new JLabel("oid клиента");
         TOID = new JTextField("",3);
+        Createfatbundle= new JButton("Сделать финальную сборку");
     }
 
 
@@ -87,6 +114,7 @@ public class AppBio extends ModuleGUI {
        // PImage.add(TOID);
         PImage.add(LImg, BorderLayout.WEST);
         PImage.add(LOID, BorderLayout.EAST);
+        PImage.add(Createfatbundle, BorderLayout.SOUTH);
         this.frame.getContentPane().add(RootPanel, BorderLayout.NORTH);
         RootPanel.add(RunSound, BorderLayout.LINE_START);
         RootPanel.add(RunPhoto, BorderLayout.LINE_END);
@@ -134,19 +162,89 @@ public class AppBio extends ModuleGUI {
         WatchButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(watchbundle_shortcut), watchbundle);
         WatchButton.getActionMap().put(watchbundle, watchBundle);
         WatchButton.addActionListener(watchBundle);
+
+        Createfatbundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(createfatbundle_shortcut), createfatbundle);
+        Createfatbundle.getActionMap().put(createfatbundle, createFatbundle);
+        Createfatbundle.addActionListener(createFatbundle);
+
+        MainMenu.NsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                NetworkSettings.frame.setVisible(true);
+            }
+        });
+    }
+
+
+    public void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
+        NetworkSettings =new NetworkSettings(SettsContainer.Smev3addressfile);
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    NetworkSettings.preperaGUI();
+                    NetworkSettings.initListeners();
+                    NetworkSettings.tryReadData();
+                    NetworkSettings.frame.setLocationRelativeTo(null);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    System.out.println("DEfault file setting not found");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 
     @Override
     public void initActions() {
+        createFatbundle = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                EBSM = new EBSMessage(of, sb, pb);
+                try {
+                    BinaryMessage.write(BinaryMessage.savedToBLOB(EBSM), SettsContainer.SaveClientDataToFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    MessageSMEV msg = new MessageSMEV();
+                    msg.ID="0000";
+                    msg.pseudo="ebs";
+                    msg.DataToWork =BinaryMessage.savedToBLOB(EBSM);
+                    msg.addressToReply="http://127.0.0.1:12121/";
+                    //     for (int i=0; i<10; i++){
+                    msg.ID=Integer.toString(0);
+                    sender.send(BinaryMessage.savedToBLOB(msg),"http://127.0.0.1:20000/");/
+
+                    akt.send(BinaryMessage.savedToBLOB(EBSM), NetworkSettings.sets.address);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
         watchBundle = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 showMessageDialog(null, "Look that");
                 byte[] arrImg = null;
-                PhotoBundle pb= null;
-                SoundBundle sb = null;
+
                 if (!new File(SettsContainer.SavePhotoToFile).exists())
                     showMessageDialog(null, "Файла с фото нет");
+
+                if (!new File(SettsContainer.SaveOtherInfoToFile).exists())
+                    showMessageDialog(null, "Файла с доп данными нет");
 
                 if (!new File(SettsContainer.SaveSoundDataWithtagsToFile).exists())
                     showMessageDialog(null, "Файла с аудио нет");
@@ -174,13 +272,17 @@ public class AppBio extends ModuleGUI {
                     pw.start();
                     System.out.println(icon.getIconHeight());
 
-                    //   FileInBinary.clean(pb);
-                 //   FileInBinary.clean(sb);
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                LOID.setText("DICK");
+                try {
+                    of = (OtherInfo) BinaryMessage.restored(Files.readAllBytes(new File(SettsContainer.SaveOtherInfoToFile).toPath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                LOID.setText("OID=>  "+of.OID);
                 LOID.updateUI();
 
             }
@@ -235,6 +337,7 @@ public class AppBio extends ModuleGUI {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         AppBio app = new AppBio(new SettingsContainer());
         app.initAboutFrame();
+        app.initNetworkSettinFrame();
         app.preperaGUI();
         app.initActions();
         app.initListeners();
@@ -275,5 +378,42 @@ public class AppBio extends ModuleGUI {
                 ss.playSound(wav);
         }
     }
+
+    public class AppAktor extends JAktor {
+        public PhotoMake.interop checkedViaForm;
+        public OnSuccess on_success;
+        public JButton save;
+        public TablesEBSCheck tebs = new TablesEBSCheck();
+        private Cypher cypher;
+        public void setCypher(Cypher cypher){
+            this.cypher=cypher;
+        }
+
+        @Override
+        public int send(byte[] message, String address) throws IOException {
+            return this.client.send(this.cypher.encrypt(message), address);
+        }
+
+        @Override
+        public void receive(byte[] message_) throws IOException {
+            System.out.println("Received!!!! via console");
+            byte[] message =  cypher.decrypt(message_);
+            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
+            System.out.println("\n\n\nRECEIVED");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (tableRequest.get(resp.ID)!=null){
+                tableRequest.remove(resp.ID);
+                tableRequest.put(resp.ID, resp.checkResult);
+                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0)) {
+                    on_success.passed();
+                }
+            }
+        }
+    }
+
 
 }
