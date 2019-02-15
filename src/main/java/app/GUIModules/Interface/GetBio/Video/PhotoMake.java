@@ -106,7 +106,6 @@ public class PhotoMake extends ModuleGUI {
     AppAktor akt;
     public CamPanel camPanel;
     public JLabel LabelCam;
-    timeBasedUUID Uuid = new timeBasedUUID();
     public AppMenu MainMenu;
     public PhotoMake(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;

@@ -65,4 +65,9 @@ class AppBioTest {
         fos.close();
         assertTrue(new File(setts.SaveOtherInfoToFile).exists());
     }
+
+    @Test
+    void initListeners() {
+
+    }
 }

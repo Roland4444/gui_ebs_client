@@ -4,6 +4,7 @@ public class SettingsContainer {
     public final String ESIAClient = "http://127.0.0.1:17778/";
     public final String AudioClient = "http://127.0.0.1:15555/";
     public final String VideoClient = "http://127.0.0.1:14444/";
+    public final String SmevClient = "http://127.0.0.1:12555/";
     public final String Smev3addressfile = "smev3service.bin";
     public final String AudioCheckServiceAddrfile = "NetworkSettings.bin";
     public final String VideoCheckServiceAddrFile = "NetworkSettingsVid.bin";
@@ -21,9 +22,10 @@ public class SettingsContainer {
     public final String SavePhotoToFile = "photoblob.bin";
     public final String SaveSoundDataWithtagsToFile = "soundblob.bin";
     public final String SaveOtherInfoToFile = "other.bin";
-    public final String SaveClientDataToFile = "EBSMessage.bin";
+    public final String SaveClientDataToFile = "EBSMessageFUll.bin";
     public final String RegisterMnemonic="981601_3T";
     public final String IdpMnemonic="TESIA";
+    public final String mergedwav = "fuck.wav";
 
 
 }

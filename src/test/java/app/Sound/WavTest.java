@@ -54,4 +54,18 @@ class WavTest {
     }
 
 
+    @Test
+    void getdata() throws IOException {
+        var arr = Files.readAllBytes(new File("init.wav").toPath());
+        assertNotEquals(null, arr);
+        System.out.println(Wav.getdata(arr).length);
+        System.out.println(Wav.BytetoHexRepresent(Wav.toBigEndian(Wav.getdata(arr))));
+        var desc = Wav. getSubBytes(arr, 0,43);
+        var data = Wav.getdata(arr);
+        var f = new FileOutputStream("resulted.wav");
+        f.write(desc);
+        f.write(Wav.toBigEndian((data)));
+        f.close();
+
+    }
 }

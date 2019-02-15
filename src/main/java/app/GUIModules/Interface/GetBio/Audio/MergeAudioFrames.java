@@ -193,7 +193,7 @@ public class MergeAudioFrames extends ModuleGUI {
                 sb.end090=Float.parseFloat(t090End.getText());
                 try {
                     sb.fileContent = Files.readAllBytes(new File(SettsContainer.resultmerged).toPath());
-                    sb.filename="temp.wav";
+                    sb.filename=SettsContainer.mergedwav;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -77,7 +77,7 @@ public class SoundRecord extends ModuleGUI {
     public boolean slot3ready=false;
 
 
-    timeBasedUUID Uuid = new timeBasedUUID();
+
     public final String Tempfile = "temp.wav";
 
 

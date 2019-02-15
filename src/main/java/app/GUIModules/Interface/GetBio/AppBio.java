@@ -10,6 +10,7 @@ import Message.toSMEV.EBS.Essens.PhotoBundle;
 import Message.toSMEV.EBS.Essens.SoundBundle;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
+import app.Essens.CypherImpl;
 import app.Essens.Sound_Settings;
 import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
@@ -30,12 +31,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -43,6 +45,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class AppBio extends ModuleGUI {
     public Map<String, Integer> tableRequest = new HashMap<>();
     BufferedImage img;
+    private Cypher cypher;
     AbstractAction createFatbundle;
     AbstractAction runSoundrecord;
     AbstractAction runPhotomake;
@@ -81,6 +84,7 @@ public class AppBio extends ModuleGUI {
     SoundBundle sb = null;
     public AppBio(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
+        cypher = new CypherImpl();
         this.MainMenu=new AppMenu();
         this.frame= new JFrame();
         this.RootPanel=new JPanel(new BorderLayout());
@@ -211,25 +215,37 @@ public class AppBio extends ModuleGUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 EBSM = new EBSMessage(of, sb, pb);
+
                 try {
                     BinaryMessage.write(BinaryMessage.savedToBLOB(EBSM), SettsContainer.SaveClientDataToFile);
+                    showMessageDialog(null, "Write complete!");
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                MessageSMEV msg = new MessageSMEV();
+                var uuid_ = Uuid.generate();
+                tableRequest.put(uuid_,-3);
+                msg.ID=uuid_;
+                msg.pseudo="ebs";
+                msg.DataToWork =BinaryMessage.savedToBLOB(EBSM);
+                try {
+                    msg.addressToReply=akt.getURL_thisAktor();
+                } catch (UnknownHostException e) {
                     e.printStackTrace();
                 }
                 try {
-                    MessageSMEV msg = new MessageSMEV();
-                    msg.ID="0000";
-                    msg.pseudo="ebs";
-                    msg.DataToWork =BinaryMessage.savedToBLOB(EBSM);
-                    msg.addressToReply="http://127.0.0.1:12121/";
-                    //     for (int i=0; i<10; i++){
-                    msg.ID=Integer.toString(0);
-                    sender.send(BinaryMessage.savedToBLOB(msg),"http://127.0.0.1:20000/");/
-
-                    akt.send(BinaryMessage.savedToBLOB(EBSM), NetworkSettings.sets.address);
+                    akt.send(BinaryMessage.savedToBLOB(msg),NetworkSettings.sets.address);
+                } catch (UnknownHostException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ\n"+e);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ\n"+e);
                 }
+                catch (CompletionException e){
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ\n"+e);
+                }
+
 
             }
         };
@@ -334,6 +350,20 @@ public class AppBio extends ModuleGUI {
         watcher.start();
     }
 
+    public void prepareAktor() throws InterruptedException {
+        akt = new AppAktor();
+
+        akt.setAddress(SettsContainer.SmevClient);
+        akt.setCypher(cypher);
+        akt.spawn();
+        akt.on_success=new OnSuccess() {
+            @Override
+            public void passed() {
+
+            }
+        };
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
         AppBio app = new AppBio(new SettingsContainer());
         app.initAboutFrame();
@@ -341,6 +371,7 @@ public class AppBio extends ModuleGUI {
         app.preperaGUI();
         app.initActions();
         app.initListeners();
+        app.prepareAktor();
 
         app.frame.setVisible(true);
         app.initwatcher();
