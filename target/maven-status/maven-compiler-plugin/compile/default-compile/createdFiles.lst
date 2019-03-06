@@ -5,6 +5,7 @@ app/GUIModules/Interface/GetBio/Audio/SoundRecord$interop.class
 app/GUIModules/Interface/ESIA/CreateESIAFrame.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$2.class
 app/GUIModules/NetworkSettings.class
+app/GUIModules/Interface/GetBio/AppBio$8.class
 app/GUIModules/Interface/GetBio/AppBio$Watcher.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$16.class
 app/GUIModules/Interface/ESIA/StartFrame$1.class
@@ -23,6 +24,7 @@ app/GUIModules/Interface/GetBio/Video/PhotoMake$8.class
 app/abstractions/Model.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$10.class
 app/GUIModules/Interface/ESIA/StartFrame$7.class
+app/GUIModules/Interface/GetBio/AppBio$AppAktor.class
 app/GUIModules/Interface/GetBio/Audio/SSettings.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$18.class
 app/utils/Cypher.class
@@ -50,6 +52,7 @@ app/GUIModules/Interface/ESIA/StartFrame$5.class
 app/GUIModules/Interface/Blocks/MainMenu/AppMenu.class
 app/GUIModules/Interface/GetBio/AppBio.class
 app/GUIModules/Interface/GetBio/AppBio$2.class
+app/GUIModules/Interface/GetBio/AppBio$playWav.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$6.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$3.class
 app/GUIModules/Interface/GetBio/Video/processor.class
@@ -81,6 +84,7 @@ app/GUIModules/Interface/GetBio/Video/TEST$camera.class
 app/GUIModules/Interface/Blocks/Panels/ClientPanel.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$15.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$8.class
+app/GUIModules/Interface/GetBio/AppBio$7.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$1.class
 app/GUIModules/App$1.class
 app/GUIModules/Interface/GetBio/Video/TEST$1.class
@@ -97,6 +101,7 @@ app/GUIModules/Interface/GetBio/Video/VSettings$3.class
 app/GUIModules/Interface/GetBio/Video/CamPanel.class
 app/GUIModules/App$AppAktor.class
 app/GUIModules/Interface/Blocks/Panels/ClientPanel$1.class
+app/GUIModules/Interface/GetBio/AppBio$6.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$11.class
 app/Essens/OnClosed.class
 app/GUIModules/Interface/GetBio/Video/VSettings.class
@@ -109,6 +114,7 @@ app/GUIModules/NetworkSettings$2.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$10.class
 app/Essens/Sound_Settings.class
 app/GUIModules/Interface/Blocks/Panels/EBSOperatorPanel.class
+app/GUIModules/Interface/GetBio/AppBio$5.class
 app/GUIModules/Interface/GetBio/Video/STReam.class
 app/GUIModules/Interface/ESIA/StartFrame$2.class
 app/GUIModules/Interface/GetBio/Audio/MergeAudioFrames$3.class

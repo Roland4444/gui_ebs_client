@@ -1,12 +1,18 @@
 package app.Sound;
 
-import app.GUIModules.Interface.GetBio.Video.grab;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class WavTest {
 
@@ -60,12 +66,34 @@ class WavTest {
         assertNotEquals(null, arr);
         System.out.println(Wav.getdata(arr).length);
         System.out.println(Wav.BytetoHexRepresent(Wav.toBigEndian(Wav.getdata(arr))));
+        var dump = Wav.toBigEndian(Wav.getdata(arr));
+        var list = new ArrayList<Double>();
+        PrintWriter pw = new PrintWriter("out.samples");
+        for (int i=0; i<dump.length; i++) {
+            Double dbl = ByteBuffer.wrap(new byte[]{dump[i], dump[i++]}).getDouble();
+            System.out.println(dbl);
+            pw.write(String.valueOf(new Double(String.valueOf(new byte[]{dump[i], dump[i++]}))));
+            pw.write("\n");
+        }
+        pw.close();
         var desc = Wav. getSubBytes(arr, 0,43);
         var data = Wav.getdata(arr);
         var f = new FileOutputStream("resulted.wav");
         f.write(desc);
         f.write(Wav.toBigEndian((data)));
         f.close();
+    }
+
+    @Test
+    void bigInt(){
+        var chunck = new byte[]{0x01, (byte) 0xff};
+        var num = new BigInteger( 1,  chunck );
+        System.out.println(String.valueOf(num));
+        Double dbl = ByteBuffer.wrap(chunck).getDouble();
+
+        System.out.println(dbl);
+
+
 
     }
 }

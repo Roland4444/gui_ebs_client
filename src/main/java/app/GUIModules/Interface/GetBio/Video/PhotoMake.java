@@ -661,6 +661,7 @@ public class PhotoMake extends ModuleGUI {
 
         public void run() {
             cameraWorks=true;
+            System.out.println(Core.NATIVE_LIBRARY_NAME);
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
             vc = new VideoCapture(0);
             vc.set(3, vs.width); //1280);
