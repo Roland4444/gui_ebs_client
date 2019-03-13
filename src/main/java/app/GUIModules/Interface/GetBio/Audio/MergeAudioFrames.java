@@ -185,12 +185,12 @@ public class MergeAudioFrames extends ModuleGUI {
                     return;
                 }
                 SoundBundle sb = new SoundBundle();
-                sb.begin09=Float.parseFloat(t09Begin.getText());
-                sb.end09=Float.parseFloat(t09End.getText());
-                sb.begin90=Float.parseFloat(t90Begin.getText());
-                sb.end90=Float.parseFloat(t90End.getText());
-                sb.begin090=Float.parseFloat(t090Begin.getText());
-                sb.end090=Float.parseFloat(t090End.getText());
+                sb.begin09  =Double.parseDouble(t09Begin.getText());
+                sb.end09    =Double.parseDouble(t09End.getText());
+                sb.begin90  =Double.parseDouble(t90Begin.getText());
+                sb.end90    =Double.parseDouble(t90End.getText());
+                sb.begin090 =Double.parseDouble(t090Begin.getText());
+                sb.end090   =Double.parseDouble(t090End.getText());
                 try {
                     sb.fileContent = Files.readAllBytes(new File(SettsContainer.resultmerged).toPath());
                     sb.filename=SettsContainer.mergedwav;

@@ -50,6 +50,7 @@ public class AppBio extends ModuleGUI {
     AbstractAction runSoundrecord;
     AbstractAction runPhotomake;
     AbstractAction watchBundle;
+    AbstractAction sendPreparedBundle;
     Sound_Settings ss;
     Sound binarySound;
     OtherInfo of;
@@ -65,6 +66,8 @@ public class AppBio extends ModuleGUI {
     public String runphotomake_shortcut = "alt P";
     public String runsoundrecord = "runsoundrecord";
     public String runphotomake = "runphotomake";
+    public String sendpreparedbundle = "sendpreparedbundle";
+    public String sendpreparedbundle_shortcut = "alt S";
     public AppMenu MainMenu;
     public app.GUIModules.About About;
     public JPanel RootPanel;
@@ -80,6 +83,7 @@ public class AppBio extends ModuleGUI {
     public JTextField TOID;
     public EBSMessage EBSM;
     public JButton Createfatbundle;
+    public JButton SendPreparedBundle;
     PhotoBundle pb= null;
     SoundBundle sb = null;
     public AppBio(SettingsContainer sc) throws IOException {
@@ -99,6 +103,7 @@ public class AppBio extends ModuleGUI {
         LOID = new JLabel("oid клиента");
         TOID = new JTextField("",3);
         Createfatbundle= new JButton("Сделать финальную сборку");
+        SendPreparedBundle = new JButton("Отправить подготовленную сборку");
     }
 
 
@@ -118,7 +123,8 @@ public class AppBio extends ModuleGUI {
        // PImage.add(TOID);
         PImage.add(LImg, BorderLayout.WEST);
         PImage.add(LOID, BorderLayout.EAST);
-        PImage.add(Createfatbundle, BorderLayout.SOUTH);
+        PImage.add(Createfatbundle, BorderLayout.CENTER);
+        PImage.add(SendPreparedBundle, BorderLayout.SOUTH);
         this.frame.getContentPane().add(RootPanel, BorderLayout.NORTH);
         RootPanel.add(RunSound, BorderLayout.LINE_START);
         RootPanel.add(RunPhoto, BorderLayout.LINE_END);
@@ -171,6 +177,10 @@ public class AppBio extends ModuleGUI {
         Createfatbundle.getActionMap().put(createfatbundle, createFatbundle);
         Createfatbundle.addActionListener(createFatbundle);
 
+        SendPreparedBundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(sendpreparedbundle_shortcut), sendpreparedbundle);
+        SendPreparedBundle.getActionMap().put(sendpreparedbundle, sendPreparedBundle);
+        SendPreparedBundle.addActionListener(sendPreparedBundle);
+
         MainMenu.NsItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e1) {
@@ -211,6 +221,44 @@ public class AppBio extends ModuleGUI {
 
     @Override
     public void initActions() {
+        sendPreparedBundle = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String userDirLocation = System.getProperty("user.dir");
+                File userDir = new File(userDirLocation);
+                final JFileChooser fc = new JFileChooser(userDir);
+                int returnVal = fc.showOpenDialog(null);
+                if (returnVal != 0)
+                    return;
+                MessageSMEV msg = new MessageSMEV();
+                var uuid_ = Uuid.generate();
+                tableRequest.put(uuid_,-3);
+                msg.ID=uuid_;
+                msg.pseudo="ebs";
+                try {
+                    msg.DataToWork =Files.readAllBytes(fc.getSelectedFile().toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    msg.addressToReply=akt.getURL_thisAktor();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    akt.send(BinaryMessage.savedToBLOB(msg),NetworkSettings.sets.address);
+                } catch (UnknownHostException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ\n"+e);
+                } catch (IOException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ\n"+e);
+                }
+                catch (CompletionException e){
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ\n"+e);
+                }
+
+
+            }
+        };
         createFatbundle = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
