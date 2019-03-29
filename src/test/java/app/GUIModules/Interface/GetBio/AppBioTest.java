@@ -54,10 +54,10 @@ class AppBioTest {
     @Test
     void createSimpleOtherInfo() throws IOException {
         OtherInfo of = new OtherInfo();
-        of.OperSNILS="000-000-600 06";
+        of.OperSNILS="000-303-903 03";
         of.RegMnemonic="981601_3T";
-        of.Mnemonic="TESIA";
-        of.OID="1000368305";
+        of.Mnemonic="ESIA";
+        of.OID="1000386103";
         of.RA="1000300890";
         SettingsContainer setts = new SettingsContainer();
         var fos = new FileOutputStream(setts.SaveOtherInfoToFile);
