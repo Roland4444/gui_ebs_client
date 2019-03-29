@@ -45,6 +45,7 @@ app/GUIModules/Interface/GetBio/Audio/SoundRecord$14.class
 app/GUIModules/App$2.class
 app/Sound/Wav.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$19.class
+app/GUIModules/Interface/GetBio/AppBio$9.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$3.class
 app/abstractions/OnSuccess.class
 app/utils/timeBasedUUID.class

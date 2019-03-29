@@ -182,7 +182,7 @@ public class App extends ModuleGUI {
                     var uuid_ = uuid.generate();
                     tableRequest.put(uuid_,-3);
                     try {
-                        InputMessage inp = new  InputMessage(file.getName(), fileContent,  tebs.voice, akt.getURL_thisAktor(), uuid_);
+                        InputMessage inp = new  InputMessage(file.getName(), fileContent, akt.getURL_thisAktor(), uuid_);
                         System.out.println("\n\n\n\nSTARTING SENDING...");
                         System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
                         akt.send(BinaryMessage.savedToBLOB(inp), "http://127.0.0.1:12121/");

@@ -80,8 +80,6 @@ public class PhotoMake extends ModuleGUI {
 
     BufferedImage img;
 
-    JMenuItem MergerSlots;
-
     JMenuItem CreateBundle;
 
     JMenuItem CreateFinal;
@@ -121,7 +119,7 @@ public class PhotoMake extends ModuleGUI {
 
         CheckItem = new JMenuItem("Проверить фото");
         SaveItem = new JMenuItem("Сохранить фото");
-        MergerSlots = new JMenuItem("Упаковать аудио и видео");
+
 
         AboutItem = new JMenuItem("О программе");
         Panel = new JPanel(new BorderLayout());
@@ -227,10 +225,7 @@ public class PhotoMake extends ModuleGUI {
 
         MainMenu.WorkMenu.add(SaveItem);
 
-        MainMenu.WorkMenu.add(MergerSlots);
         MainMenu.WorkMenu.add(CreateBundle);
-
-
 
         frame.setJMenuBar(MainMenu);
 
@@ -472,7 +467,7 @@ public class PhotoMake extends ModuleGUI {
                 var uuid_ = Uuid.generate();
                 tableRequest.put(uuid_,-3);
                 try {
-                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.tebs.photo, akt.getURL_thisAktor(), uuid_);
+                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,   akt.getURL_thisAktor(), uuid_);
                     System.out.println("\n\n\n\nSTARTING SENDING...");
                     System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
                     System.out.println("SENDING =>> "+ NetworkSettings.sets.address);

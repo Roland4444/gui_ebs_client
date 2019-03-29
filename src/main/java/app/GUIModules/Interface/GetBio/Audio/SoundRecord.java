@@ -458,7 +458,7 @@ public class SoundRecord extends ModuleGUI {
                 var uuid_ = Uuid.generate();
                 tableRequest.put(uuid_,-3);
                 try {
-                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.tebs.voice, akt.getURL_thisAktor(), uuid_);
+                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.getURL_thisAktor(), uuid_);
                     System.out.println("\n\n\n\nSTARTING SENDING...");
                     System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
                     System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
