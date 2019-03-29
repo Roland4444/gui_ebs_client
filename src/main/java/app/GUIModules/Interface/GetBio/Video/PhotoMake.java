@@ -605,7 +605,7 @@ public class PhotoMake extends ModuleGUI {
             if (tableRequest.get(resp.ID)!=null){
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
-                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0)) {
+                if ((resp.checkResult==0) ) {
                     on_success.passed();
                 }
             }

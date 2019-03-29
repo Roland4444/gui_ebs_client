@@ -66,9 +66,7 @@ public class App extends ModuleGUI {
             if (tableRequest.get(resp.ID)!=null){
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
-                this.label_resultLoadSo.setText(tebs.onLoadLibraryErrors.get(resp.ResultLoadingSoSymbols));
-                this.label_errorCode.setText("Code result Check=>"+resp.lastErrorInSession);
-                if ((resp.checkResult==0) && (resp.lastErrorInSession==0) && (resp.ResultLoadingSoSymbols==0))
+                if ((resp.checkResult==0) )
                     this.label_resultCheck.setText("проверка успешна");
                 else
                     this.label_resultCheck.setText("проверка не пройдена");
