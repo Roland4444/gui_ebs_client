@@ -333,6 +333,12 @@ public class PhotoMake extends ModuleGUI {
         VideoSetts = Video_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(VSettings.defaultFileName_static).toPath()));
     }
 
+    public void savePhotoBlob(String image) throws IOException {
+        var pb = new PhotoBundle();
+        pb.fileContent = Files.readAllBytes(new File(image).toPath());
+        pb.filename = image;
+        BinaryMessage.write(BinaryMessage.savedToBLOB(pb), SettsContainer.SavePhotoToFile);
+    };
 
     @Deprecated  //Check
     public void initCreateBundle(){
@@ -343,26 +349,8 @@ public class PhotoMake extends ModuleGUI {
         savePhotoBlob = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                PhotoBundle pb = new PhotoBundle();
                 try {
-                    pb.fileContent=Files.readAllBytes(new File(IMG_PATH).toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                pb.filename=IMG_PATH;
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(SettsContainer.SavePhotoToFile);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    fos.write(BinaryMessage.savedToBLOB(pb));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    fos.close();
+                    savePhotoBlob(IMG_PATH);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
