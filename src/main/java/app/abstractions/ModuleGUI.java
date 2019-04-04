@@ -12,6 +12,4 @@ public  abstract class ModuleGUI {
     public SettingsContainer SettsContainer;
     protected timeBasedUUID Uuid = new timeBasedUUID();
     public JMenuBar MenuBar;
-
-
 }
