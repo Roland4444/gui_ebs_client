@@ -448,6 +448,16 @@ public class SoundRecord extends ModuleGUI {
         checkAction = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
+                try {
+                    hookThat(Tempfile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 byte[] fileContent = null;
                 var checkfile = new File(Tempfile);
                 try {
@@ -615,6 +625,10 @@ public class SoundRecord extends ModuleGUI {
         });
 
 
+    }
+
+    private void hookThat(String tempfile) throws IOException {
+        Process p = Runtime.getRuntime().exec("./repack.sh");
     }
 
 
