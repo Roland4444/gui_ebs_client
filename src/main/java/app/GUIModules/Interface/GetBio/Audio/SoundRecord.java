@@ -11,10 +11,10 @@ import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
 import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.OnFailure;
 import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
-import app.utils.timeBasedUUID;
 import impl.JAktor;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
@@ -119,6 +119,7 @@ public class SoundRecord extends ModuleGUI {
     public JButton Stop;
     public JLabel StartLabel;
     public JLabel StopLabel;
+    public JLabel InfoLabel;
     public boolean checked = false;
     public interop exchange;
     AppAktor akt;
@@ -138,6 +139,7 @@ public class SoundRecord extends ModuleGUI {
         Saveslot1 = new JMenuItem("Слот1    (Ctrl+1)");
         Saveslot2 = new JMenuItem("Слот2    (Ctrl+2)");
         Saveslot3 = new JMenuItem("Слот3    (Ctrl+3)");
+        InfoLabel = new JLabel("");
         MergerSlots = new JMenuItem("Склеить образцы");
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить записанный фрагмент  (Ctrl+C)");
@@ -224,7 +226,7 @@ public class SoundRecord extends ModuleGUI {
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 480);
         frame.setLocationRelativeTo(null);
 
         PlayItem.add(Playcurrent);
@@ -249,6 +251,9 @@ public class SoundRecord extends ModuleGUI {
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
 
         Panel.add(Check, BorderLayout.WEST);
+        Panel.add(InfoLabel, BorderLayout.EAST);
+
+        InfoLabel.setText("I am here");
 
         StartPanel.add(Start);
         StartPanel.add(StartLabel);
@@ -272,7 +277,7 @@ public class SoundRecord extends ModuleGUI {
     }
 
     public void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        About = new About();
+        About = new About(this.SettsContainer);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -454,7 +459,7 @@ public class SoundRecord extends ModuleGUI {
                     e.printStackTrace();
                 }
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -739,6 +744,13 @@ public class SoundRecord extends ModuleGUI {
                 disableCheck();
             }
         };
+        akt.on_failure=new OnFailure() {
+            @Override
+            public void failed(int errorcode) {
+                InfoLabel.setText("Error code="+errorcode+"\n"+SettsContainer.SoundErrorsDict.get(errorcode));
+                InfoLabel.updateUI();
+            }
+        };
     }
 
     public static void  main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
@@ -761,6 +773,7 @@ public class SoundRecord extends ModuleGUI {
     public class AppAktor extends JAktor {
         public interop checkedViaForm;
         public OnSuccess on_success;
+        public OnFailure on_failure;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();
         private Cypher cypher;
@@ -787,11 +800,11 @@ public class SoundRecord extends ModuleGUI {
             if (tableRequest.get(resp.ID)!=null){
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
-                if ((resp.checkResult==0))  {
+                if ((resp.checkResult==0))
                     on_success.passed();
-                }
-        //        else
-          //          this.label_resultCheck.setText("проверка не пройдена");
+                else
+                    on_failure.failed(resp.checkResult);
+
 
             }
         }

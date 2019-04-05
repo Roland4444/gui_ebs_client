@@ -137,7 +137,7 @@ public class AppBio extends ModuleGUI {
     }
 
     public void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-            this.About = new About();
+            this.About = new About(this.SettsContainer);
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {

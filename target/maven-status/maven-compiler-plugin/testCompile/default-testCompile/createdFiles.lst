@@ -1,5 +1,6 @@
 app/Sound_SettingsTest$lambda.class
 app/GUIModules/Interface/GetBio/AppBioTest.class
+app/GUIModules/Interface/GetBio/Video/PhotoMakeTest.class
 app/Sound_SettingsTest$callable.class
 app/Sound_SettingsTest$1.class
 app/Sound_SettingsTest.class

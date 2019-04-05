@@ -1,6 +1,7 @@
 package app.GUIModules;
 
 import app.abstractions.ModuleGUI;
+import app.abstractions.SettingsContainer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,9 @@ public class About extends ModuleGUI {
     public JButton ok;
     public JPanel main;
     public JPanel buttonPanel;
-    @Override
+    public About(SettingsContainer setts){
+        this.SettsContainer=setts;
+    }
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame = new JFrame("О программе");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -25,7 +28,7 @@ public class About extends ModuleGUI {
         buttonPanel=new JPanel(new FlowLayout());
         main =  new JPanel(gr_layout);
         about = new JPanel();
-        info = new JTextArea("\n\n      Программа для сбора биометрических данных       \n      Версия 2.0.0\n      Written Roman Pastushkov @ 2018 @ Vcabank\n      December 2018 Build\n\n");
+        info = new JTextArea("\n\n      Программа для сбора биометрических данных       \n     "+SettsContainer.VersionProg+"\n      Written Roman Pastushkov @ 2018 @ Vcabank\n      April 2019 Build\n\n");
         frame.getContentPane().add(main);
         about.add(info);
         ok = new JButton("OK");
@@ -35,6 +38,9 @@ public class About extends ModuleGUI {
         main.add(buttonPanel);
 
     }
+
+
+
 
     @Override
     public void initListeners() {
@@ -48,7 +54,7 @@ public class About extends ModuleGUI {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        var ab = new About();
+        var ab = new About(new SettingsContainer());
         ab.preperaGUI();
         ab.initListeners();
         ab.frame.setLocationRelativeTo(null);

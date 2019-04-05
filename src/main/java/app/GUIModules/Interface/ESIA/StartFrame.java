@@ -221,7 +221,7 @@ public class StartFrame extends ModuleGUI {
 
 
     private void initAboutFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, InterruptedException {
-        About = new About();
+        About = new About(this.SettsContainer);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
