@@ -118,9 +118,6 @@ public class AppBio extends ModuleGUI {
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setJMenuBar(this.MainMenu);
         WatchPanel.add(WatchButton);
-
-       // PImage.add(LOID);
-       // PImage.add(TOID);
         PImage.add(LImg, BorderLayout.WEST);
         PImage.add(LOID, BorderLayout.EAST);
         PImage.add(Createfatbundle, BorderLayout.CENTER);

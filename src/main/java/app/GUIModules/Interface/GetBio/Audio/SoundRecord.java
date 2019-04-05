@@ -1,33 +1,36 @@
 package app.GUIModules.Interface.GetBio.Audio;
 
 import Message.BKKCheck.InputMessage;
-import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
-import Table.TablesEBSCheck;
+import app.Essens.AppAktor;
 import app.Essens.CypherImpl;
+import app.Essens.Sound_Settings;
 import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
-import app.Essens.Sound_Settings;
 import app.abstractions.ModuleGUI;
 import app.abstractions.OnFailure;
 import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
-import impl.JAktor;
+
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
+
 import static javax.swing.JOptionPane.showMessageDialog;
 public class SoundRecord extends ModuleGUI {
     AbstractAction mergeAction;
@@ -625,7 +628,6 @@ public class SoundRecord extends ModuleGUI {
                     lockSound.delete();
                 }
                 System.exit(0);
-
             }
         });
 
@@ -733,6 +735,7 @@ public class SoundRecord extends ModuleGUI {
 
     public void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
+        akt.setTableReqs(this.tableRequest);
         akt.checkedViaForm=exchange;
         akt.setAddress(SettsContainer.AudioClient);
         akt.setCypher(cypher);
@@ -740,6 +743,7 @@ public class SoundRecord extends ModuleGUI {
         akt.on_success=new OnSuccess() {
             @Override
             public void passed() {
+                InfoLabel.setText("Проверка пройдена!");
                 enableSave();
                 disableCheck();
             }
@@ -770,45 +774,7 @@ public class SoundRecord extends ModuleGUI {
 
 
 
-    public class AppAktor extends JAktor {
-        public interop checkedViaForm;
-        public OnSuccess on_success;
-        public OnFailure on_failure;
-        public JButton save;
-        public TablesEBSCheck tebs = new TablesEBSCheck();
-        private Cypher cypher;
-        public void setCypher(Cypher cypher){
-            this.cypher=cypher;
-        }
-        
-        @Override        
-        public int send(byte[] message, String address) throws IOException {
-            return this.client.send(this.cypher.encrypt(message), address);
-        }
-        
-        @Override
-        public void receive(byte[] message_) throws IOException {
-            System.out.println("Received!!!! via console");
-            byte[] message =  cypher.decrypt(message_);
-            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
-            System.out.println("\n\n\nRECEIVED");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (tableRequest.get(resp.ID)!=null){
-                tableRequest.remove(resp.ID);
-                tableRequest.put(resp.ID, resp.checkResult);
-                if ((resp.checkResult==0))
-                    on_success.passed();
-                else
-                    on_failure.failed(resp.checkResult);
 
-
-            }
-        }
-    }
 
     public class interop{
         public boolean checked;

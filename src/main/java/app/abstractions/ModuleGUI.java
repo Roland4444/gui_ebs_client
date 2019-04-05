@@ -1,5 +1,6 @@
 package app.abstractions;
 
+import app.Essens.AppAktor;
 import app.utils.timeBasedUUID;
 
 import javax.swing.*;

@@ -10,6 +10,7 @@
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/About.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/GetBio/Audio/SoundRecord.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/Sound/Wav.java
+/home/roland/IdeaProjects/mono_gui/src/main/java/app/abstractions/OnFailure.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/GetBio/Video/grab.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/ESIA/StartFrame.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/Blocks/MainMenu/AppMenu.java

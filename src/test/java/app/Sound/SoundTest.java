@@ -74,18 +74,7 @@ class SoundTest {
         assertEquals(true, res.exists());
     }
 
-    @Test
-    void playoffset() throws IOException {
-        Sound_Settings ss = null;
 
-        try {
-            ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File("sound_settings.bin").toPath()));
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        Sound binarySound = new Sound(ss);
-        binarySound.playSound(tempfile, 65000, 0);
-    }
 
     @Test
     void getframerate() throws IOException, UnsupportedAudioFileException {

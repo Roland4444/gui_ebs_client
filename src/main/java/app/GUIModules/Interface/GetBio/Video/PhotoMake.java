@@ -1,10 +1,9 @@
 package app.GUIModules.Interface.GetBio.Video;
 
 import Message.BKKCheck.InputMessage;
-import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import Message.toSMEV.EBS.Essens.PhotoBundle;
-import Table.TablesEBSCheck;
+import app.Essens.AppAktor;
 import app.Essens.CypherImpl;
 import app.Essens.OnClosed;
 import app.Essens.Video_Settings;
@@ -12,11 +11,10 @@ import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.ModuleGUI;
+import app.abstractions.OnFailure;
 import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
-import app.utils.timeBasedUUID;
-import impl.JAktor;
 import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
@@ -28,7 +26,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -105,6 +106,7 @@ public class PhotoMake extends ModuleGUI {
     public CamPanel camPanel;
     public JLabel LabelCam;
     public AppMenu MainMenu;
+    public JLabel InfoLabel;
     public PhotoMake(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
         cypher = new CypherImpl();
@@ -120,7 +122,7 @@ public class PhotoMake extends ModuleGUI {
         CheckItem = new JMenuItem("Проверить фото");
         SaveItem = new JMenuItem("Сохранить фото");
 
-
+        InfoLabel = new JLabel("");
         AboutItem = new JMenuItem("О программе");
         Panel = new JPanel(new BorderLayout());
         Check = new JButton("Проверить фото  (Ctrl+C)");
@@ -215,7 +217,7 @@ public class PhotoMake extends ModuleGUI {
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 400);
         frame.setLocationRelativeTo(null);
         MainMenu.EditMenu.add(VsItem);
         MainMenu.WorkMenu.add(CheckItem);
@@ -233,6 +235,7 @@ public class PhotoMake extends ModuleGUI {
 
         Panel.add(Check, BorderLayout.WEST);
 
+        InfoLabel.setText("I am here");
        // ButtonPanel.add(Start);
         ButtonPanel.add(Start);
 
@@ -529,6 +532,7 @@ public class PhotoMake extends ModuleGUI {
 
     public void prepareAktor() throws InterruptedException {
         akt = new AppAktor();
+        akt.setTableReqs(this.tableRequest);
         akt.checkedViaForm=exchange;
         akt.setAddress(SettsContainer.VideoClient);
         akt.setCypher(cypher);
@@ -538,6 +542,13 @@ public class PhotoMake extends ModuleGUI {
             public void passed() {
                 enableSave();
                 disableCheck();
+            }
+        };
+        akt.on_failure=new OnFailure() {
+            @Override
+            public void failed(int errorcode) {
+                InfoLabel.setText("Error code="+errorcode+"\n"+SettsContainer.SoundErrorsDict.get(errorcode));
+                InfoLabel.updateUI();
             }
         };
     }
@@ -558,42 +569,6 @@ public class PhotoMake extends ModuleGUI {
     }
 
 
-
-    public class AppAktor extends JAktor {
-        public interop checkedViaForm;
-        public OnSuccess on_success;
-        public JButton save;
-        public TablesEBSCheck tebs = new TablesEBSCheck();
-        private Cypher cypher;
-        public void setCypher(Cypher cypher){
-            this.cypher=cypher;
-        }
-        
-        @Override        
-        public int send(byte[] message, String address) throws IOException {
-            return this.client.send(this.cypher.encrypt(message), address);
-        }
-        
-        @Override
-        public void receive(byte[] message_) throws IOException {
-            System.out.println("Received!!!! via console");
-            byte[] message =  cypher.decrypt(message_);
-            ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
-            System.out.println("\n\n\nRECEIVED");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (tableRequest.get(resp.ID)!=null){
-                tableRequest.remove(resp.ID);
-                tableRequest.put(resp.ID, resp.checkResult);
-                if ((resp.checkResult==0) ) {
-                    on_success.passed();
-                }
-            }
-        }
-    }
 
     public void startCam(){
         cam =new camera();
