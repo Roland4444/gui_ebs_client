@@ -9,10 +9,7 @@ import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
-import app.abstractions.ModuleGUI;
-import app.abstractions.OnFailure;
-import app.abstractions.OnSuccess;
-import app.abstractions.SettingsContainer;
+import app.abstractions.*;
 import app.utils.Cypher;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -776,11 +773,5 @@ public class SoundRecord extends ModuleGUI {
 
 
 
-    public class interop{
-        public boolean checked;
-        public int resultloadso;
-        public int resultcheck;
-        public int errorcode;
-    }
 
 }

@@ -21,6 +21,7 @@ import app.Sound.Sound;
 import app.abstractions.ModuleGUI;
 import app.abstractions.OnSuccess;
 import app.abstractions.SettingsContainer;
+import app.abstractions.interop;
 import app.utils.Cypher;
 import impl.JAktor;
 
@@ -32,7 +33,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -456,7 +456,7 @@ public class AppBio extends ModuleGUI {
     }
 
     public class AppAktor extends JAktor {
-        public PhotoMake.interop checkedViaForm;
+        public interop checkedViaForm;
         public OnSuccess on_success;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();

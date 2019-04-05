@@ -10,10 +10,7 @@ import app.Essens.Video_Settings;
 import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
-import app.abstractions.ModuleGUI;
-import app.abstractions.OnFailure;
-import app.abstractions.OnSuccess;
-import app.abstractions.SettingsContainer;
+import app.abstractions.*;
 import app.utils.Cypher;
 import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
@@ -109,6 +106,7 @@ public class PhotoMake extends ModuleGUI {
     public JLabel InfoLabel;
     public PhotoMake(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
+        exchange=new interop();
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
         MenuBar = new JMenuBar();
@@ -584,12 +582,7 @@ public class PhotoMake extends ModuleGUI {
 
     }
 
-    public class interop{
-        public boolean checked;
-        public int resultloadso;
-        public int resultcheck;
-        public int errorcode;
-    }
+
 
     class camera extends Thread {
         public JLabel mounted;

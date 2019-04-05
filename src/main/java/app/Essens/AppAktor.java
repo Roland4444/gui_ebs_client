@@ -3,19 +3,18 @@ package app.Essens;
 import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import Table.TablesEBSCheck;
-import app.GUIModules.Interface.GetBio.Audio.SoundRecord;
 import app.abstractions.OnFailure;
 import app.abstractions.OnSuccess;
+import app.abstractions.interop;
 import app.utils.Cypher;
 import impl.JAktor;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AppAktor extends JAktor {
-    public SoundRecord.interop checkedViaForm;
+    public interop checkedViaForm;
     public OnSuccess on_success;
     public OnFailure on_failure;
     public JButton save;
