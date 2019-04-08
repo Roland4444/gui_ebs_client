@@ -406,6 +406,11 @@ public class StartFrame extends ModuleGUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 showMessageDialog(null, "Proceed register");
+                try {
+                    Process p = Runtime.getRuntime().exec(SettsContainer.runMainApp);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
 

@@ -215,7 +215,7 @@ public class PhotoMake extends ModuleGUI {
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 400);
+        frame.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 800);
         frame.setLocationRelativeTo(null);
         MainMenu.EditMenu.add(VsItem);
         MainMenu.WorkMenu.add(CheckItem);
@@ -523,10 +523,6 @@ public class PhotoMake extends ModuleGUI {
             }
         });
     }
-    public void setAktor(AppAktor jktr){
-        this.akt=jktr;
-    }
-
 
     public void prepareAktor() throws InterruptedException {
         akt = new AppAktor();

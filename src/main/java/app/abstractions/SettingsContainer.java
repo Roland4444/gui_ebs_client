@@ -19,6 +19,7 @@ public class SettingsContainer {
     public final String receivedOIDSave = "oid.bin";
     public final String runPhotoMake    = "java --module-path build -m uk.roland.ebs_client/app.GUIModules.Interface.GetBio.Video.PhotoMake";
     public final String runSoundRecord  = "java --module-path build -m uk.roland.ebs_client/app.GUIModules.Interface.GetBio.Audio.SoundRecord";
+    public final String runMainApp      = "java --module-path build -m uk.roland.ebs_client/app.GUIModules.Interface.GetBio.AppBio";
     public final String lockSoundRecordfile ="srecord.lock";
     public final String lockPhotomakefile ="photom.lock";
     public boolean productionMode=true;

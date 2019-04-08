@@ -40,6 +40,7 @@ public class AppAktor extends JAktor {
         byte[] message =  cypher.decrypt(message_);
         ResponceMessage resp = (ResponceMessage) BinaryMessage.restored(message);
         System.out.println("\n\n\nRECEIVED");
+        ResponceMessage.printIt(resp);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
