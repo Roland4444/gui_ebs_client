@@ -1,6 +1,7 @@
 package app.GUIModules.Interface.GetBio.Video;
 
 import Message.BKKCheck.InputMessage;
+import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import Message.toSMEV.EBS.Essens.PhotoBundle;
 import app.Essens.AppAktor;
@@ -230,6 +231,8 @@ public class PhotoMake extends ModuleGUI {
         frame.setJMenuBar(MainMenu);
 
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
+
+        frame.getContentPane().add(InfoLabel, BorderLayout.PAGE_START);
 
         Panel.add(Check, BorderLayout.WEST);
 
@@ -540,8 +543,8 @@ public class PhotoMake extends ModuleGUI {
         };
         akt.on_failure=new OnFailure() {
             @Override
-            public void failed(int errorcode) {
-                InfoLabel.setText("Error code="+errorcode+"\n"+SettsContainer.SoundErrorsDict.get(errorcode));
+            public void failed(ResponceMessage resp) {
+                InfoLabel.setText("Error code="+resp.checkResult+"\n"+"Параметр "+resp.ProblemName + "не пройден");
                 InfoLabel.updateUI();
             }
         };

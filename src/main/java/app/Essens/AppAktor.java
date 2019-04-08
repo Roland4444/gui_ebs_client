@@ -52,7 +52,7 @@ public class AppAktor extends JAktor {
             if ((resp.checkResult==0))
                 on_success.passed();
             else
-                on_failure.failed(resp.checkResult);
+                on_failure.failed(resp);
 
 
         }

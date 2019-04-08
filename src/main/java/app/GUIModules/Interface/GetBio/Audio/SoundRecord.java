@@ -1,6 +1,7 @@
 package app.GUIModules.Interface.GetBio.Audio;
 
 import Message.BKKCheck.InputMessage;
+import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
 import app.Essens.AppAktor;
 import app.Essens.CypherImpl;
@@ -747,10 +748,12 @@ public class SoundRecord extends ModuleGUI {
         };
         akt.on_failure=new OnFailure() {
             @Override
-            public void failed(int errorcode) {
-                InfoLabel.setText("Error code="+errorcode+"\n"+SettsContainer.SoundErrorsDict.get(errorcode));
+            public void failed(ResponceMessage resp) {
+                InfoLabel.setText("Error code="+resp.checkResult+"\n"+SettsContainer.SoundErrorsDict.get(resp.checkResult));
                 InfoLabel.updateUI();
             }
+
+
         };
     }
 

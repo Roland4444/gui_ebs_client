@@ -1,12 +1,12 @@
 app/GUIModules/Interface/GetBio/Audio/MergeAudioFrames.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$13.class
 app/GUIModules/Interface/ESIA/StartFrame$4.class
-app/GUIModules/Interface/GetBio/Audio/SoundRecord$interop.class
 app/GUIModules/Interface/ESIA/CreateESIAFrame.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$2.class
 app/GUIModules/NetworkSettings.class
 app/GUIModules/Interface/GetBio/AppBio$8.class
 app/GUIModules/Interface/GetBio/AppBio$Watcher.class
+app/GUIModules/Interface/GetBio/Video/PhotoMake$15.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$16.class
 app/GUIModules/Interface/ESIA/StartFrame$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$7.class
@@ -14,6 +14,7 @@ app/GUIModules/Interface/GetBio/Video/PhotoMake$5.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$1.class
 app/GUIModules/Interface/GetBio/Video/TEST.class
 app/GUIModules/Interface/GetBio/Video/window.class
+app/abstractions/OnFailure.class
 app/GUIModules/Interface/ESIA/StartFrame$OnSuccess.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$4.class
 app/Essens/IPSetts.class
@@ -36,7 +37,6 @@ app/GUIModules/Interface/GetBio/Video/PhotoMake$7.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$2.class
 app/GUIModules/Interface/ESIA/StartFrame$6.class
 app/GUIModules/App$3.class
-app/GUIModules/Interface/GetBio/Audio/SoundRecord$AppAktor.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$2.class
 module-info.class
 app/GUIModules/About.class
@@ -58,14 +58,15 @@ app/GUIModules/Interface/GetBio/Video/PhotoMake$6.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$3.class
 app/GUIModules/Interface/GetBio/Video/processor.class
 app/GUIModules/Interface/ESIA/StartFrame$AppAktor.class
-app/GUIModules/Interface/GetBio/Video/PhotoMake$AppAktor.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$9.class
 app/GUIModules/Interface/GetBio/Video/VSettings$1.class
 app/GUIModules/NetworkSettings$1.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord.class
+app/Essens/AppAktor.class
 app/GUIModules/Interface/GetBio/Video/VSettings$4.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$11.class
+app/abstractions/interop.class
 app/GUIModules/Interface/ESIA/StartFrame.class
 app/GUIModules/Interface/GetBio/AppBio$1.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$4.class
@@ -97,7 +98,6 @@ app/GUIModules/Interface/GetBio/Video/PhotoMake$4.class
 app/GUIModules/Interface/Blocks/MainMenu/AppMenu$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$6.class
 app/GUIModules/Interface/GetBio/Audio/MergeAudioFrames$2.class
-app/GUIModules/Interface/GetBio/Video/PhotoMake$interop.class
 app/GUIModules/Interface/GetBio/Video/VSettings$3.class
 app/GUIModules/Interface/GetBio/Video/CamPanel.class
 app/GUIModules/App$AppAktor.class
@@ -112,6 +112,7 @@ app/GUIModules/Interface/GetBio/Video/PhotoMake$3.class
 app/Sound/Sound$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$17.class
 app/GUIModules/NetworkSettings$2.class
+app/GUIModules/Interface/GetBio/Audio/SoundRecord$22.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$10.class
 app/Essens/Sound_Settings.class
 app/GUIModules/Interface/Blocks/Panels/EBSOperatorPanel.class

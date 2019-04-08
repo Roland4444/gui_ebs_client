@@ -1,5 +1,6 @@
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/App.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/NetworkSettings.java
+/home/roland/IdeaProjects/mono_gui/src/main/java/app/Essens/AppAktor.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/abstractions/SettingsContainer.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/Blocks/Panels/EBSOperatorPanel.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/GetBio/Video/window.java
@@ -33,3 +34,4 @@
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/GUIModules/Interface/GetBio/Audio/SSettings.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/Essens/OnClosed.java
 /home/roland/IdeaProjects/mono_gui/src/main/java/app/Sound/Sound.java
+/home/roland/IdeaProjects/mono_gui/src/main/java/app/abstractions/interop.java
