@@ -18,10 +18,7 @@ import app.GUIModules.Interface.GetBio.Audio.SoundRecord;
 import app.GUIModules.Interface.GetBio.Video.PhotoMake;
 import app.GUIModules.NetworkSettings;
 import app.Sound.Sound;
-import app.abstractions.ModuleGUI;
-import app.abstractions.OnSuccess;
-import app.abstractions.SettingsContainer;
-import app.abstractions.interop;
+import app.abstractions.*;
 import app.utils.Cypher;
 import impl.JAktor;
 
@@ -404,7 +401,14 @@ public class AppBio extends ModuleGUI {
         akt.on_success=new OnSuccess() {
             @Override
             public void passed() {
+                showMessageDialog(null, "Регистрация успешна");
 
+            }
+        };
+        akt.on_fail=new OnFailure() {
+            @Override
+            public void failed(ResponceMessage resp) {
+                showMessageDialog(null, "Регистрация неуспешна");
             }
         };
     }
@@ -458,6 +462,7 @@ public class AppBio extends ModuleGUI {
     public class AppAktor extends JAktor {
         public interop checkedViaForm;
         public OnSuccess on_success;
+        public OnFailure on_fail;
         public JButton save;
         public TablesEBSCheck tebs = new TablesEBSCheck();
         private Cypher cypher;
@@ -487,6 +492,8 @@ public class AppBio extends ModuleGUI {
                 if ((resp.checkResult==0) ) {
                     on_success.passed();
                 }
+                else
+                    on_fail.failed(resp);
             }
         }
     }

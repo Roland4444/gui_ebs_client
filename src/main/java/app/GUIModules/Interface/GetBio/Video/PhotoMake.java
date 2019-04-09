@@ -539,12 +539,16 @@ public class PhotoMake extends ModuleGUI {
             public void passed() {
                 enableSave();
                 disableCheck();
+                InfoLabel.setText("Проверка пройдена");
+                InfoLabel.setForeground(Color.green);
+
             }
         };
         akt.on_failure=new OnFailure() {
             @Override
             public void failed(ResponceMessage resp) {
-                InfoLabel.setText("Error code="+resp.checkResult+"\n"+"Параметр "+resp.ProblemName + "не пройден");
+                InfoLabel.setText("Error code="+resp.checkResult+"\n"+"Параметр "+resp.ProblemName + "  не пройден. Выровняйте голову");
+                InfoLabel.setForeground(Color.red);
                 InfoLabel.updateUI();
             }
         };
