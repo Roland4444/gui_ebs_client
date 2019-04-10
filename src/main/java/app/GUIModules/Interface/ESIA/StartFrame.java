@@ -1,9 +1,12 @@
 package app.GUIModules.Interface.ESIA;
+import Message.BKKCheck.ResponceMessage;
 import Message.abstractions.BinaryMessage;
+import Message.toSMEV.EBS.Essens.OtherInfo;
 import Message.toSMEV.ESIAFind.ESIAFindMessageInitial;
 import Message.toSMEV.ESIAFind.ESIAFindMessageResult;
 import Message.toSMEV.MessageSMEV;
 import Table.TablesEBSCheck;
+import app.Essens.AppAktor;
 import app.Essens.CypherImpl;
 import app.GUIModules.About;
 import app.GUIModules.Interface.Blocks.Panels.ClientPanel;
@@ -12,6 +15,7 @@ import app.GUIModules.Interface.Blocks.MainMenu.AppMenu;
 import app.GUIModules.NetworkSettings;
 import app.abstractions.Model;
 import app.abstractions.ModuleGUI;
+import app.abstractions.OnFailure;
 import app.abstractions.SettingsContainer;
 import app.utils.Cypher;
 import app.utils.Extractor;
@@ -85,6 +89,8 @@ public class StartFrame extends ModuleGUI {
     public EBSOperatorPanel ExtendedPanel;
     public ClientPanel ClientPanelP;
 
+    public OtherInfo oi;
+
     public NetworkSettings ns;
     AppAktor akt;
     public timeBasedUUID Uuid ;
@@ -94,12 +100,21 @@ public class StartFrame extends ModuleGUI {
     public AppMenu MainMenu;
     public app.GUIModules.About About;
 
+    public void initOtherInfo(){
+        oi = new OtherInfo();
+        oi.Mnemonic= "ESIA";
+        oi.RegMnemonic = "981601_3T";
+    };
+
     public StartFrame(SettingsContainer sc) throws IOException {
         ExtendedPanel = new EBSOperatorPanel();
         ClientPanelP = new ClientPanel();
         this.SettsContainer=sc;
         cypher = new CypherImpl();
         frame = new JFrame(sc.VersionProg);
+
+        initOtherInfo();
+
 
 
         LsenderPanel=new JLabel("Отправитель");
@@ -264,7 +279,7 @@ public class StartFrame extends ModuleGUI {
 
         ClientPanelP.add(ClientPanelP.PFIO);
         ClientPanelP.add(ClientPanelP.PPass);
-        ClientPanelP.add(ClientPanelP.PSNILS);
+    //    ClientPanelP.add(ClientPanelP.PSNILS);
         ClientPanelP.add(ClientPanelP.PMobile);
 
         PSender.add(PsnilsPanel);
@@ -440,10 +455,10 @@ public class StartFrame extends ModuleGUI {
                         showMessageDialog(null, "заполните мобильный телефон клиента => 10 значащих цифр, \nнапример 9604451213");
                         return;
                     }
-                    if (!checkClientSNILS()){
-                        showMessageDialog(null, "заполните СНИЛС клиента");
-                        return;
-                    }
+                 //   if (!checkClientSNILS()){
+                 //       showMessageDialog(null, "заполните СНИЛС клиента");
+                 //       return;
+                 //   }
                     if (!checkPass()){
                         showMessageDialog(null, "заполните паспорт клиента");
                         return;
@@ -458,7 +473,7 @@ public class StartFrame extends ModuleGUI {
                 //    msg.OperatorSnils=ESIAFindMessageInitial.getSNILSfromplain(TOperSnils.getText());
                     msg.Passseria=Pass.get(0);
                     msg.Passnumber=Pass.get(1);
-                    msg.SNILS=ESIAFindMessageInitial.getSNILSfromplain(ClientPanelP.TSNILS.getText());
+                //    msg.SNILS=ESIAFindMessageInitial.getSNILSfromplain(ClientPanelP.TSNILS.getText());
                     msg.MobileNumber=ESIAFindMessageInitial.getMobilefromplain(ClientPanelP.TMobile.getText());
                     byte[] datatoWork = BinaryMessage.savedToBLOB(msg);
 
@@ -491,14 +506,20 @@ public class StartFrame extends ModuleGUI {
 
 
     private void prepareAktor() throws InterruptedException {
-        akt = new AppAktor();
+        akt = new FindAppAktor();
         akt.setAddress(SettsContainer.ESIAClient);
         akt.setCypher(cypher);
         akt.spawn();
-        akt.on_success=new OnSuccess() {
+        akt.on_success= new app.abstractions.OnSuccess() {
             @Override
             public void passed() {
-
+                enableProceed();
+            }
+        };
+        akt.on_failure=new OnFailure() {
+            @Override
+            public void failed(ResponceMessage resp) {
+                showMessageDialog(null, "Учетная запись не найдена или не подтверждена");
             }
         };
         //  showMessageDialog(null, "AKtor spawned");
@@ -513,11 +534,6 @@ public class StartFrame extends ModuleGUI {
         fr.initListeners();
 
     }
-
-    interface OnSuccess{
-        public void passed();
-    }
-
 
     private void initNetworkSettinFrame() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         ns = new NetworkSettings(SettsContainer.Smev3addressfile);
@@ -552,25 +568,13 @@ public class StartFrame extends ModuleGUI {
 
 
 
-    public class AppAktor extends JAktor {
-        public OnSuccess on_success;
-        public JButton save;
-        public TablesEBSCheck tebs = new TablesEBSCheck();
-        private Cypher cypher;
-        public void setCypher(Cypher cypher){
-            this.cypher=cypher;
-        }
-
-        @Override
-        public int send(byte[] message, String address) throws IOException {
-            return this.client.send(this.cypher.encrypt(message), address);
-        }
-
+    public class FindAppAktor extends AppAktor {
         @Override
         public void receive(byte[] message_) throws IOException {
             ESIAFindMessageResult resp = (ESIAFindMessageResult) BinaryMessage.restored(message_);
             if (tableRequest.get(resp.ID)==null)
                 return;
+            tableRequest.remove(resp.ID);
             enableRequest();
             unlockinputs();
             System.out.println("Received!!!! via console");
@@ -578,24 +582,30 @@ public class StartFrame extends ModuleGUI {
             if (resp.BioStu!=null){
                 if (resp.BioStu.toUpperCase().equals("Y")){
                     showMessageDialog(null, "Клиент уже зарегестрирован в ЕБС");
+                    return;
                 }
             }
-            FileOutputStream fos = new FileOutputStream(SettsContainer.receivedOIDSave);
-            fos.write(resp.oid.getBytes());
-            fos.close();
+            System.out.println("\n\n\nRECEIVED\n\n"+resp.oid+"\n\n"+resp.trusted);
 
-            System.out.println("\n\n\nRECEIVED");
-            if ((resp.oid!=null) && resp.trusted.equals("trusted"))
-                enableProceed();
+            if ((resp.oid!=null) && resp.trusted.equals("trusted")) {
+                oi.OID=resp.oid;
+                oi.RA=ExtendedPanel.TRA.getText();
+                oi.OperSNILS=ESIAFindMessageInitial.getSNILSfromplain(ExtendedPanel.TOperSnils.getText());
+                BinaryMessage.write(BinaryMessage.savedToBLOB(oi), SettsContainer.SaveOtherInfoToFile);
+                on_success.passed();
+            }
             if (resp.oid==null)
-                enableCreate();
-            if ((resp.oid!=null) && (!resp.trusted.equals("trusted")))
-                enableUpgrade();
+                on_failure.failed(null);
+
+
+
+           //     enableCreate();
+           // if ((resp.oid!=null) && (!resp.trusted.equals("trusted")))
+           //     enableUpgrade();
         //    showMessageDialog(null, "Status => "+ resp.trusted+"\nOID=>"+resp.oid);
         //        else
         //          this.label_resultCheck.setText("проверка не пройдена");
 
-            tableRequest.remove(resp.ID);
         }
     }
 
