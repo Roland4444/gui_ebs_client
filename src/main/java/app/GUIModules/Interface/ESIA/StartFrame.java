@@ -582,7 +582,7 @@ public class StartFrame extends ModuleGUI {
             if (resp.BioStu!=null){
                 if (resp.BioStu.toUpperCase().equals("Y")){
                     showMessageDialog(null, "Клиент уже зарегестрирован в ЕБС");
-                    return;
+                  //////  return;
                 }
             }
             System.out.println("\n\n\nRECEIVED\n\n"+resp.oid+"\n\n"+resp.trusted);

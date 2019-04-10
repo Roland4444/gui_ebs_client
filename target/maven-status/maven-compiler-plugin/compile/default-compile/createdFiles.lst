@@ -15,7 +15,6 @@ app/GUIModules/Interface/GetBio/Audio/SoundRecord$1.class
 app/GUIModules/Interface/GetBio/Video/TEST.class
 app/GUIModules/Interface/GetBio/Video/window.class
 app/abstractions/OnFailure.class
-app/GUIModules/Interface/ESIA/StartFrame$OnSuccess.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$4.class
 app/Essens/IPSetts.class
 app/abstractions/SettingsContainer.class
@@ -51,13 +50,14 @@ app/abstractions/OnSuccess.class
 app/utils/timeBasedUUID.class
 app/GUIModules/Interface/ESIA/StartFrame$5.class
 app/GUIModules/Interface/Blocks/MainMenu/AppMenu.class
+app/GUIModules/Interface/GetBio/AppBio$10.class
 app/GUIModules/Interface/GetBio/AppBio.class
+app/GUIModules/Interface/ESIA/StartFrame$FindAppAktor.class
 app/GUIModules/Interface/GetBio/AppBio$2.class
 app/GUIModules/Interface/GetBio/AppBio$playWav.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$6.class
 app/GUIModules/Interface/GetBio/Audio/SSettings$3.class
 app/GUIModules/Interface/GetBio/Video/processor.class
-app/GUIModules/Interface/ESIA/StartFrame$AppAktor.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$9.class
 app/GUIModules/Interface/GetBio/Video/VSettings$1.class
 app/GUIModules/NetworkSettings$1.class
@@ -95,6 +95,7 @@ app/GUIModules/Interface/GetBio/Audio/SoundRecord$21.class
 app/GUIModules/Interface/GetBio/Video/grab.class
 app/Sound/Sound.class
 app/GUIModules/Interface/GetBio/Video/PhotoMake$4.class
+app/GUIModules/Interface/ESIA/StartFrame$9.class
 app/GUIModules/Interface/Blocks/MainMenu/AppMenu$1.class
 app/GUIModules/Interface/GetBio/Audio/SoundRecord$6.class
 app/GUIModules/Interface/GetBio/Audio/MergeAudioFrames$2.class
