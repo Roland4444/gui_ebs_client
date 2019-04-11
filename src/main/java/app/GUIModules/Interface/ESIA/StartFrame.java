@@ -48,10 +48,14 @@ public class StartFrame extends ModuleGUI {
     public final String makerequest ="makerteq";
     public final String proceedregister = "proceedregister";
     public final String proceedregister_shortcut = "control P";
+    public final String makebundlewithoutsearch = "makebundlewithoutsearch";
+    public final String makebundlewithoutsearch_shortcut = "constrol D";
+
 
 
     public Map<String, Integer> tableRequest = new HashMap<>();
 
+    public AbstractAction makeBundleWithoutSearch;
     public AbstractAction openSetts;
     public AbstractAction makeRequest;
     public AbstractAction saveReceuvedOID;
@@ -91,6 +95,11 @@ public class StartFrame extends ModuleGUI {
 
     public OtherInfo oi;
 
+    public JLabel LOID;
+    public JTextField TOID;
+    public JButton MakeBundleWithoutSearch;
+    public JPanel POID;
+
     public NetworkSettings ns;
     AppAktor akt;
     public timeBasedUUID Uuid ;
@@ -115,7 +124,10 @@ public class StartFrame extends ModuleGUI {
 
         initOtherInfo();
 
-
+        LOID = new JLabel("oid клиента");;
+        TOID = new JTextField("",3);;
+        MakeBundleWithoutSearch = new JButton("Зарегистрировать по OID");
+        POID = new JPanel(new GridLayout(2,2));
 
         LsenderPanel=new JLabel("Отправитель");
         LOperSnils=new JLabel("Снилс оператора");
@@ -283,6 +295,7 @@ public class StartFrame extends ModuleGUI {
         ClientPanelP.add(ClientPanelP.PMobile);
 
         PSender.add(PsnilsPanel);
+        PSender.add(POID);  //<<
 
         PsnilsPanel.add(LOperSnils);
         PsnilsPanel.add(TOperSnils);
@@ -306,6 +319,10 @@ public class StartFrame extends ModuleGUI {
 
         PSnils.add(LSNILS);
         PSnils.add(TSNILS);
+
+        POID.add(LOID);
+        POID.add(TOID);
+        POID.add(MakeBundleWithoutSearch);
 
         frame.pack();
 
