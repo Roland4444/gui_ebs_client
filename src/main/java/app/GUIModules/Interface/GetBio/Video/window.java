@@ -1,20 +1,18 @@
 package app.GUIModules.Interface.GetBio.Video;
 
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import javax.swing.*;
-
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 
-import org.opencv.core.Mat;
+import static org.opencv.core.Core.ellipse;
 
 
 public class window {
@@ -148,7 +146,7 @@ class processor {
         for(Rect rect:faces.toArray())
         {
             Point center= new Point(rect.x + rect.width*0.5, rect.y + rect.height*0.5 );
-            Core.ellipse( mRgba, center, new Size( rect.width*0.5, rect.height*0.5), 0, 0, 360, new Scalar( 255, 0, 255 ), 4, 8, 0 );
+            ellipse( mRgba, center, new Size( rect.width*0.5, rect.height*0.5), 0, 0, 360, new Scalar( 255, 0, 255 ), 4, 8, 0 );
         }
         return mRgba;
     }

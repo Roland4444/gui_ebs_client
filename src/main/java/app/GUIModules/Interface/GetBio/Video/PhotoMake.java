@@ -14,7 +14,6 @@ import app.GUIModules.NetworkSettings;
 import app.abstractions.*;
 import app.utils.Cypher;
 import org.opencv.core.*;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.objdetect.CascadeClassifier;
 
@@ -35,6 +34,8 @@ import java.util.Map;
 import java.util.concurrent.CompletionException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.opencv.core.Core.rectangle;
+import static org.opencv.highgui.Highgui.imencode;
 
 
 public class PhotoMake extends ModuleGUI {
@@ -627,7 +628,7 @@ public class PhotoMake extends ModuleGUI {
                     if (VideoSetts.CheckFaces)
                         detectFace(mat);
                     var mem = new MatOfByte();
-                    Highgui.imencode(".png", mat, mem);
+                    imencode(".png", mat, mem);
                     try {
                         im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
                     } catch (IOException e) {
@@ -652,7 +653,7 @@ public class PhotoMake extends ModuleGUI {
 
             System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
             for (Rect rect : faceDetections.toArray()) {
-                Core.rectangle(img, new org.opencv.core.Point(rect.x, rect.y), new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height),
+                rectangle(img, new org.opencv.core.Point(rect.x, rect.y), new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height),
                         scalar, 5);
             }
         }

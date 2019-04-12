@@ -3,7 +3,6 @@ package app.GUIModules.Interface.GetBio.Video;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
 import javax.imageio.ImageIO;
@@ -12,6 +11,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static org.opencv.highgui.Highgui.imencode;
+
 
 public class grab {
     public final String saveTo = "tested.png";
@@ -36,7 +38,7 @@ public class grab {
         mem = new MatOfByte();
         if (vc.grab()) {
             vc.retrieve(frame);
-            Highgui.imencode(".png", frame, mem);
+            imencode(".png", frame, mem);
             Image im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
             var fos = new FileOutputStream(saveTo);
             fos.write(mem.toArray());

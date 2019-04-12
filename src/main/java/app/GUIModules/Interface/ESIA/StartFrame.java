@@ -58,8 +58,6 @@ public class StartFrame extends ModuleGUI {
     public AbstractAction makeBundleWithoutSearch;
     public AbstractAction openSetts;
     public AbstractAction makeRequest;
-    public AbstractAction saveReceuvedOID;
-    public AbstractAction closeFrame;
     public AbstractAction exitItem;
     public AbstractAction proceedRegister;
     public JLabel LsenderPanel;
@@ -77,9 +75,9 @@ public class StartFrame extends ModuleGUI {
     public JLabel LPass;
     public JTextField TPass;
     public JMenuItem OpenSetts;
-    public JPanel PSender, Pra, PFIO, PPass, PButton, PMobile, PSnils;
+    public JPanel PButton, PMobile, PSnils;
 
-    public JPanel MainPanel, PsnilsPanel, RootPanel;
+    public JPanel MainPanel, RootPanel;
 
     public JButton MakeRequest;
     public JButton ProceedRegister, CreateESIAFRomScratch, UpgradeCurrentEsia;
@@ -149,16 +147,11 @@ public class StartFrame extends ModuleGUI {
         PSnils = new JPanel(new GridLayout());
         PMobile = new JPanel(new GridLayout());
 
-        PSender = new JPanel(new GridLayout());
 
-        Pra = new JPanel(new GridLayout());
-        PFIO = new JPanel(new GridLayout());
-        PPass = new JPanel(new GridLayout());
         var gr_l = new GridLayout(10,1);
         RootPanel = new JPanel(new BorderLayout());
 
         MainPanel = new JPanel();;    //////// new JPanel(gr_l);
-        PsnilsPanel = new JPanel(new GridLayout());
         timeBasedUUID Uuid = new timeBasedUUID();
 
         MakeRequest = new JButton("Найти запись (Ctrl+F)");
@@ -288,26 +281,12 @@ public class StartFrame extends ModuleGUI {
 
         MainPanel.add(ExtendedPanel);
         MainPanel.add(ClientPanelP);
+        MainPanel.add(POID);
 
         ClientPanelP.add(ClientPanelP.PFIO);
         ClientPanelP.add(ClientPanelP.PPass);
     //    ClientPanelP.add(ClientPanelP.PSNILS);
         ClientPanelP.add(ClientPanelP.PMobile);
-
-        PSender.add(PsnilsPanel);
-        PSender.add(POID);  //<<
-
-        PsnilsPanel.add(LOperSnils);
-        PsnilsPanel.add(TOperSnils);
-
-        Pra.add(Lra);
-        Pra.add(Tra);
-
-        PFIO.add(LFIO);
-        PFIO.add(TFIO);
-
-        PPass.add(LPass);
-        PPass.add(TPass);
 
         PButton.add(MakeRequest);
         PButton.add(ProceedRegister);
@@ -378,6 +357,13 @@ public class StartFrame extends ModuleGUI {
         ProceedRegister.addActionListener(proceedRegister);
 
 
+        MakeBundleWithoutSearch.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(makebundlewithoutsearch_shortcut), makebundlewithoutsearch);
+        MakeBundleWithoutSearch.getActionMap().put(makebundlewithoutsearch, makeBundleWithoutSearch);
+        MakeBundleWithoutSearch.addActionListener(makeBundleWithoutSearch);
+
+
+
         MainMenu.NsItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e1) {
@@ -413,11 +399,30 @@ public class StartFrame extends ModuleGUI {
         return true;
     };
 
-
+    public void proceedRegister(){
+        showMessageDialog(null, "Proceed register");
+        try {
+            Process p = Runtime.getRuntime().exec(SettsContainer.runMainApp);
+        } catch (IOException e) {
+        e.printStackTrace();
+        }
+    }
 
 
     @Override
     public void initActions() {
+        makeBundleWithoutSearch = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    suspendOtherInfo(TOID.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                proceedRegister();
+            }
+        };
+
         openSetts = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -437,12 +442,7 @@ public class StartFrame extends ModuleGUI {
         proceedRegister = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                showMessageDialog(null, "Proceed register");
-                try {
-                    Process p = Runtime.getRuntime().exec(SettsContainer.runMainApp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                proceedRegister();
             }
         };
 
@@ -582,7 +582,12 @@ public class StartFrame extends ModuleGUI {
     }
 
 
-
+    public void suspendOtherInfo(String oid) throws IOException {
+        oi.OID=oid;
+        oi.RA=ExtendedPanel.TRA.getText();
+        oi.OperSNILS=ESIAFindMessageInitial.getSNILSfromplain(ExtendedPanel.TOperSnils.getText());
+        BinaryMessage.write(BinaryMessage.savedToBLOB(oi), SettsContainer.SaveOtherInfoToFile);
+    };
 
 
     public class FindAppAktor extends AppAktor {
@@ -605,10 +610,7 @@ public class StartFrame extends ModuleGUI {
             System.out.println("\n\n\nRECEIVED\n\n"+resp.oid+"\n\n"+resp.trusted);
 
             if ((resp.oid!=null) && resp.trusted.equals("trusted")) {
-                oi.OID=resp.oid;
-                oi.RA=ExtendedPanel.TRA.getText();
-                oi.OperSNILS=ESIAFindMessageInitial.getSNILSfromplain(ExtendedPanel.TOperSnils.getText());
-                BinaryMessage.write(BinaryMessage.savedToBLOB(oi), SettsContainer.SaveOtherInfoToFile);
+                suspendOtherInfo(resp.oid);
                 on_success.passed();
             }
             if (resp.oid==null)

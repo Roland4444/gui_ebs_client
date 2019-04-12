@@ -4,7 +4,6 @@ import app.abstractions.ModuleGUI;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
 import javax.imageio.ImageIO;
@@ -18,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
+import static org.opencv.highgui.Highgui.imencode;
 
 public class TEST extends ModuleGUI {
     public final String LImgStatic = "pics/static.jpg";
@@ -122,7 +122,7 @@ public class TEST extends ModuleGUI {
                 while (true) {
                     vc.read(mat);
                     var mem = new MatOfByte();
-                    Highgui.imencode(".png", mat, mem);
+                    imencode(".png", mat, mem);
                     try {
                         im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
                     } catch (IOException e) {
