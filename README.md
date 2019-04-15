@@ -52,3 +52,6 @@ Change opencv res =>https://stackoverflow.com/questions/10018190/how-to-change-w
 
 
 Detect face => https://blog.openshift.com/day-12-opencv-face-detection-for-java-developers/
+
+
+In distr mnust be install opencv2 libs
