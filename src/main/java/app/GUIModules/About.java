@@ -28,7 +28,7 @@ public class About extends ModuleGUI {
         buttonPanel=new JPanel(new FlowLayout());
         main =  new JPanel(gr_layout);
         about = new JPanel();
-        info = new JTextArea("\n\n      Программа для сбора биометрических данных       \n     "+SettsContainer.VersionProg+"\n      Written Roman Pastushkov @ 2018 @ Vcabank\n      April 2019 Build\n\n");
+        info = new JTextArea("\n\n      Программа для сбора биометрических данных       \n     "+SettsContainer.VersionProg+"\n      Written Roman Pastushkov @ 2018 @ Vcabank\n    15th  April 2019 Build\n\n");
         frame.getContentPane().add(main);
         about.add(info);
         ok = new JButton("OK");

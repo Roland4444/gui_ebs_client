@@ -15,7 +15,7 @@ public class SettingsContainer {
     public final String SoundSettings = "sound_settings.bin";
     public final String DumpModelFile = "model.bin";
     public final String resultmerged = "result.wav";
-    public final String VersionProg = "EBS GUI Client 2.5.0";
+    public final String VersionProg = "EBS GUI Client 3.0.0";
     public final String receivedOIDSave = "oid.bin";
     public final String runPhotoMake    = "java --module-path build -m uk.roland.ebs_client/app.GUIModules.Interface.GetBio.Video.PhotoMake";
     public final String runSoundRecord  = "java --module-path build -m uk.roland.ebs_client/app.GUIModules.Interface.GetBio.Audio.SoundRecord";
