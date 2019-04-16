@@ -55,3 +55,7 @@ Detect face => https://blog.openshift.com/day-12-opencv-face-detection-for-java-
 
 
 In distr mnust be install opencv2 libs
+
+
+RA const @ via File Setts;
+SNILS OPer - viar ini file;

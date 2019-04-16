@@ -114,6 +114,7 @@ public class StartFrame extends ModuleGUI {
     };
 
     public StartFrame(SettingsContainer sc) throws IOException {
+
         ExtendedPanel = new EBSOperatorPanel();
         ClientPanelP = new ClientPanel();
         this.SettsContainer=sc;
