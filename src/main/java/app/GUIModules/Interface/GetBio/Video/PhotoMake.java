@@ -450,6 +450,8 @@ public class PhotoMake extends ModuleGUI {
         checkAction = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
+                InfoLabel.setText("");
+                InfoLabel.updateUI();
                 byte[] fileContent = null;
                 var checkfile = new File(IMG_PATH);
                 try {
@@ -540,7 +542,7 @@ public class PhotoMake extends ModuleGUI {
             public void passed() {
                 enableSave();
                 disableCheck();
-                InfoLabel.setText("Проверка пройдена");
+                InfoLabel.setText("   Проверка пройдена");
                 InfoLabel.setForeground(Color.green);
 
             }
@@ -548,7 +550,7 @@ public class PhotoMake extends ModuleGUI {
         akt.on_failure=new OnFailure() {
             @Override
             public void failed(ResponceMessage resp) {
-                InfoLabel.setText("Error code="+resp.checkResult+"\n"+"Параметр "+resp.ProblemName + "  не пройден. Выровняйте голову");
+                InfoLabel.setText("   Error code="+resp.checkResult+"\n"+"Параметр "+resp.ProblemName + "  не пройден. Выровняйте голову");
                 InfoLabel.setForeground(Color.red);
                 InfoLabel.updateUI();
             }
