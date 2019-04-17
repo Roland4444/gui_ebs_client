@@ -126,7 +126,7 @@ public class MergeAudioFrames extends ModuleGUI {
         t090Begin =new JTextField("",width);
         t090End =new JTextField("",width);
         CreateSoundBundle = new JMenuItem("Сформировать звуковой слепок (Ctrl+B)");
-        LaunchHelper = new JMenuItem("Запустить помошника (Ctrl+H)");
+        LaunchHelper = new JMenuItem("Запустить помошника (Alt+H)");
         ExitItem = new JMenuItem("Выйти");
     }
 
