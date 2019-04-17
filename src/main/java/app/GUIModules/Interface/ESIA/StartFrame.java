@@ -174,6 +174,7 @@ public class StartFrame extends ModuleGUI {
         }
     }
 
+
     public void savesession() throws IOException {
         Modell.SNILSoper=ExtendedPanel.TOperSnils.getText();
         Modell.RA=ExtendedPanel.TRA.getText();
