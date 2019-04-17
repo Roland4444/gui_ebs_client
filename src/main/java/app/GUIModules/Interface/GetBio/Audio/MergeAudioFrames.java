@@ -165,7 +165,7 @@ public class MergeAudioFrames extends ModuleGUI {
                 Runtime r = Runtime.getRuntime();
                 Process p = null;
                 try {
-                    p = r.exec("./audacity "+ SettsContainer.resultmerged);
+                    p = r.exec("audacity "+ SettsContainer.resultmerged);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

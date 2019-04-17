@@ -387,6 +387,11 @@ public class SoundRecord extends ModuleGUI {
         });
     }
 
+    public void clearInfo() throws InterruptedException {
+        InfoLabel.setText("");
+        InfoLabel.updateUI();
+        Thread.sleep(1000);
+    }
 
 
     public void initActions(){
@@ -454,6 +459,11 @@ public class SoundRecord extends ModuleGUI {
         checkAction = new AbstractAction("Check"){
             @Override
             public void actionPerformed(ActionEvent e1) {
+                try {
+                    clearInfo();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 try {
                     hookThat(Tempfile);
                 } catch (IOException e) {
@@ -699,6 +709,8 @@ public class SoundRecord extends ModuleGUI {
 
 
         String bind = "Check";
+
+
 
         checkAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         Check.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
