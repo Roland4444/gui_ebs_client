@@ -29,7 +29,7 @@ public class SettingsContainer {
     public final String SaveClientDataToFile = "EBSMessageFUll.bin";
     public final String RegisterMnemonic="981601_3T";
     public final String IdpMnemonic="TESIA";
-    public final String mergedwav = "fuck.wav";
+    public final String mergedwav = "merged.wav";
 
     public Map<Integer, String> SoundErrorsDict;
     public Map<Integer, String> PhotoErrorDict;
