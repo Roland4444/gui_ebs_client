@@ -89,17 +89,17 @@ public class AppBio extends ModuleGUI {
         this.MainMenu=new AppMenu();
         this.frame= new JFrame();
         this.RootPanel=new JPanel(new BorderLayout());
-        RunSound = new JButton("Запись голоса");
-        RunPhoto = new JButton("Сделать фото");
+        RunSound = new JButton("1.   Запись голоса");
+        RunPhoto = new JButton("2.   Сделать фото");
         WatchPanel=new JPanel();
-        WatchButton = new JButton("Просмотреть сборку");
+        WatchButton = new JButton("3.    Просмотреть сборку");
         LImg = new JLabel();
         ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(SettsContainer.SoundSettings).toPath()));
         binarySound = new Sound(ss);
         PImage =new JPanel(new BorderLayout());
         LOID = new JLabel("oid клиента");
         TOID = new JTextField("",3);
-        Createfatbundle= new JButton("Сделать финальную сборку");
+        Createfatbundle= new JButton("4.    Сделать финальную сборку");
         SendPreparedBundle = new JButton("Отправить подготовленную сборку");
     }
 
