@@ -106,6 +106,8 @@ public class PhotoMake extends ModuleGUI {
     public JLabel LabelCam;
     public AppMenu MainMenu;
     public JLabel InfoLabel;
+    Thread FPatchAndCheck;
+
     public PhotoMake(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
         exchange=new interop();
@@ -353,31 +355,38 @@ public class PhotoMake extends ModuleGUI {
     public void check(){
         InfoLabel.setText("");
         InfoLabel.updateUI();
-        byte[] fileContent = null;
-        var checkfile = new File(IMG_PATH);
-        try {
-            fileContent = Files.readAllBytes(checkfile.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        var uuid_ = Uuid.generate();
-        tableRequest.put(uuid_,-3);
-        try {
-            InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,   akt.getURL_thisAktor(), uuid_);
-            System.out.println("\n\n\n\nSTARTING SENDING...");
-            System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
-            System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
-            akt.send(BinaryMessage.savedToBLOB(inp), NetworkSettings.sets.address);
-            System.out.println("\n\n\n\nSENDING FINISHED!!!...");
-        } catch (UnknownHostException e) {
-            showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
-        } catch (IOException e) {
-            showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
 
-        }
-        catch (CompletionException e){
-            showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
-        }
+        FPatchAndCheck = new Thread() {
+            @Override
+            public void run() {
+                byte[] fileContent = null;
+                var checkfile = new File(IMG_PATH);
+                try {
+                    fileContent = Files.readAllBytes(checkfile.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                var uuid_ = Uuid.generate();
+                tableRequest.put(uuid_,-3);
+                try {
+                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,   akt.getURL_thisAktor(), uuid_);
+                    System.out.println("\n\n\n\nSTARTING SENDING...");
+                    System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
+                    System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
+                    akt.send(BinaryMessage.savedToBLOB(inp), NetworkSettings.sets.address);
+                    System.out.println("\n\n\n\nSENDING FINISHED!!!...");
+                } catch (UnknownHostException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+                } catch (IOException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+
+                }
+                catch (CompletionException e){
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+                }
+            };
+        };
+        FPatchAndCheck.start();
     }
 
     public void initActions(){

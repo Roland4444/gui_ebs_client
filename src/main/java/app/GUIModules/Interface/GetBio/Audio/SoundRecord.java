@@ -13,9 +13,6 @@ import app.Sound.Sound;
 import app.abstractions.*;
 import app.utils.Cypher;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
@@ -84,7 +81,7 @@ public class SoundRecord extends ModuleGUI {
     public final String Tempfile = "temp.wav";
 
 
-    Thread FPatchAndSend;
+    Thread FPatchAndCheck;
 
     public Map<String, Integer> tableRequest = new HashMap<>();
 
@@ -400,7 +397,7 @@ public class SoundRecord extends ModuleGUI {
 
     public void check(){
         Stop.setBackground(StartBackgroundColor);
-        FPatchAndSend = new Thread() {
+        FPatchAndCheck = new Thread() {
             @Override
             public void run() {
                 try {
@@ -441,7 +438,7 @@ public class SoundRecord extends ModuleGUI {
 
             }
         };
-        FPatchAndSend.start();
+        FPatchAndCheck.start();
 
 
     }
