@@ -13,6 +13,9 @@ import app.Sound.Sound;
 import app.abstractions.*;
 import app.utils.Cypher;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
@@ -80,6 +83,8 @@ public class SoundRecord extends ModuleGUI {
 
     public final String Tempfile = "temp.wav";
 
+
+    Thread FPatchAndSend;
 
     public Map<String, Integer> tableRequest = new HashMap<>();
 
@@ -394,41 +399,51 @@ public class SoundRecord extends ModuleGUI {
     }
 
     public void check(){
-        try {
-            hookThat(Tempfile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        byte[] fileContent = null;
-        var checkfile = new File(Tempfile);
-        try {
-            fileContent = Files.readAllBytes(checkfile.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        var uuid_ = Uuid.generate();
-        tableRequest.put(uuid_,-3);
-        try {
-            InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.getURL_thisAktor(), uuid_);
-            System.out.println("\n\n\n\nSTARTING SENDING...");
-            System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
-            System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
-            akt.send(BinaryMessage.savedToBLOB(inp), NetworkSettings.sets.address);
-            System.out.println("\n\n\n\nSENDING FINISHED!!!...");
-        } catch (UnknownHostException e) {
-            showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
-        } catch (IOException e) {
-            showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+        Stop.setBackground(StartBackgroundColor);
+        FPatchAndSend = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    hookThat(Tempfile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                byte[] fileContent = null;
+                var checkfile = new File(Tempfile);
+                try {
+                    fileContent = Files.readAllBytes(checkfile.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                var uuid_ = Uuid.generate();
+                tableRequest.put(uuid_,-3);
+                try {
+                    InputMessage inp = new  InputMessage(checkfile.getName(), fileContent,  akt.getURL_thisAktor(), uuid_);
+                    System.out.println("\n\n\n\nSTARTING SENDING...");
+                    System.out.println("AKTOR ADRESS="+akt.getURL_thisAktor());
+                    System.out.println("SENDING =>> "+ NetworkSettings.sets.address);
+                    akt.send(BinaryMessage.savedToBLOB(inp), NetworkSettings.sets.address);
+                    System.out.println("\n\n\n\nSENDING FINISHED!!!...");
+                } catch (UnknownHostException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+                } catch (IOException e) {
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
 
-        }
-        catch (CompletionException e){
-            showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
-        }
+                }
+                catch (CompletionException e){
+                    showMessageDialog(null, "ВОЗНИКЛА ОШИБКА ПРИ ОТПРАВКЕ => ПРОВЕРЬТЕ СЕТЕВЫЕ НАСТРОЙКИ");
+                }
+
+            }
+        };
+        FPatchAndSend.start();
+
+
     }
 
     public void initActions(){
@@ -483,9 +498,12 @@ public class SoundRecord extends ModuleGUI {
         stopRecord = new  AbstractAction(stoprecord){
             @Override
             public void actionPerformed(ActionEvent e1) {
+
                 if (!recording)
                     return;
+                Stop.setBackground(Color.YELLOW);
                 Start.setBackground(StartBackgroundColor);
+
                 BinarySound.stopRecord();
                 recording = false;
                 enablePlay();
@@ -785,10 +803,5 @@ public class SoundRecord extends ModuleGUI {
         sr.preperaGUI();
         sr.frame.setVisible(true);
     }
-
-
-
-
-
-
 }
+
