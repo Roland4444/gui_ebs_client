@@ -81,10 +81,13 @@ public class AppBio extends ModuleGUI {
     public EBSMessage EBSM;
     public JButton Createfatbundle;
     public JButton SendPreparedBundle;
+    public JLabel InfoLabel;
+    public JPanel PEndPage;
     PhotoBundle pb= null;
     SoundBundle sb = null;
     public AppBio(SettingsContainer sc) throws IOException {
         this.SettsContainer=sc;
+        InfoLabel = new JLabel("I am there");
         cypher = new CypherImpl();
         this.MainMenu=new AppMenu();
         this.frame= new JFrame();
@@ -97,6 +100,7 @@ public class AppBio extends ModuleGUI {
         ss = Sound_Settings.restoreBytesToSetiings(Files.readAllBytes(new File(SettsContainer.SoundSettings).toPath()));
         binarySound = new Sound(ss);
         PImage =new JPanel(new BorderLayout());
+        PEndPage = new JPanel(new GridLayout(2,1));
         LOID = new JLabel("oid клиента");
         TOID = new JTextField("",3);
         Createfatbundle= new JButton("4.    Сделать финальную сборку");
@@ -115,10 +119,12 @@ public class AppBio extends ModuleGUI {
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setJMenuBar(this.MainMenu);
         WatchPanel.add(WatchButton);
+        PEndPage.add(SendPreparedBundle);
+        PEndPage.add(InfoLabel);
         PImage.add(LImg, BorderLayout.WEST);
         PImage.add(LOID, BorderLayout.EAST);
         PImage.add(Createfatbundle, BorderLayout.CENTER);
-        PImage.add(SendPreparedBundle, BorderLayout.SOUTH);
+        PImage.add(PEndPage, BorderLayout.SOUTH);
         this.frame.getContentPane().add(RootPanel, BorderLayout.NORTH);
         RootPanel.add(RunSound, BorderLayout.LINE_START);
         RootPanel.add(RunPhoto, BorderLayout.LINE_END);
@@ -265,7 +271,7 @@ public class AppBio extends ModuleGUI {
                     e.printStackTrace();
                 }
 
-
+                InfoLabel.setText("");
                 MessageSMEV msg = new MessageSMEV();
                 var uuid_ = Uuid.generate();
                 tableRequest.put(uuid_,-3);
@@ -401,14 +407,18 @@ public class AppBio extends ModuleGUI {
         akt.on_success=new OnSuccess() {
             @Override
             public void passed() {
-                showMessageDialog(null, "Регистрация успешна");
+                InfoLabel.setText("Регистрация успешна");
+                InfoLabel.setForeground(Color.green);
+                InfoLabel.updateUI();
 
             }
         };
         akt.on_fail=new OnFailure() {
             @Override
             public void failed(ResponceMessage resp) {
-                showMessageDialog(null, "Регистрация неуспешна");
+                InfoLabel.setText("Регистрация неуспешна");
+                InfoLabel.setForeground(Color.red);
+                InfoLabel.updateUI();
             }
         };
     }
