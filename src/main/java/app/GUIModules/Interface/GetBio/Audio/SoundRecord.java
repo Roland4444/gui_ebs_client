@@ -44,6 +44,7 @@ public class SoundRecord extends ModuleGUI {
     AbstractAction playSlot2;
     AbstractAction playSlot3;
     AbstractAction createBundle;
+    AbstractAction remindAction;
     private Cypher cypher;
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
@@ -72,6 +73,8 @@ public class SoundRecord extends ModuleGUI {
     public final String stoprecord="stoprecord";
     public final String startrec_shortcut = "control S";
     public final String stoptrec_shortcut = "control F";
+    public final String remind_shortcut = "control H";
+    public final String remind = "remind";
 
     public boolean slot1ready=false;
     public boolean slot2ready=false;
@@ -100,6 +103,7 @@ public class SoundRecord extends ModuleGUI {
     JMenuItem Saveslot1;
     JMenuItem Saveslot2;
     JMenuItem Saveslot3;
+    JMenuItem HelpItem;
 
     JMenuItem MergerSlots;
 
@@ -135,6 +139,7 @@ public class SoundRecord extends ModuleGUI {
         PlayItem = new JMenu("Воспроизвести");
         CheckItem = new JMenuItem("Проверить записанный фрагмент");
         SaveItem = new JMenu("Сохранить фрагмент в слот...");
+        HelpItem = new JMenuItem("Напомнить последовательности?(Ctrl + H)");
         Playcurrent = new JMenuItem("Текущий фрагмент   "+playcurrent_shortcut);
         Playslot1 = new JMenuItem("Слот1    "+playslot1_shortcut);
         Playslot2 = new JMenuItem("Слот2    "+playslot2_shortcut);
@@ -249,6 +254,7 @@ public class SoundRecord extends ModuleGUI {
 
         MainMenu.WorkMenu.add(MergerSlots);
         MainMenu.WorkMenu.add(CreateBundle);
+        MainMenu.HelpMenu.add(HelpItem);
 
         frame.setJMenuBar(MainMenu);
         frame.getContentPane().add(Panel, BorderLayout.PAGE_END);
@@ -509,6 +515,12 @@ public class SoundRecord extends ModuleGUI {
                 check();
             }
         };
+        remindAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                showMessageDialog(null, "0 1 2 3 4 5 6 7 8 9\n9 8 7 6 5 4 3 2 1 0\n5 9 4 7 3 1 8 6 0 2");
+            }
+        };
 
         checkAction = new AbstractAction("Check"){
             @Override
@@ -721,6 +733,10 @@ public class SoundRecord extends ModuleGUI {
         CreateBundle.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(createbundle_shortcut), createbundle);
         CreateBundle.getActionMap().put(createbundle, createBundle);
         CreateBundle.addActionListener(createBundle);
+
+        HelpItem.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(remind_shortcut), remind);
+        HelpItem.getActionMap().put(remind, remindAction);
+        HelpItem.addActionListener(remindAction);
 
 
         String bind = "Check";
