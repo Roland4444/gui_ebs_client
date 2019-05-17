@@ -203,7 +203,7 @@ public class MergeAudioFrames extends ModuleGUI {
                     FileOutputStream  fos = new FileOutputStream(SettsContainer.SaveSoundDataWithtagsToFile);
                     fos.write(SoundBundle.saveToByte(sb));
                     fos.close();
-                    showMessageDialog(null, "Блоб сохранен!");
+                    showMessageDialog(null, "Успешно сохранен!");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

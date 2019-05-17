@@ -565,7 +565,10 @@ public class PhotoMake extends ModuleGUI {
         akt.on_failure=new OnFailure() {
             @Override
             public void failed(ResponceMessage resp) {
-                InfoLabel.setText("   Error code="+resp.checkResult+"\n"+" Параметр "+resp.ProblemName + "  не пройден. Выровняйте голову");
+                String appendix = "Выровняйте голову";
+                if (resp.checkResult==13)
+                    appendix = "Придвиньте камеру ближе к лицу клента";
+                InfoLabel.setText("   Error code="+resp.checkResult+"\n"+" Параметр "+resp.ProblemName + "  не пройден."+appendix);
                 InfoLabel.setForeground(Color.red);
                 InfoLabel.updateUI();
             }

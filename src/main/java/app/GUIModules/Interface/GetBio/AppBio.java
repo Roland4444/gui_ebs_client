@@ -127,8 +127,8 @@ public class AppBio extends ModuleGUI {
         PImage.add(PEndPage, BorderLayout.SOUTH);
         this.frame.getContentPane().add(RootPanel, BorderLayout.NORTH);
         RootPanel.add(RunSound, BorderLayout.LINE_START);
-        RootPanel.add(RunPhoto, BorderLayout.LINE_END);
-        RootPanel.add(WatchPanel, BorderLayout.CENTER);
+        RootPanel.add(RunPhoto, BorderLayout.CENTER);
+        RootPanel.add(WatchPanel, BorderLayout.LINE_END);
         RootPanel.add(PImage, BorderLayout.SOUTH);
 
         MainMenu.AboutFrame=this.About.frame;
@@ -266,7 +266,7 @@ public class AppBio extends ModuleGUI {
 
                 try {
                     BinaryMessage.write(BinaryMessage.savedToBLOB(EBSM), SettsContainer.SaveClientDataToFile);
-                    showMessageDialog(null, "Write complete!");
+                    showMessageDialog(null, "запись завершена!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -301,7 +301,7 @@ public class AppBio extends ModuleGUI {
         watchBundle = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                showMessageDialog(null, "Look that");
+                showMessageDialog(null, "Взгляни на это");
                 byte[] arrImg = null;
 
                 if (!new File(SettsContainer.SavePhotoToFile).exists())
