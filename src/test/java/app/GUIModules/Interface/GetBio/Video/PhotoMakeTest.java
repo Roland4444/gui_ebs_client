@@ -13,7 +13,7 @@ class PhotoMakeTest {
     @Test
     void savePhotoBlob() throws IOException {
         PhotoMake pm = new PhotoMake(new SettingsContainer());
-        pm.savePhotoBlob("tested1.png");
+        pm.savePhotoBlob("tested.png");
         assertTrue(new File(pm.SettsContainer.SavePhotoToFile).exists());
     }
 }

@@ -46,6 +46,7 @@ public class SoundRecord extends ModuleGUI {
     AbstractAction createBundle;
     AbstractAction remindAction;
     private Cypher cypher;
+    public boolean fullCyclePlayed = false;
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
@@ -233,7 +234,7 @@ public class SoundRecord extends ModuleGUI {
 
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 480);
         frame.setLocationRelativeTo(null);
 
@@ -454,7 +455,8 @@ public class SoundRecord extends ModuleGUI {
         createBundle = new AbstractAction(createbundle) {
             @Override
             public void actionPerformed(ActionEvent e) {
-               MF.frame.setVisible(true);
+                fullCyclePlayed = true;
+                MF.frame.setVisible(true);
             }
         };
 
@@ -658,11 +660,26 @@ public class SoundRecord extends ModuleGUI {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                var lockSound = new File(SettsContainer.lockSoundRecordfile);
-                if (lockSound.delete()){
-                    lockSound.delete();
+                if (fullCyclePlayed) {
+                    var lockSound = new File(SettsContainer.lockSoundRecordfile);
+                    if (lockSound.delete()) {
+                        lockSound.delete();
+                    }
+                    System.exit(0);
                 }
-                System.exit(0);
+                Object[] options = {"Да, выйти",
+                        "Нет, остаться"};
+                int n = JOptionPane.showOptionDialog(frame,
+                        "Аудиосборка не сформирована. Вы действительно хотите выйти?",
+                        "Внимание",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                if (n==0)
+                    System.exit(0);
+
             }
         });
 

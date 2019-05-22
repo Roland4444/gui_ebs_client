@@ -184,7 +184,7 @@ class SoundTest {
 
     }
 
-    @Test
+    //@Test
     void modifyBinaryContent() throws IOException {
         String prepared = "prepared.wav";
         String modified = "modified.wav";
