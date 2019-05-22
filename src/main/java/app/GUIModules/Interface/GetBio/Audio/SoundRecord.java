@@ -46,7 +46,6 @@ public class SoundRecord extends ModuleGUI {
     AbstractAction createBundle;
     AbstractAction remindAction;
     private Cypher cypher;
-    public boolean fullCyclePlayed = false;
     public final String slot1 = "slot1.wav";
     public final String slot2 = "slot2.wav";
     public final String slot3 = "slot3.wav";
@@ -660,26 +659,7 @@ public class SoundRecord extends ModuleGUI {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                if (fullCyclePlayed) {
-                    var lockSound = new File(SettsContainer.lockSoundRecordfile);
-                    if (lockSound.delete()) {
-                        lockSound.delete();
-                    }
-                    System.exit(0);
-                }
-                Object[] options = {"Да, выйти",
-                        "Нет, остаться"};
-                int n = JOptionPane.showOptionDialog(frame,
-                        "Аудиосборка не сформирована. Вы действительно хотите выйти?",
-                        "Внимание",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        options[1]);
-                if (n==0)
-                    System.exit(0);
-
+                proceedExitTry("Аудиосборка не сформирована. Вы действительно хотите выйти?",SettsContainer.lockSoundRecordfile);
             }
         });
 

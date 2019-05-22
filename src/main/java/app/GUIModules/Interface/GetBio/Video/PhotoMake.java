@@ -50,7 +50,6 @@ public class PhotoMake extends ModuleGUI {
     AbstractAction savePhotoBlob;
 
     private Cypher cypher;
-
     public final String chackaction = "check action";
     public final String checkaction_shortcut = "control C";
     public final String makeshot = "makeshot";
@@ -218,7 +217,7 @@ public class PhotoMake extends ModuleGUI {
     }
     @Override
     public void preperaGUI() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 800);
         frame.setLocationRelativeTo(null);
         MainMenu.EditMenu.add(VsItem);
@@ -399,7 +398,7 @@ public class PhotoMake extends ModuleGUI {
                     e.printStackTrace();
                 }
                 showMessageDialog(null, "Файл сохранен!=>"+SettsContainer.SavePhotoToFile);
-
+                fullCyclePlayed = true;
             }
         };
 
@@ -483,7 +482,6 @@ public class PhotoMake extends ModuleGUI {
         openVideoFrame = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 startCam();
             }
         };
@@ -495,6 +493,8 @@ public class PhotoMake extends ModuleGUI {
             }
         };
     }
+
+
 
 
     @Override
@@ -535,12 +535,7 @@ public class PhotoMake extends ModuleGUI {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                var lockPhoto = new File(SettsContainer.lockPhotomakefile);
-                if (lockPhoto.exists()){
-                    lockPhoto.delete();
-                }
-                System.exit(0);
-
+               proceedExitTry("Фотосборка не сформирована. Вы действительно хотите выйти?", SettsContainer.lockPhotomakefile);
             }
         });
     }
@@ -554,12 +549,16 @@ public class PhotoMake extends ModuleGUI {
         akt.spawn();
         akt.on_success=new OnSuccess() {
             @Override
-            public void passed() {
+            public void passed() throws IOException, InterruptedException {
                 enableSave();
                 disableCheck();
                 InfoLabel.setText("   Проверка пройдена");
                 InfoLabel.setForeground(Color.green);
-
+                savePhotoBlob(IMG_PATH);
+                showMessageDialog(null, "Фото прошло проверку и сохранено! Нажмите ОК для выхода");
+                clean(SettsContainer.lockPhotomakefile);
+                Thread.sleep(2000);
+                System.exit(0);
             }
         };
         akt.on_failure=new OnFailure() {

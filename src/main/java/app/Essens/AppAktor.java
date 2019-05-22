@@ -49,8 +49,13 @@ public class AppAktor extends JAktor {
         if (tableRequest.get(resp.ID)!=null){
             tableRequest.remove(resp.ID);
             tableRequest.put(resp.ID, resp.checkResult);
-            if ((resp.checkResult==0))
-                on_success.passed();
+            if ((resp.checkResult==0)) {
+                try {
+                    on_success.passed();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             else
                 on_failure.failed(resp);
 

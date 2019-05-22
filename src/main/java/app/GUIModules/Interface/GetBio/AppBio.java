@@ -500,7 +500,11 @@ public class AppBio extends ModuleGUI {
                 tableRequest.remove(resp.ID);
                 tableRequest.put(resp.ID, resp.checkResult);
                 if ((resp.checkResult==0) ) {
-                    on_success.passed();
+                    try {
+                        on_success.passed();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else
                     on_fail.failed(resp);

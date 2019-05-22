@@ -613,7 +613,11 @@ public class StartFrame extends ModuleGUI {
 
             if ((resp.oid!=null) && resp.trusted.equals("trusted")) {
                 suspendOtherInfo(resp.oid);
-                on_success.passed();
+                try {
+                    on_success.passed();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             if (resp.oid==null)
                 on_failure.failed(null);
