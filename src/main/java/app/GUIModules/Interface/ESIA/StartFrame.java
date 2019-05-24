@@ -110,7 +110,7 @@ public class StartFrame extends ModuleGUI {
     public void initOtherInfo(){
         oi = new OtherInfo();
         oi.Mnemonic= "ESIA";
-        oi.RegMnemonic = "981601_3S";
+        oi.RegMnemonic = "981601_3T";
     };
 
     public StartFrame(SettingsContainer sc) throws IOException {

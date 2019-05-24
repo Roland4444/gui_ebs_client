@@ -262,6 +262,7 @@ public class AppBio extends ModuleGUI {
         createFatbundle = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                of.RegMnemonic = "981601_3S";
                 EBSM = new EBSMessage(of, sb, pb);
 
                 try {
